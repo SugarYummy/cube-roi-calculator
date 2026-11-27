@@ -186,7 +186,7 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
   <div class="s1">
    <div>
     <div style="overflow-x:auto"><table class="sc"><thead><tr><th>Stat</th><th>Amount</th><th>Final Damage</th><th class="n">Per 1 point</th></tr></thead><tbody id="scBody"></tbody></table></div>
-    <p class="note" id="iedNow"></p>
+    <p class="note"><span class="req">*</span> Bosses with PDR: 380% (source: Seren, MapleStory Wiki)</p>
    </div>
    <figure class="shot" style="margin:0">
     <figcaption><b>Example scouter</b><span>Click <b>Detail Eff.</b>, then copy the rows with arrows.</span></figcaption>
@@ -200,7 +200,7 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
  <section class="panel step" id="step2">
   <div class="stephead"><div><h2>Step 2: Input your gear</h2><p>Pick each item and its 3 lines.</p></div>
    <div class="row"><button class="btn" id="bReset" type="button">Reset (clear gear)</button><button class="btn ghost" id="bTemplate" type="button">Load example</button></div></div>
-  <div class="callout" id="exNote"><b>This is an example (Ai's gear).</b> Click <b>Reset</b> to clear it, then fill in your own.</div>
+  <div class="callout" id="exNote"><b>This is an example (Moeko's gear).</b> Click <b>Reset</b> to clear it, then fill in your own.</div>
   <div class="callout warn"><ul>
    <li><b>Hat:</b> only Stat hats are calculated. Cooldown (CD) hat lines aren't counted.</li>
    <li>All items count as Legendary.</li>
@@ -237,7 +237,7 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
 {
 const RATES = {"ring":{"bright":[[["S",12,10.2564],["s",12,10.2564],["A",9,7.6923],["xr",20,7.6923],["J",0,64.1025]],[["S",9,10],["s",9,10],["A",6,8],["S",12,2.0513],["s",12,2.0513],["A",9,1.5385],["xr",20,1.5385],["J",0,64.8207]],[["S",9,11.875],["s",9,11.875],["A",6,9.5],["S",12,0.5128],["s",12,0.5128],["A",9,0.3846],["xr",20,0.3846],["J",0,64.955]]],"glowing":[[["S",12,10.2564],["s",12,10.2564],["A",9,7.6923],["xr",20,7.6923],["J",0,64.1025]],[["S",9,11.25],["s",9,11.25],["A",6,9],["S",12,1.0256],["s",12,1.0256],["A",9,0.7692],["xr",20,0.7692],["J",0,64.91]],[["S",9,12.375],["s",9,12.375],["A",6,9.9],["S",12,0.1026],["s",12,0.1026],["A",9,0.0769],["xr",20,0.0769],["J",0,64.9911]]]},"belt":{"bright":[[["S",12,12.1212],["s",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,48.4848]],[["S",9,8.3333],["s",9,8.3333],["A",6,6.6667],["xi",0,16.9698],["S",12,2.4242],["s",12,2.4242],["A",9,1.8182],["J",0,53.0301]],[["S",9,9.8958],["s",9,9.8958],["A",6,7.9167],["xi",0,16.7424],["S",12,0.6061],["s",12,0.6061],["A",9,0.4545],["J",0,53.8827]]],"glowing":[[["S",12,12.1212],["s",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,48.4848]],[["S",9,9.375],["s",9,9.375],["A",6,7.5],["xi",0,16.8182],["S",12,1.2121],["s",12,1.2121],["A",9,0.9091],["J",0,53.5984]],[["S",9,10.3125],["s",9,10.3125],["A",6,8.25],["xi",0,16.6818],["S",12,0.1212],["s",12,0.1212],["A",9,0.0909],["J",0,54.1098]]]},"weapon":{"bright":[[["S",12,9.7561],["s",12,9.7561],["T",12,4.878],["D",12,4.878],["A",9,7.3171],["I",35,4.878],["I",40,4.878],["B",35,9.7561],["B",40,4.878],["J",0,39.0242]],[["S",9,9.3023],["s",9,9.3023],["T",9,5.5814],["D",9,5.5814],["A",6,7.4419],["I",30,5.5814],["B",30,5.5814],["S",12,1.9512],["s",12,1.9512],["T",12,0.9756],["D",12,0.9756],["A",9,1.4634],["I",35,0.9756],["I",40,0.9756],["B",35,1.9512],["B",40,0.9756],["J",0,39.4327]],[["S",9,11.0465],["s",9,11.0465],["T",9,6.6279],["D",9,6.6279],["A",6,8.8372],["I",30,6.6279],["B",30,6.6279],["S",12,0.4878],["s",12,0.4878],["T",12,0.2439],["D",12,0.2439],["A",9,0.3659],["I",35,0.2439],["I",40,0.2439],["B",35,0.4878],["B",40,0.2439],["J",0,39.5093]]],"glowing":[[["S",12,9.7561],["s",12,9.7561],["T",12,4.878],["D",12,4.878],["A",9,7.3171],["I",35,4.878],["I",40,4.878],["B",35,9.7561],["B",40,4.878],["J",0,39.0242]],[["S",9,10.4651],["s",9,10.4651],["T",9,6.2791],["D",9,6.2791],["A",6,8.3721],["I",30,6.2791],["B",30,6.2791],["S",12,0.9756],["s",12,0.9756],["T",12,0.4878],["D",12,0.4878],["A",9,0.7317],["I",35,0.4878],["I",40,0.4878],["B",35,0.9756],["B",40,0.4878],["J",0,39.4838]],[["S",9,11.5116],["s",9,11.5116],["T",9,6.907],["D",9,6.907],["A",6,9.2093],["I",30,6.907],["B",30,6.907],["S",12,0.0976],["s",12,0.0976],["T",12,0.0488],["D",12,0.0488],["A",9,0.0732],["I",35,0.0488],["I",40,0.0488],["B",35,0.0976],["B",40,0.0488],["J",0,39.5299]]]},"secondary":{"bright":[[["S",12,8.5106],["s",12,8.5106],["T",12,4.2553],["D",12,4.2553],["A",9,6.383],["I",35,4.2553],["I",40,4.2553],["xi",0,12.766],["B",35,8.5106],["B",40,4.2553],["J",0,34.0424]],[["S",9,7.8431],["s",9,7.8431],["T",9,4.7059],["D",9,4.7059],["A",6,6.2745],["I",30,4.7059],["xi",0,15.1022],["B",30,4.7059],["S",12,1.7021],["s",12,1.7021],["T",12,0.8511],["D",12,0.8511],["A",9,1.2766],["I",35,0.8511],["I",40,0.8511],["B",35,1.7021],["B",40,0.8511],["J",0,33.4752]],[["S",9,9.3137],["s",9,9.3137],["T",9,5.5882],["D",9,5.5882],["A",6,7.451],["I",30,5.5882],["xi",0,15.5402],["B",30,5.5882],["S",12,0.4255],["s",12,0.4255],["T",12,0.2128],["D",12,0.2128],["A",9,0.3191],["I",35,0.2128],["I",40,0.2128],["B",35,0.4255],["B",40,0.2128],["J",0,33.3688]]],"glowing":[[["S",12,8.5106],["s",12,8.5106],["T",12,4.2553],["D",12,4.2553],["A",9,6.383],["I",35,4.2553],["I",40,4.2553],["xi",0,12.766],["B",35,8.5106],["B",40,4.2553],["J",0,34.0424]],[["S",9,8.8235],["s",9,8.8235],["T",9,5.2941],["D",9,5.2941],["A",6,7.0588],["I",30,5.2941],["xi",0,15.3942],["B",30,5.2941],["S",12,0.8511],["s",12,0.8511],["T",12,0.4255],["D",12,0.4255],["A",9,0.6383],["I",35,0.4255],["I",40,0.4255],["B",35,0.8511],["B",40,0.4255],["J",0,33.4041]],[["S",9,9.7059],["s",9,9.7059],["T",9,5.8235],["D",9,5.8235],["A",6,7.7647],["I",30,5.8235],["xi",0,15.657],["B",30,5.8235],["S",12,0.0851],["s",12,0.0851],["T",12,0.0426],["D",12,0.0426],["A",9,0.0638],["I",35,0.0426],["I",40,0.0426],["B",35,0.0851],["B",40,0.0426],["J",0,33.3406]]]},"emblem":{"bright":[[["S",12,11.4286],["s",12,11.4286],["T",12,5.7143],["D",12,5.7143],["A",9,8.5714],["I",35,5.7143],["I",40,5.7143],["J",0,45.7144]],[["S",9,10],["s",9,10],["T",9,6],["D",9,6],["A",6,8],["I",30,6],["S",12,2.2857],["s",12,2.2857],["T",12,1.1429],["D",12,1.1429],["A",9,1.7143],["I",35,1.1429],["I",40,1.1429],["J",0,43.143]],[["S",9,11.875],["s",9,11.875],["T",9,7.125],["D",9,7.125],["A",6,9.5],["I",30,7.125],["S",12,0.5714],["s",12,0.5714],["T",12,0.2857],["D",12,0.2857],["A",9,0.4286],["I",35,0.2857],["I",40,0.2857],["J",0,42.6606]]],"glowing":[[["S",12,11.4286],["s",12,11.4286],["T",12,5.7143],["D",12,5.7143],["A",9,8.5714],["I",35,5.7143],["I",40,5.7143],["J",0,45.7144]],[["S",9,11.25],["s",9,11.25],["T",9,6.75],["D",9,6.75],["A",6,9],["I",30,6.75],["S",12,1.1429],["s",12,1.1429],["T",12,0.5714],["D",12,0.5714],["A",9,0.8571],["I",35,0.5714],["I",40,0.5714],["J",0,42.8214]],[["S",9,12.375],["s",9,12.375],["T",9,7.425],["D",9,7.425],["A",6,9.9],["I",30,7.425],["S",12,0.1143],["s",12,0.1143],["T",12,0.0571],["D",12,0.0571],["A",9,0.0857],["I",35,0.0571],["I",40,0.0571],["J",0,42.532]]]},"hat":{"bright":[[["S",12,9.7561],["s",12,9.7561],["A",9,7.3171],["xi",0,14.6342],["xd",0,7.3171],["J",0,51.2195]],[["S",9,7.6923],["s",9,7.6923],["A",6,6.1538],["xi",0,15.2344],["xd",0,7.6172],["S",12,1.9512],["s",12,1.9512],["A",9,1.4634],["J",0,50.2438]],[["S",9,9.1346],["s",9,9.1346],["A",6,7.3077],["xi",0,15.3472],["xd",0,7.6736],["S",12,0.4878],["s",12,0.4878],["A",9,0.3659],["J",0,50.0609]]],"glowing":[[["S",12,9.7561],["s",12,9.7561],["A",9,7.3171],["xi",0,14.6342],["xd",0,7.3171],["J",0,51.2195]],[["S",9,8.6538],["s",9,8.6538],["A",6,6.9231],["xi",0,15.3096],["xd",0,7.6548],["S",12,0.9756],["s",12,0.9756],["A",9,0.7317],["J",0,50.1218]],[["S",9,9.5192],["s",9,9.5192],["A",6,7.6154],["xi",0,15.3772],["xd",0,7.6886],["S",12,0.0976],["s",12,0.0976],["A",9,0.0732],["J",0,50.0124]]]},"top":{"bright":[[["S",12,10.2564],["s",12,10.2564],["A",9,7.6923],["xi",0,15.3846],["xt",3,7.6923],["xv",0,7.6923],["J",0,41.0256]],[["S",9,6.4516],["s",9,6.4516],["A",6,5.1613],["xi",0,13.3996],["xt",2,5.1613],["xv",0,6.6998],["S",12,2.0513],["s",12,2.0513],["A",9,1.5385],["xt",3,1.5385],["J",0,49.4954]],[["S",9,7.6613],["s",9,7.6613],["A",6,6.129],["xi",0,13.0272],["xt",2,6.129],["xv",0,6.5136],["S",12,0.5128],["s",12,0.5128],["A",9,0.3846],["xt",3,0.3846],["J",0,51.0833]]],"glowing":[[["S",12,10.2564],["s",12,10.2564],["A",9,7.6923],["xi",0,15.3846],["xt",3,7.6923],["xv",0,7.6923],["J",0,41.0256]],[["S",9,7.2581],["s",9,7.2581],["A",6,5.8065],["xi",0,13.1514],["xt",2,5.8065],["xv",0,6.5757],["S",12,1.0256],["s",12,1.0256],["A",9,0.7692],["xt",3,0.7692],["J",0,50.5542]],[["S",9,7.9839],["s",9,7.9839],["A",6,6.3871],["xi",0,12.928],["xt",2,6.3871],["xv",0,6.464],["S",12,0.1026],["s",12,0.1026],["A",9,0.0769],["xt",3,0.0769],["J",0,51.5071]]]},"bottom":{"bright":[[["S",12,12.1212],["s",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,48.4848]],[["S",9,7.6923],["s",9,7.6923],["A",6,6.1538],["xi",0,15.944],["xd",0,6.1538],["S",12,2.4242],["s",12,2.4242],["A",9,1.8182],["J",0,49.6968]],[["S",9,9.1346],["s",9,9.1346],["A",6,7.3077],["xi",0,15.5244],["xd",0,7.3077],["S",12,0.6061],["s",12,0.6061],["A",9,0.4545],["J",0,49.9243]]],"glowing":[[["S",12,12.1212],["s",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,48.4848]],[["S",9,8.6538],["s",9,8.6538],["A",6,6.9231],["xi",0,15.6644],["xd",0,6.9231],["S",12,1.2121],["s",12,1.2121],["A",9,0.9091],["J",0,49.8483]],[["S",9,9.5192],["s",9,9.5192],["A",6,7.6154],["xi",0,15.4126],["xd",0,7.6154],["S",12,0.1212],["s",12,0.1212],["A",9,0.0909],["J",0,49.9848]]]},"shoulder":{"bright":[[["S",12,12.1212],["s",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,48.4848]],[["S",9,8.3333],["s",9,8.3333],["A",6,6.6667],["xi",0,16.9698],["S",12,2.4242],["s",12,2.4242],["A",9,1.8182],["J",0,53.0301]],[["S",9,9.8958],["s",9,9.8958],["A",6,7.9167],["xi",0,16.7424],["S",12,0.6061],["s",12,0.6061],["A",9,0.4545],["J",0,53.8827]]],"glowing":[[["S",12,12.1212],["s",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,48.4848]],[["S",9,9.375],["s",9,9.375],["A",6,7.5],["xi",0,16.8182],["S",12,1.2121],["s",12,1.2121],["A",9,0.9091],["J",0,53.5984]],[["S",9,10.3125],["s",9,10.3125],["A",6,8.25],["xi",0,16.6818],["S",12,0.1212],["s",12,0.1212],["A",9,0.0909],["J",0,54.1098]]]},"cape":{"bright":[[["S",12,12.1212],["s",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,48.4848]],[["S",9,8.3333],["s",9,8.3333],["A",6,6.6667],["xi",0,16.9698],["S",12,2.4242],["s",12,2.4242],["A",9,1.8182],["J",0,53.0301]],[["S",9,9.8958],["s",9,9.8958],["A",6,7.9167],["xi",0,16.7424],["S",12,0.6061],["s",12,0.6061],["A",9,0.4545],["J",0,53.8827]]],"glowing":[[["S",12,12.1212],["s",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,48.4848]],[["S",9,9.375],["s",9,9.375],["A",6,7.5],["xi",0,16.8182],["S",12,1.2121],["s",12,1.2121],["A",9,0.9091],["J",0,53.5984]],[["S",9,10.3125],["s",9,10.3125],["A",6,8.25],["xi",0,16.6818],["S",12,0.1212],["s",12,0.1212],["A",9,0.0909],["J",0,54.1098]]]},"gloves":{"bright":[[["S",12,10],["s",12,10],["C",8,10],["A",9,7.5],["xi",0,15.0],["xd",0,7.5],["J",0,40]],[["S",9,7.1429],["s",9,7.1429],["A",6,5.7143],["F",32,1.4286],["f",32,1.4286],["xi",0,14.4286],["xd",0,7.2143],["S",12,2],["s",12,2],["C",8,2],["A",9,1.5],["J",0,48.0001]],[["S",9,8.4821],["s",9,8.4821],["A",6,6.7857],["F",32,1.6964],["f",32,1.6964],["xi",0,14.3214],["xd",0,7.1607],["S",12,0.5],["s",12,0.5],["C",8,0.5],["A",9,0.375],["J",0,49.4999]]],"glowing":[[["S",12,10],["s",12,10],["C",8,10],["A",9,7.5],["xi",0,15.0],["xd",0,7.5],["J",0,40]],[["S",9,8.0357],["s",9,8.0357],["A",6,6.4286],["F",32,1.6071],["f",32,1.6071],["xi",0,14.3572],["xd",0,7.1786],["S",12,1],["s",12,1],["C",8,1],["A",9,0.75],["J",0,49.0]],[["S",9,8.8393],["s",9,8.8393],["A",6,7.0714],["F",32,1.7679],["f",32,1.7679],["xi",0,14.2928],["xd",0,7.1464],["S",12,0.1],["s",12,0.1],["C",8,0.1],["A",9,0.075],["J",0,49.9]]]},"shoes":{"bright":[[["S",12,11.1111],["s",12,11.1111],["A",9,8.3333],["xi",0,16.6666],["xd",0,8.3333],["J",0,44.4444]],[["S",9,7.6923],["s",9,7.6923],["A",6,6.1538],["xi",0,15.641],["xd",0,7.8205],["S",12,2.2222],["s",12,2.2222],["A",9,1.6667],["J",0,48.8888]],[["S",9,9.1346],["s",9,9.1346],["A",6,7.3077],["xi",0,15.4488],["xd",0,7.7244],["S",12,0.5556],["s",12,0.5556],["A",9,0.4167],["J",0,49.7223]]],"glowing":[[["S",12,11.1111],["s",12,11.1111],["A",9,8.3333],["xi",0,16.6666],["xd",0,8.3333],["J",0,44.4444]],[["S",9,8.6538],["s",9,8.6538],["A",6,6.9231],["xi",0,15.5128],["xd",0,7.7564],["S",12,1.1111],["s",12,1.1111],["A",9,0.8333],["J",0,49.4443]],[["S",9,9.5192],["s",9,9.5192],["A",6,7.6154],["xi",0,15.3974],["xd",0,7.6987],["S",12,0.1111],["s",12,0.1111],["A",9,0.0833],["J",0,49.9444]]]},"heart":{"bright":[[["S",12,14.8148],["s",12,14.8148],["A",9,11.1111],["J",0,59.2592]],[["S",9,10],["s",9,10],["A",6,8],["S",12,2.963],["s",12,2.963],["A",9,2.2222],["J",0,63.852]],[["S",9,11.875],["s",9,11.875],["A",6,9.5],["S",12,0.7407],["s",12,0.7407],["A",9,0.5556],["J",0,64.7128]]],"glowing":[[["S",12,14.8148],["s",12,14.8148],["A",9,11.1111],["J",0,59.2592]],[["S",9,11.25],["s",9,11.25],["A",6,9],["S",12,1.4815],["s",12,1.4815],["A",9,1.1111],["J",0,64.426]],[["S",9,12.375],["s",9,12.375],["A",6,9.9],["S",12,0.1481],["s",12,0.1481],["A",9,0.1111],["J",0,64.9424]]]}};
 const GROUPS = [["Accessories",["ring1","ring2","ring3","pend1","pend2","eye","face","earring","belt"]],
- ["Weapon, Secondary, Emblem",["weapon","secondary","emblem"]],
+ ["WSE",["weapon","secondary","emblem"]],
  ["Armor",["hat","top","bottom","shoulder","cape","gloves","shoes"]],["Other",["heart","badge"]]];
 const SLOTS = [
  ["ring1","Ring 1","ring","ring"],["ring2","Ring 2","ring","ring"],["ring3","Ring 3","ring","ring"],
@@ -254,32 +254,32 @@ const ITEMS = {
  eye:[["Magic Eyepatch",160],["Papulatus Mark",145],["Black Bean Mark",135]],
  face:[["Berserked",160],["Twilight Mark",140],["Condensed Power Crystal",110]],
  earring:[["Commanding Force Earring",200],["Estella Earrings",160],["Superior Gollux Earrings",150],["Meister Earrings",140],["Reinforced Gollux Earrings",140]],
- belt:[["Dreamy Belt",200],["Superior Gollux Belt",150],["Enraged Zakum Belt",150],["Tyrant Belt",150],["Reinforced Gollux Belt",140],["Golden Clover Belt",140]],
+ belt:[["Dreamy Belt",200],["Superior Gollux Belt",150],["Level 140 Belt",140]],
  weapon:[["Destiny Weapon",250],["Genesis Weapon",200]],
  secondary:[["Astra Secondary",200]],
  emblem:[["Seren Emblem",200],["Class Emblem",100]],
  hat:[["Eternal Hat",250],["Arcane Hat",200],["Absolab Hat",160],["CRA Hat",150]],
  top:[["Eternal Top",250],["CRA Top",150]],
- bottom:[["Eternal Bot",250],["CRA Bot",150]],
- shoulder:[["Eternal Shoulder",250],["Arcane Shoulder",200],["Absolab Shoulder",160],["Meister Shoulder",140]],
- cape:[["Eternal Cape",250],["Arcane Cape",200],["Absolab Cape",160],["Tyrant Cape",150]],
- gloves:[["Eternal Glove",250],["Arcane Glove",200],["Absolab Glove",160],["Tyrant Glove",150]],
- shoes:[["Eternal Shoes",250],["Arcane Shoes",200],["Absolab Shoes",160],["Tyrant Shoes",150]],
- heart:[["Total Control",200],["Black Heart",120]],
- badge:[["Ghost Ship Exorcist",140]]
+ bottom:[["Eternal Bottom",250],["CRA Bottom",150]],
+ shoulder:[["Eternal Shoulder",250],["Arcane Shoulder",200],["Absolab Shoulder",160]],
+ cape:[["Eternal Cape",250],["Arcane Cape",200],["Absolab Cape",160]],
+ gloves:[["Eternal Glove",250],["Arcane Glove",200],["Absolab Glove",160]],
+ shoes:[["Eternal Shoes",250],["Arcane Shoes",200],["Absolab Shoes",160]],
+ heart:[["Total Control",200],["Plasma Heart",130],["Fairy Heart",100]],
+ badge:[["Ghost Ship Exorcist",150],["Sengoku Hakase",null],["Inspector's Mapae",null]]
 };
 const SCOUT = [
- ["boss","Boss Damage",40,1],["att","{A} %",12,1],["crit","Crit Damage",8,1],["ied","IED (380)",40,1],
+ ["boss","Boss Damage",40,1],["att","{A} %",12,1],["crit","Crit Damage",8,1],["ied","IED (380)",40,1,"",1],
  ["statp","{M} %",12,1],["secp","{S} %",12,1],["allp","All Stat %",9,1]
-].map(([id,label,amt,req,hint])=>({id,label,amt,req,hint}));
+].map(([id,label,amt,req,hint,star])=>({id,label,amt,req,hint,star}));
 const TEMPLATE = {cube:"bright",ms:"INT",ss:"LUK",
  scout:{boss:[40,"3.560"],att:[12,"4.603"],statp:[12,"1.005"],allp:[9,"0.870"],crit:[8,"2.277"],ied:[40,"0.831"],secp:[12,"0.155"]},
  gear:{ring1:[200,"A10","S10","S13","Endless Terror"],ring2:[160,"S13","S10","S10","Dawn Guardian Angel Ring"],ring3:[150,"S12","S12","A6","Superior Gollux Ring"],
   pend1:[140,"S12","S9","S9","Daybreak Pendant"],pend2:[160,"S13","S10","S10","Source of Suffering"],eye:[160,"S13","S13","A7","Magic Eyepatch"],face:[160,"S13","S10","S10","Berserked"],
   earring:[200,"S13","S13","A7","Commanding Force Earring"],belt:[200,"S13","S13","S10","Dreamy Belt"],weapon:[250,"T13","B40","T10","Destiny Weapon"],secondary:[200,"B40","T10","T10","Astra Secondary"],
-  emblem:[200,"T13","T10","T10","Seren Emblem"],hat:[250,"S13","S10","S13","Eternal Hat"],top:[250,"S13","S10","S10","Eternal Top"],bottom:[250,"S13","S10","S10","Eternal Bot"],
+  emblem:[200,"T13","T10","T10","Seren Emblem"],hat:[250,"S13","S10","S13","Eternal Hat"],top:[250,"S13","S10","S10","Eternal Top"],bottom:[250,"S13","S10","S10","Eternal Bottom"],
   shoulder:[250,"S13","S10","S10","Eternal Shoulder"],cape:[250,"S13","S10","S10","Eternal Cape"],gloves:[250,"C8","C8","A7","Eternal Glove"],shoes:[250,"S13","S13","S10","Eternal Shoes"],
-  heart:[200,"S13","S13","S10","Total Control"],badge:[140,"S12","S9","S9","Ghost Ship Exorcist"]}};
+  heart:[200,"S13","S13","S10","Total Control"],badge:[150,"S12","S9","S9","Ghost Ship Exorcist"]}};
 const ORDER = "TSACBIDsFf";
 const MAXC = {xd:1,xt:1,I:3,B:3,xr:3,xi:2,xv:2};
 const ADJ = new Set(["S","s","A","T"]);
@@ -405,7 +405,7 @@ const itemName = s=>S.gear[s.id][4]||s.name;
 const lab=s=>s.label.replace("{M}",MS()).replace("{S}",SS()).replace("{A}",ATTN());
 const missing = ()=>SCOUT.filter(s=>s.req&&!(parseFloat(S.scout[s.id][1])>0&&+S.scout[s.id][0]>0));
 function buildScout(){
- $("scBody").innerHTML=SCOUT.map(s=>`<tr><td><span id="lb_${s.id}">${lab(s)}</span>${s.hint?`<small>${s.hint}</small>`:""}</td>
+ $("scBody").innerHTML=SCOUT.map(s=>`<tr><td><span id="lb_${s.id}">${lab(s)}</span>${s.star?'<span class="req">*</span>':""}${s.hint?`<small>${s.hint}</small>`:""}</td>
   <td><input class="amt" id="a_${s.id}" inputmode="decimal" aria-label="${lab(s)} amount"></td>
   <td><div class="fdw"><input id="f_${s.id}" inputmode="decimal" placeholder="0.000" aria-label="${lab(s)} final damage"><span>%</span></div></td>
   <td class="n pp" id="pp_${s.id}"></td></tr>`).join("");
@@ -431,7 +431,6 @@ function updateStep1(){
  for(const s of SCOUT) $("lb_"+s.id).textContent=lab(s);
  const per={boss:P.boss,att:P.att,statp:P.statp,allp:P.allp,crit:P.crit,ied:P.ied(1),secp:P.secp};
  for(const s of SCOUT){ const v=per[s.id], est=s.id==="allp"&&S.scout.allp[2]==null&&v; $("pp_"+s.id).innerHTML=v?`${v.toFixed(4)}%${est?'<small>estimate</small>':""}`:'<span class="muted">-</span>'; }
- $("iedNow").textContent=P.iedNow!=null?`Your IED is about ${P.iedNow.toFixed(2)}%.`:"";
  for(const s of SCOUT) $("f_"+s.id).classList.toggle("miss",miss.includes(s));
  $("next1").disabled=miss.length>0;
  $("s1msg").textContent=miss.length?`Still needed: ${miss.map(lab).join(", ")}`:"All set.";
@@ -451,7 +450,7 @@ function buildGear(){
   sel.addEventListener("change",()=>{
    const g=S.gear[s.id], v=sel.value;
    if(v==="__c"){ n.hidden=false; n.focus(); g[4]=n.value.trim(); }
-   else{ n.hidden=true; g[4]=v; const hit=(ITEMS[s.list]||[]).find(([nm])=>nm===v); if(hit) setLevel(s,hit[1]); }
+   else{ n.hidden=true; g[4]=v; const hit=(ITEMS[s.list]||[]).find(([nm])=>nm===v); if(hit&&hit[1]) setLevel(s,hit[1]); else fillSlot(s); }
    changed();
   });
   n.addEventListener("input",()=>{S.gear[s.id][4]=n.value.trim().slice(0,60);changed();});
@@ -469,7 +468,7 @@ function fillSlot(s){
  const g=S.gear[s.id], lvl=+g[0]||0, list=ITEMS[s.list]||[], name=g[4]||"";
  const known=list.some(([nm])=>nm===name), custom=!!name&&!known;
  const sel=$("i_"+s.id);
- sel.innerHTML=`<option value="">${esc(s.name)}: pick an item</option>`+list.map(([nm,l])=>`<option value="${esc(nm)}">${esc(nm)} (Lv ${l})</option>`).join("")+`<option value="__c">Other item (type the name)</option>`;
+ sel.innerHTML=`<option value="">${esc(s.name)}: pick an item</option>`+list.map(([nm,l])=>`<option value="${esc(nm)}">${esc(nm)}${l?` (Lv ${l})`:""}</option>`).join("")+`<option value="__c">Custom Item</option>`;
  sel.value=custom?"__c":name; sel.classList.toggle("J",!name);
  const n=$("n_"+s.id); n.hidden=!custom&&sel.value!=="__c"; if(custom) n.value=name; else if(sel.value!=="__c") n.value="";
  const lv=$("l_"+s.id), levels=[...new Set([...LEVELS,...(lvl?[lvl]:[])])].sort((a,b)=>a-b);
@@ -544,7 +543,7 @@ function valid(st){
   const b=(typeof r[2]==="number"&&isFinite(r[2])&&r[2]>0)?r[2]:baseFrom(s.id,a,f); st.scout[s.id]=[a,f,b]; }
  for(const s of SLOTS){
   let g=st.gear[s.id]; if(!Array.isArray(g)||g.length<4) g=bg[s.id];
-  st.gear[s.id]=[parseInt(g[0])||0,...[1,2,3].map(i=>String(g[i]).replace(/[^A-Za-z0-9.]/g,"")||"J0"),String(g[4]||"").slice(0,60)];
+  st.gear[s.id]=[parseInt(g[0])||0,...[1,2,3].map(i=>String(g[i]).replace(/[^A-Za-z0-9.]/g,"")||"J0"),({"Eternal Bot":"Eternal Bottom","CRA Bot":"CRA Bottom"})[g[4]]||String(g[4]||"").slice(0,60)];
  }
  if(!["bright","glowing","both"].includes(st.cube)) st.cube="bright";
  const ST=["STR","DEX","INT","LUK"]; if(!ST.includes(st.ms)) st.ms="INT"; if(!ST.includes(st.ss)) st.ss="LUK";
