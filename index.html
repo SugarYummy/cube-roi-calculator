@@ -30,6 +30,7 @@ h1 svg{width:26px;height:26px;flex:none}
 h2{font-family:var(--display);font-size:22px;font-weight:700;margin:0;letter-spacing:-.01em}
 h3{font-family:var(--display);font-size:15px;font-weight:700;margin:0;letter-spacing:.02em;color:var(--muted);text-transform:uppercase}
 .spacer{flex:1}
+.hright{display:flex;gap:10px;align-items:center;margin-left:auto}
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
 .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;background:var(--sunk);border:1px solid var(--line);border-radius:8px;padding:7px 12px;min-height:38px;font-weight:600;transition:transform .08s,background .15s,border-color .15s}
@@ -61,6 +62,7 @@ a{color:var(--accent)}
 .stephead p{margin:4px 0 0;color:var(--muted);max-width:70ch}
 .foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
 .callout{background:var(--sunk);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;padding:10px 14px;font-size:14px;margin-bottom:12px}
+.chip{display:inline-block;vertical-align:middle;margin-left:8px;font:600 12px var(--body);color:var(--accent);border:1px solid color-mix(in oklab,var(--accent) 50%,var(--line));background:color-mix(in oklab,var(--accent) 10%,transparent);border-radius:999px;padding:3px 10px;letter-spacing:0}
 .callout ul{margin:4px 0 0;padding-left:18px}.callout li{margin:3px 0}
 .callout.warn{border-left-color:var(--warn)}
 .linkbtn{background:none;border:0;padding:4px 2px;font-size:14px;font-weight:600;color:var(--link);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
@@ -133,7 +135,7 @@ select.J{color:var(--muted)}
 .hd,.list summary{display:grid;grid-template-columns:30px minmax(0,1.4fr) minmax(0,1fr) 112px 100px 90px minmax(130px,1fr);gap:10px;align-items:center}
 .hd{font-size:12px;color:var(--muted);padding:0 12px 2px}
 .hd>span:nth-child(n+3){text-align:center}.hd>span:last-child{text-align:left}
-@media(min-width:761px){.list summary .tg,.list summary .ch,.list summary .c50,.list summary .gn{text-align:center}}
+@media(min-width:901px){.list summary .tg,.list summary .ch,.list summary .c50,.list summary .gn{text-align:center}}
 details.it{background:var(--sunk);border:1px solid var(--line);border-radius:10px}
 details.it[open]{border-color:var(--accent)}
 .list summary{list-style:none;cursor:pointer;padding:9px 12px;min-height:44px}
@@ -147,7 +149,7 @@ i.O{background:var(--line);color:var(--muted)!important}
 .num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
 .gn{color:var(--good)}
 .bar{display:flex;align-items:center;gap:8px;font-variant-numeric:tabular-nums;white-space:nowrap;font-size:13px}
-.bar i{display:block;height:10px;border-radius:5px;background:var(--accent);flex:none}
+.bar i{display:block;height:10px;border-radius:5px;background:var(--accent);flex:none;max-width:calc(100% - 60px)}
 .dt{padding:2px 12px 12px;font-size:13px;color:var(--muted)}
 .dt table{width:100%;border-collapse:collapse;margin-top:8px;color:var(--fg)}
 .dt th{font-weight:500;color:var(--muted);text-align:left;font-size:12px}
@@ -172,7 +174,7 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
  .gr .sn{grid-area:sn;align-self:center}.gr .nm{grid-area:nm}.gr .lv{grid-area:lv}
  .gr .l0{grid-area:l1}.gr .l1{grid-area:l2}.gr .l2{grid-area:l3}
 }
-@media(max-width:760px){
+@media(max-width:900px){
  .hd{display:none}
  .list summary{grid-template-columns:28px minmax(0,1fr) auto;grid-template-areas:"r s s" "r t t" "r c g" "r b b";row-gap:4px}
  .list summary .rk{grid-area:r;align-self:start}.list summary .sl{grid-area:s}.list summary .tg{grid-area:t;margin-top:6px;padding-top:6px;border-top:1px solid var(--line)}
@@ -180,6 +182,7 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
  .tt tr{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px 8px;padding:10px 0;border-bottom:1px solid var(--line)}
  .tt td{border:0;padding:0;text-align:left!important;background:none!important}
  .tt td.tgt{grid-column:1/-1;font-weight:600}
+ .tt td[data-lab]::before{content:attr(data-lab)!important}
  .tt td[data-l]::before{content:attr(data-l);display:block;font-size:11px;color:var(--muted);font-weight:400}
  .tt td[data-l="Chance"]{grid-column:span 2;order:1}.tt td[data-l="FD gain"]{order:2}.tt td[data-l="FD per cubes"]{order:3}.tt td.q{order:4}
  .list summary .ch{grid-area:c;text-align:left}.list summary .gn{grid-area:g}.list summary .c50{display:none}.list summary .bar{grid-area:b}
@@ -198,9 +201,11 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
   <h1><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3l11 6v14l-11 6-11-6V9z" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linejoin="round"/><path d="M5 9l11 6 11-6M16 15v14" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linejoin="round"/></svg>Cube ROI Calculator</h1>
   <div class="seg" role="group" aria-label="Cube type"><button type="button" data-cube="bright">Black / Bright Cube</button><button type="button" data-cube="glowing">Red / Glowing Cube</button><button type="button" data-cube="both">Compare both</button></div>
   <span class="spacer"></span>
+  <div class="hright">
   <button class="btn ghost" id="bCopy" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>Copy link</button>
   <button class="btn ghost" id="bPaste" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Load link</button>
   <button class="btn icon ghost" id="themeBtn" type="button" aria-label="Switch theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></button>
+  </div>
  </header>
  <div id="codebox" class="panel"><label for="codeIn" class="muted">Paste a share link from a friend:</label><textarea id="codeIn" spellcheck="false" style="margin-top:6px"></textarea><div class="row" style="margin-top:8px"><button class="btn accent" id="bLoadCode" type="button">Load</button><span id="msg2" class="muted"></span></div></div>
  <div id="msg" role="status"></div>
@@ -208,7 +213,7 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
  <nav class="tabs" aria-label="Steps">
   <button class="tab" type="button" data-go="1"><span class="n">1</span><span>Scouter values<small>Efficiency Boss Cut tab, after Result</small></span></button>
   <button class="tab" type="button" data-go="2"><span class="n">2</span><span>Your gear<small>Your items, item level, and potentials</small></span></button>
-  <button class="tab" type="button" data-go="3"><span class="n">3</span><span>Results<small>What to cube next</small></span></button>
+  <button class="tab" type="button" data-go="3"><span class="n">3</span><span>Results<small>Ranked by FD per cube</small></span></button>
  </nav>
 
  <section class="panel step" id="step1">
@@ -246,15 +251,15 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
  </section>
 
  <section class="panel step" id="step3">
-  <div class="stephead"><div><h2>What to cube next</h2><p>Best value per cube at the top. Tap a row for its auto-reroll targets. <b id="cubeNote"></b></p></div></div>
+  <div class="stephead"><div><h2>Step 3: What to cube next <span class="chip" id="cubeNote"></span></h2><p>Best value per cube is at the top. Tap a row to see its auto-reroll targets.</p></div></div>
   <div id="out"></div>
   <p class="note">This tool might have mistakes. Use it at your own risk.</p>
-  <div class="foot"><button class="btn" type="button" data-go="2">← Edit gear</button><button class="btn" type="button" data-go="1">Edit scouter values</button></div>
+  <div class="foot"><button class="btn" type="button" data-go="2">← Back to gear</button><button class="btn ghost" type="button" data-go="1">Edit scouter values</button></div>
  </section>
 
  <footer>
   <div><b>FD gain</b> = how much Final Damage you gain.</div>
-  <div><b>FD per cubes</b> = average FD you gain for that many cubes. Higher is better.</div>
+  <div><b>FD per X cubes</b> = average FD you gain for every X cubes you use. Higher is better.</div>
   <div><b>Cube rates</b> from <a href="https://brendonmay.github.io/cubingCalculator/">brendonmay's cubing calculator</a>.</div>
  </footer>
 </div>
@@ -317,7 +322,7 @@ const SCOUT = [
 ].map(([id,label,amt,req,hint,star])=>({id,label,amt,req,hint,star}));
 const TEMPLATE = {cube:"bright",ms:"INT",ss:"LUK",
  scout:{boss:[40,"3.560"],att:[12,"4.603"],statp:[12,"1.005"],allp:[9,"0.870"],crit:[8,"2.277"],ied:[40,"0.831"],secp:[12,"0.155"]},
- gear:{ring1:[200,"A10","S10","S13","Endless Terror"],ring2:[160,"S13","S10","S10","Dawn Guardian Angel Ring"],ring3:[150,"S12","S12","A6","Superior Gollux Ring"],
+ gear:{ring4:[0,"J0","J0","J0",""],ring1:[200,"A10","S10","S13","Endless Terror"],ring2:[160,"S13","S10","S10","Dawn Guardian Angel Ring"],ring3:[150,"S12","S12","A6","Superior Gollux Ring"],
   pend1:[140,"S12","S9","S9","Daybreak Pendant"],pend2:[160,"S13","S10","S10","Source of Suffering"],eye:[160,"S13","S13","A7","Magic Eyepatch"],face:[160,"S13","S10","S10","Berserked"],
   earring:[200,"S13","S13","A7","Commanding Force Earring"],belt:[200,"S13","S13","S10","Dreamy Belt"],weapon:[250,"T13","B40","T10","Destiny Weapon"],secondary:[200,"B40","T10","T10","Astra Secondary"],
   emblem:[200,"T13","T10","T10","Seren Emblem"],hat:[250,"S13","S10","S13","Eternal Hat"],top:[250,"S13","S10","S10","Eternal Top"],bottom:[250,"S13","S10","S10","Eternal Bottom"],
@@ -488,7 +493,7 @@ function presets(slot,cube,P){
 }
 function presetHtml(slot,cube,P){
  const ps=presets(slot,cube,P); if(!ps) return "";
- return `<div class="ph"><b>Auto-reroll targets</b><span>Put these in the Target presets. When you hit one, tap it to update your gear.${["weapon","secondary","emblem"].includes(slot.kind)?"":" Stop Upon Combat Power Increase also works here."}</span></div>
+ return `<div class="ph"><b>Auto-reroll targets${S.cube==="both"?` (${CUBE[cube]})`:""}</b><span>Put these in the Target presets. When you hit one, tap it to update your gear.${["weapon","secondary","emblem"].includes(slot.kind)?"":" Stop Upon Combat Power Increase also works here."}</span></div>
   ${["weapon","secondary","emblem"].includes(slot.kind)?`<div class="cpwarn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.5"/></svg><span><b>Turn OFF Stop Upon Combat Power Increase!</b> On WSE, Boss raises Combat Power way more than it's worth, so it will stop on bad lines.</span></div>`:""}
   <div class="pgrid">${ps.picked.map((x,k)=>`<button type="button" class="preset" data-slot="${slot.id}" data-codes="${x.codes.join(",")}">
    <span class="pn">${k+1}${k===0?' <em>Recommended</em>':""}</span>
@@ -496,13 +501,14 @@ function presetHtml(slot,cube,P){
    <span class="pm">1 in ${fmt(1/x.p)} · <b>+${x.gain.toFixed(3)}%</b></span></button>`).join("")}</div>
   <div class="note" style="margin-top:6px">With ${ps.picked.length>1?`all ${ps.picked.length}`:"this"}: 1 in ${fmt(1/ps.up)} per cube, about <span data-p="${ps.up}"></span> cubes for <span class="qlab"></span>, <span data-r="${ps.roi/1000}"></span> FD per <span class="nlab"></span> cubes.</div>`;
 }
-const fdFmt=v=>v>=100?v.toFixed(0):v>=1?v.toFixed(2):v>=0.01?v.toFixed(3):v>0?v.toPrecision(2):"0";
+const fdFmt=v=>v>=100?v.toFixed(0):v>=1?v.toFixed(2):v>=0.001?v.toFixed(3):v>0?v.toPrecision(2):"0";
 function paintNums(root){
  root=root||$("out");
  for(const e of root.querySelectorAll("[data-p]")) e.textContent=fmt(cubesFor(+e.dataset.p,S.q));
  for(const e of root.querySelectorAll("[data-r]")) e.textContent=fdFmt(+e.dataset.r*S.per);
  for(const e of root.querySelectorAll(".qlab")) e.textContent=`${Math.round(S.q*100)}%`;
  for(const e of root.querySelectorAll(".nlab")) e.textContent=fmt(S.per);
+ for(const e of root.querySelectorAll('td[data-l="FD per cubes"]')) e.dataset.lab=`FD per ${fmt(S.per)}`;
 }
 function fillPresets(d){
  const el=d.querySelector(".presets"); if(!el||el.dataset.done) return;
@@ -533,7 +539,7 @@ function fillScout(){
 }
 const CUBE={bright:"Black / Bright Cube",glowing:"Red / Glowing Cube",both:"both cubes"};
 const SHORT={bright:"Bright",glowing:"Glowing"};
-function paintCube(){for(const b of document.querySelectorAll("[data-cube]")){const on=b.dataset.cube===S.cube;b.classList.toggle("on",on);b.setAttribute("aria-pressed",on);} const c=$("cubeNote"); if(c) c.textContent=S.cube==="both"?"Comparing both cubes: each item shows the cube that gives more per cube.":`Using ${CUBE[S.cube]} odds. Switch at the top.`;}
+function paintCube(){for(const b of document.querySelectorAll("[data-cube]")){const on=b.dataset.cube===S.cube;b.classList.toggle("on",on);b.setAttribute("aria-pressed",on);} const c=$("cubeNote"); if(c) c.textContent=S.cube==="both"?"Comparing both cubes":CUBE[S.cube];}
 function updateStep1(){
  const P=perValues(), miss=missing();
  for(const s of SCOUT) $("lb_"+s.id).textContent=lab(s);
@@ -586,7 +592,7 @@ function fillSlot(s){
  $("w_"+s.id).textContent=lvl&&lvl<120?"Under Lv 120: odds are estimated":"";
  for(const i of [0,1,2]){
   const opts=options(s.kind,optLvl(lvl),i), el=$(`p_${s.id}_${i}`);
-  let v=g[i+1]; if(!opts.includes(v)){const [c]=parse(v);v=opts.find(o=>parse(o)[0]===c)||"J0";g[i+1]=v;}
+  let v=g[i+1]; if(!opts.includes(v)){const [c,val]=parse(v);const same=opts.filter(o=>parse(o)[0]===c).sort((a,b)=>Math.abs(parse(a)[1]-val)-Math.abs(parse(b)[1]-val)||parse(a)[1]-parse(b)[1]);v=same[0]||"J0";g[i+1]=v;}
   el.innerHTML=opts.map(o=>`<option value="${o}">${lineLabel(o)}</option>`).join("");
   el.value=v; el.classList.toggle("J",v==="J0");
  }
@@ -614,7 +620,7 @@ function renderResults(){
   <div class="hd"><span>#</span><span>Item and current lines</span><span>Best target</span><span>Chance</span><span><span class="qlab"></span> cubes</span><span>FD gain</span><span>FD per <span class="nlab"></span> cubes</span></div>`;
  const tbl=x=>{const b=x.best;return `<div style="margin-top:${both?10:0}px">${both?`<b style="color:var(--fg)">${CUBE[x.cube]}</b>`:""}
    <div style="overflow-x:auto"><div class="ttcap">Cubes columns = cubes needed for a 25%, 50%, 75% or 99% chance to hit.</div><table class="tt"><colgroup><col class="c-t"><col class="c-c"><col class="c-q"><col class="c-q"><col class="c-q"><col class="c-q"><col class="c-g"><col class="c-r"></colgroup>
-   <thead><tr><th>Target</th><th class="n">Chance</th><th class="n q">25%</th><th class="n q">50%</th><th class="n q">75%</th><th class="n q">99%</th><th class="n">FD gain</th><th class="n">FD per <span class="nlab"></span></th></tr></thead><tbody>${x.targets.map(t=>`<tr${t===b?' class="best"':''}><td class="tgt">${tHtml(t.t)}</td><td class="n" data-l="Chance">1 in ${fmt(1/t.p)}</td>${[.25,.5,.75,.99].map(q=>`<td class="n q" data-l="Cubes for ${q*100}%">${short(cubesFor(t.p,q))}</td>`).join("")}<td class="n" data-l="FD gain">+${t.gain.toFixed(3)}%</td><td class="n" data-l="FD per cubes" data-r="${t.roi/1000}"></td></tr>`).join("")}</tbody></table></div></div>`;};
+   <thead><tr><th>Target</th><th class="n">Chance</th><th class="n q">25%</th><th class="n q">50%</th><th class="n q">75%</th><th class="n q">99%</th><th class="n">FD gain</th><th class="n">FD per <span class="nlab"></span></th></tr></thead><tbody>${x.targets.map(t=>`<tr${t===b?' class="best"':''}><td class="tgt">${tHtml(t.t)}</td><td class="n" data-l="Chance">1 in ${fmt(1/t.p)}</td>${[.25,.5,.75,.99].map(q=>`<td class="n q" data-l="${q*100}% cubes">${short(cubesFor(t.p,q))}</td>`).join("")}<td class="n" data-l="FD gain">+${t.gain.toFixed(3)}%</td><td class="n" data-l="FD per cubes" data-r="${t.roi/1000}"></td></tr>`).join("")}</tbody></table></div></div>`;};
  const rows=ok.map((r,i)=>{
   const b=r.best, now=S.gear[r.slot.id].slice(1,4).map(lineLabel).join(", ");
   const other=both?r.per.find(x=>x!==r.per.find(y=>y.cube===r.cube)):null;
@@ -634,7 +640,7 @@ function renderResults(){
 
 /* ---------- steps, state ---------- */
 function go(n){
- if(n>1&&missing().length){ n=1; say("Fill in the scouter rows marked * first."); }
+ if(n>1&&missing().length){ n=1; say("Fill in your scouter values first."); }
  step=n;
  for(const i of [1,2,3]){ $("step"+i).classList.toggle("on",i===n); document.querySelector(`.tab[data-go="${i}"]`).classList.toggle("on",i===n); }
  $("exNote").style.display=isTemplateGear()?"":"none";
