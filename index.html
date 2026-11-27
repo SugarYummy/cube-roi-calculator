@@ -196,6 +196,20 @@ select:disabled{opacity:.55;cursor:not-allowed}
 .why{background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:14px;color:var(--muted)}
 .why ul{margin:6px 0 0;padding-left:18px}.why li{margin:3px 0}
 .list{display:grid;gap:6px}
+.bud{margin:0 0 12px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--sunk)}
+.budtop{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;font-size:14px;color:var(--muted)}
+.budtop>b{color:var(--fg);font:600 15px var(--display)}.budtop label{display:flex;align-items:center;gap:6px}.budtop input{width:96px}
+.bnote{flex-basis:100%;font-size:12.5px}
+.budsum{margin:10px 0 8px;font-size:14px}
+.budt{width:100%;max-width:620px;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+.budt th:nth-child(3){width:76px}.budt th:nth-child(4){width:96px}
+@media (max-width:600px){.bud{padding:12px}.budt th,.budt td{padding-left:5px;padding-right:5px}.budt th:first-child,.budt td:first-child{width:24px}.budt th:nth-child(3){width:52px}.budt th:nth-child(4){width:70px}.budt .dk{display:none}.budt .ph{display:inline}}.budt tbody[hidden]{display:none}.budt .ph{display:none}.budmore{margin-top:6px;font-size:13px}
+.budt th{font-weight:500;color:var(--muted);font-size:12px;text-align:left;padding:4px 8px;border-bottom:1px solid var(--line)}
+.budt td{padding:5px 8px;border-bottom:1px solid color-mix(in oklab,var(--line) 55%,transparent)}
+.budt tr:last-child td{border-bottom:0}
+.budt td.n{text-align:right;white-space:nowrap}.budt th.n{text-align:right;line-height:1.3}.budt th:first-child,.budt td:first-child{width:30px;color:var(--muted)}
+.budt tr.ok td:nth-child(3){color:var(--good);font-weight:600}
+.list .rk.bdone{color:var(--good)}
 .hd,.list summary{display:grid;grid-template-columns:30px minmax(0,1.4fr) minmax(0,1fr) 112px 100px 90px minmax(130px,1fr);gap:10px;align-items:center}
 .hd{font-size:12px;color:var(--muted);padding:0 13px 2px}
 .hd>span:nth-child(n+3){text-align:center}.hd>span:last-child{text-align:left}
@@ -364,6 +378,7 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
    <li><b>Ranking:</b> for each item it checks targets like "33%+ Magic ATT" and picks the one with the most FD per cube (or the fewest cubes).</li>
    <li><b>Auto-reroll targets:</b> settings for the in-game Target presets. One is only suggested if everything it stops on is an upgrade for you. The game adds up totals, and All Stats counts toward your main stat.</li>
    <li><b>Mesos:</b> Heroic world prices. Bright 22M and Glowing 12M each, plus the meso fee each cube use charges (20 × item level²). The 25% off Cash Shop cube sale turns on by itself on sale days.</li>
+   <li><b>Budget plan:</b> in Mesos mode, type your mesos. It cubes each item in list order until it hits the target, 4,000 times, and shows how far you get most of the time.</li>
    <li><b>Your data:</b> saved in your browser only. Copy link puts your gear in the link.</li>
    <li><b>Not exact for:</b> Demon Avenger, Xenon, and Cooldown Hat values from Maple Scouter.</li>
    <li>Found a bug or a wrong number? <a href="https://github.com/SugarYummy/cube-roi-calculator/issues">Report it on GitHub</a>.</li>
@@ -1009,6 +1024,35 @@ function fillSlot(s){
 const isTemplateGear=()=>SLOTS.every(s=>JSON.stringify(S.gear[s.id])===JSON.stringify(TEMPLATE.gear[s.id]));
 
 /* ---------- step 3 ---------- */
+// Budget plan (Mesos): go down the list in order and cube each item until it hits its target. Tried 4,000 times.
+const parseMeso=t=>{ const m=String(t).replace(/[,\s]/g,"").match(/^(\d*\.?\d+)([kmbt]?)/i); if(!m) return 0; const n=+m[1], u=m[2].toLowerCase(); return n*(u?{k:1e3,m:1e6,b:1e9,t:1e12}[u]:(n>=1e6?1:1e9)); };
+let BUDROWS=[], budAll=false;
+function budgetSim(rows,B){
+ const N=4000, fin=rows.map(()=>0), cnt=new Array(rows.length+1).fill(0); let g=0, seed=12345;
+ const rnd=()=>{ seed=seed+0x6D2B79F5|0; let t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; };
+ for(let r=0;r<N;r++){ let rem=B,k=0;
+  for(const x of rows){ const n=x.p>=1?1:Math.max(1,Math.ceil(Math.log(1-rnd())/Math.log(1-x.p))), c=n*x.cost; if(c>rem) break; rem-=c; fin[k]++; g+=x.gain; k++; }
+  cnt[k]++; }
+ let med=0, acc=0; for(let k=0;k<cnt.length;k++){ acc+=cnt[k]; if(acc>=N/2){ med=k; break; } }
+ return {fin:fin.map(f=>f/N), med, gain:g/N};
+}
+function paintBudget(){
+ const o=$("budOut"); if(!o) return; const B=parseMeso(S.bud), rows=BUDROWS, its=[...$("out").querySelectorAll("details.it")];
+ const mark=f=>its.forEach((d,i)=>{ const r=d.querySelector(".rk"), on=!!f&&f[i]>=.5; r.classList.toggle("bdone",on); r.title=on?"Likely done with your budget":""; });
+ if(!(B>0)||!rows.length){ o.innerHTML='<p class="budsum muted">Type how many mesos you have, like 700B.</p>'; mark(null); return; }
+ const sim=budgetSim(rows,B), nm=i=>`<b>${esc(rows[i].name)}</b>`;
+ const pct=f=>f===1?"100%":f>=.995?">99%":f===0?"0%":f<.005?"<1%":Math.round(f*100)+"%";
+ let sum=sim.med===0?`${mesoFmt(B)} is not enough to finish ${nm(0)} most of the time. It takes about <b>${mesoFmt(rows[0].avg)}</b> on average.`
+  :sim.med===rows.length?`With ${mesoFmt(B)} you most likely finish <b>all ${rows.length}</b> items.`
+  :`With ${mesoFmt(B)} you most likely finish the top <b>${sim.med}</b> item${sim.med>1?"s":""} (up to ${nm(sim.med-1)}), then run out during ${nm(sim.med)}.`;
+ if(sim.gain>0) sum+=` Average gain: <b>+${sim.gain.toFixed(3)}%</b> FD.`;
+ let cum=0; const tr=[], cut=Math.max(4,sim.med+3);
+ for(let i=0;i<rows.length;i++){ cum+=rows[i].avg; if(i>=3&&sim.fin[i]<.005) break;
+  tr.push(`<tr${sim.fin[i]>=.5?' class="ok"':""}><td>${i+1}</td><td>${esc(rows[i].name)}</td><td class="n">${pct(sim.fin[i])}</td><td class="n">${mesoFmt(cum)}</td></tr>`); }
+ const more=tr.length-cut;
+ o.innerHTML=`<p class="budsum">${sum}</p><table class="budt"><thead><tr><th>#</th><th>Item</th><th class="n">Chance</th><th class="n"><span class="dk">Avg mesos by then</span><span class="ph">Avg mesos</span></th></tr></thead><tbody>${tr.slice(0,cut).join("")}</tbody>${more>0?`<tbody${budAll?"":" hidden"}>${tr.slice(cut).join("")}</tbody>`:""}</table>${more>0?`<button type="button" class="linkbtn budmore" id="budMore">${budAll?"Show less":`Show ${more} more`}</button>`:""}`;
+ mark(sim.fin);
+}
 function renderResults(){
  if(step!==3) return;
  const P=perValues();
@@ -1024,6 +1068,8 @@ function renderResults(){
   (skip.length?`<p class="maxed">Skipped (no level set): ${skip.map(s=>esc(s.name)).join(", ")}.</p>`:"");
  if(!ok.length){$("out").innerHTML='<p class="note">Nothing to upgrade yet. Fill in your gear in step 2.</p>'+tail;return;}
  const maxRoi=Math.max(...ok.map(val)), top=ok[0], tb=pickT(top);
+ BUDROWS=ok.map(r=>{ const b=pickT(r), c=price(r.cube,r.lvl); return {name:itemName(r.slot),p:b.p,cost:c,avg:c/b.p,gain:b.gain}; });
+ const bud=MESO()?`<div class="bud"><div class="budtop"><b>Budget plan</b><label>I have <input id="budIn" inputmode="decimal" autocomplete="off" value="${esc(S.bud)}" placeholder="700B" aria-label="Your mesos"> mesos</label><span class="bnote">Cubes each item in list order until it hits the target (tried 4,000 times). Chance is how often you finish that item. Green numbers in the list are likely done.</span></div><div id="budOut"></div></div>`:"";
  const pick=`<div class="top"><div class="pick"><div class="k">${S.sort==="cheap"?"Cheapest upgrade right now":"Best value right now"}${both?` (${CUBE[top.cube]})`:""}</div>
   <div class="pbody">${iconHtml(S.gear[top.slot.id][4],1)}<div><div class="big">${esc(itemName(top.slot))}</div><div class="ptg">${tHtml(tb.t)}</div>
   <div class="stats"><span><b>1 in ${fmt(1/tb.p)}</b>chance per ${SHORT[top.cube]} cube</span><span><b data-p="${tb.p}" data-c="${top.cube}" data-lv="${top.lvl}"></b>${cunit()} for <span class="qlab"></span></span><span class="g"><b>+${tb.gain.toFixed(3)}%</b>Final Damage</span></div></div></div></div></div>`;
@@ -1047,7 +1093,8 @@ function renderResults(){
    <span class="bar"><i style="width:${Math.max(3,val(r)/maxRoi*70).toFixed(1)}%"></i><span data-r="${b.roi/1000}" data-c="${r.cube}" data-lv="${r.lvl}"></span></span></summary>
    <div class="dt">${pHtml}${(both?r.per.filter(x=>pickT(x)):[r]).map(tbl).join("")}</div></details>`;
  }).join("");
- $("out").innerHTML=pick+head+`<div class="list">${rows}</div>`+tail;
+ $("out").innerHTML=pick+head.replace('<div class="hd">',bud+'<div class="hd">')+`<div class="list">${rows}</div>`+tail;
+ if(MESO()) paintBudget();
  for(const d of $("out").querySelectorAll("details.it[open]")) fillPresets(d);
  paintNums();
  if(keepOpen){ const d=$("out").querySelector(`details.it[data-slot="${keepOpen}"]`); keepOpen=null; if(d) d.scrollIntoView({block:"nearest",behavior:"smooth"}); }
@@ -1083,6 +1130,7 @@ function valid(st){
  if(st.metric!=="cost") st.metric="fd";
  if(st.unit!=="mesos") st.unit="cubes";
  st.perB=Math.min(Math.max(+parseFloat(st.perB)||100,0.001),1e6);
+ st.bud=st.bud==null?"100B":String(st.bud).slice(0,20);
  st.per=Math.min(Math.max(parseInt(st.per)||1000,1),1e9);
  st.r4=!!st.r4||+st.gear.ring4[0]>0;
  st.name=String(st.name||"").slice(0,30); if(!CLS[st.cls]) st.cls="";
@@ -1173,7 +1221,7 @@ DB=loadDB(); S=DB.list.find(p=>p.id===DB.cur).state; valid(S);
 buildScout(); buildGear(); applyAll(); renderProfiles();
 go(missing().length?1:3);
 $("profSel").addEventListener("change",e=>switchTo(e.target.value));
-$("profNew").addEventListener("click",()=>{ addProfile({cube:S.cube,ms:"INT",ss:"LUK",cls:"",name:"",reg:S.reg,scout:blankScout(),gear:blankGear(),q:S.q,per:S.per,sort:S.sort,metric:S.metric,unit:S.unit,perB:S.perB},"New character added. Fill in its scouter values."); $("charName").focus(); });
+$("profNew").addEventListener("click",()=>{ addProfile({cube:S.cube,ms:"INT",ss:"LUK",cls:"",name:"",reg:S.reg,scout:blankScout(),gear:blankGear(),q:S.q,per:S.per,sort:S.sort,metric:S.metric,unit:S.unit,perB:S.perB,bud:S.bud},"New character added. Fill in its scouter values."); $("charName").focus(); });
 let delT; $("profDel").addEventListener("click",()=>{
  const b=$("profDel"); if(DB.list.length<2) return;
  if(!b.classList.contains("sure")){ b.classList.add("sure"); b.textContent="Click again to delete"; clearTimeout(delT); delT=setTimeout(()=>{b.classList.remove("sure");b.textContent="Delete";},3000); return; }
@@ -1247,6 +1295,7 @@ $("out").addEventListener("click",e=>{const b=e.target.closest("[data-metric]");
 $("out").addEventListener("change",e=>{ if(!e.target.classList.contains("cdHatTog")) return; S.cd.on=e.target.checked; fillCd(); fillSlot(SID.hat); save(); keepOpen="hat"; renderResults(); });
 $("out").addEventListener("click",e=>{ if(!e.target.closest("[data-cdgo]")) return; S.cd.on=true; fillCd(); save(); go(1); setTimeout(()=>{ $("cdGrid").scrollIntoView({block:"center",behavior:"smooth"}); $("cdv2").focus({preventScroll:true}); },50); });
 $("out").addEventListener("click",e=>{const b=e.target.closest("[data-unit]");if(!b)return;S.unit=b.dataset.unit;save();renderResults();});
+$("out").addEventListener("click",e=>{ if(e.target.id!=="budMore") return; budAll=!budAll; paintBudget(); $("budMore").focus(); });
 $("out").addEventListener("change",e=>{ if(e.target.id==="saleChk"){ saleOn=e.target.checked; renderResults(); } });
 $("out").addEventListener("change",e=>{
  if(e.target.id==="qSel"){ S.q=+e.target.value; save(); paintNums(); }
@@ -1262,6 +1311,7 @@ $("out").addEventListener("click",e=>{
 $("out").addEventListener("input",e=>{
  if(e.target.id==="perIn"){ const n=parseInt(e.target.value.replace(/[^0-9]/g,"")); if(n>0){ S.per=Math.min(n,1e9); save(); paintNums(); } }
  if(e.target.id==="perBIn"){ const n=parseFloat(e.target.value.replace(/[^0-9.]/g,"")); if(n>0){ S.perB=Math.min(+n.toFixed(3),1e6); save(); paintNums(); } }
+ if(e.target.id==="budIn"){ S.bud=e.target.value.slice(0,20); save(); paintBudget(); }
 });
 $("out").addEventListener("toggle",e=>{if(e.target.matches&&e.target.matches("details.it")&&e.target.open) fillPresets(e.target);},true);
 const cf=$("cfModal"); let cfPick=null;
