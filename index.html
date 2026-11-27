@@ -115,7 +115,18 @@ table.sc{width:100%;border-collapse:collapse}
 .pbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 12px}
 .pbar label{display:flex;align-items:center;gap:8px;font-weight:600}.pbar select{width:auto;min-width:220px}
 #profDel.sure{color:#ff6b6f;border-color:#ff6b6f}
-#charName{width:190px}#clsSel{width:auto}
+#charName{width:190px}
+.sp{position:fixed;z-index:60;margin:0;padding:4px;list-style:none;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.35);overflow:auto;font:15px/1.35 var(--body);color:var(--fg);overscroll-behavior:contain}
+.sp li{padding:7px 10px;border-radius:7px;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.sp li.gh{font-weight:700;font-size:13px;color:var(--muted);cursor:default;padding:8px 10px 3px}
+.sp li.on{background:var(--sunk);outline:1px solid var(--line)}.sp li.sel{color:var(--accent);font-weight:600}.sp li.dis{color:var(--muted);cursor:default}
+.sp li.ig{padding-left:14px}.sp li i{font:700 10px var(--body);font-style:normal;width:16px;height:16px;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;color:#10200b;flex:none}
+.combo{position:relative;display:block}.combo input{width:250px;padding-right:28px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%2398a3b6' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:12px 8px}
+.combo ul{position:absolute;z-index:30;left:0;top:calc(100% + 4px);min-width:100%;width:max-content;max-width:min(320px,90vw);max-height:340px;overflow:auto;margin:0;padding:4px;list-style:none;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.35);font-weight:400}
+.combo li{padding:7px 10px;border-radius:7px;cursor:pointer;white-space:nowrap}
+.combo li.gh{font-weight:700;color:var(--fg);cursor:default;padding:8px 10px 4px;font-size:14px}
+.combo li.op{padding-left:18px}.combo li.op.on{background:var(--sunk);outline:1px solid var(--line)}.combo li.op.cur{color:var(--accent);font-weight:600}
+.combo li.none{color:var(--muted);cursor:default}
 .rkrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin:-2px 0 12px}
 .rkl{font-weight:600}.rkl small{color:var(--muted);font-weight:400}
 .rkmsg{font-size:14px;color:var(--muted)}.rkmsg.bad{color:#ff6b6f}
@@ -140,6 +151,7 @@ table.sc{width:100%;border-collapse:collapse}
 .gic{display:flex;flex:none}.ic.sm{width:40px;height:40px;border-radius:9px}.ic.sm img{max-width:32px;max-height:32px;transform:none}
 .ghd span:nth-child(2){padding-left:57px}
 .gr select{font-size:15px;padding:7px 26px 7px 8px;background-position:right 8px center;text-overflow:ellipsis}
+select.tL,select.tU{background-repeat:no-repeat;background-position:left 8px center,right 8px center;background-size:16px 16px,11px 8px;padding-left:31px!important}select.tL{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%238bd448'/%3E%3Ctext x='8' y='12' text-anchor='middle' font-family='Arial,sans-serif' font-weight='700' font-size='10' fill='%2310200b'%3EL%3C/text%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%2398a3b6' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}select.tU{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%23f2b632'/%3E%3Ctext x='8' y='12' text-anchor='middle' font-family='Arial,sans-serif' font-weight='700' font-size='10' fill='%2310200b'%3EU%3C/text%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%2398a3b6' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}select optgroup{font-style:normal;font-weight:700;color:var(--muted)}
 select.J{color:var(--muted)}
 .gr.empty{border-style:dashed}
 .gr[hidden]{display:none}
@@ -259,8 +271,8 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
   <div class="stephead"><div><h2>Step 1: Input your scouter values</h2><p>In Maple Scouter, click <b>Result</b>, then open the <b>Efficiency Boss Cut</b> tab. Under <b>Stat Efficiency</b>, click <b>Detail Eff.</b> and copy the amount and Final Damage % of each row into the boxes.</p></div></div>
   <div class="row" style="margin-bottom:12px;gap:10px 16px">
    <label class="pick2">Name <input id="charName" placeholder="Character name" maxlength="30" autocomplete="off"></label>
-   <label class="pick2">Class <select id="clsSel"><option value="">Pick class (optional)</option></select></label>
-   <label class="pick2">Main stat <select id="msSel"><option>STR</option><option>DEX</option><option>INT</option><option>LUK</option></select></label>
+   <div class="pick2"><label for="clsIn">Class</label><div class="combo"><input id="clsIn" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="clsList" placeholder="Pick class (optional)" autocomplete="off" spellcheck="false"><ul id="clsList" role="listbox" hidden></ul></div></div>
+   <label class="pick2">Main stat <select id="msSel"><option>STR</option><option>DEX</option><option>INT</option><option>LUK</option><option value="HP">Max HP</option></select></label>
    <label class="pick2">Secondary stat <select id="ssSel"><option>STR</option><option>DEX</option><option>INT</option><option>LUK</option></select></label>
   </div>
   <div class="rkrow">
@@ -332,7 +344,7 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
 
 <script>
 {
-const RATES = {"ring":{"bright":[[["S",12,10.2564],["s",12,10.2564],["A",9,7.6923],["xr",20,7.6923],["J",0,64.1025]],[["S",9,10],["s",9,10],["A",6,8],["S",12,2.0513],["s",12,2.0513],["A",9,1.5385],["xr",20,1.5385],["J",0,64.8207]],[["S",9,11.875],["s",9,11.875],["A",6,9.5],["S",12,0.5128],["s",12,0.5128],["A",9,0.3846],["xr",20,0.3846],["J",0,64.955]]],"glowing":[[["S",12,10.2564],["s",12,10.2564],["A",9,7.6923],["xr",20,7.6923],["J",0,64.1025]],[["S",9,11.25],["s",9,11.25],["A",6,9],["S",12,1.0256],["s",12,1.0256],["A",9,0.7692],["xr",20,0.7692],["J",0,64.91]],[["S",9,12.375],["s",9,12.375],["A",6,9.9],["S",12,0.1026],["s",12,0.1026],["A",9,0.0769],["xr",20,0.0769],["J",0,64.9911]]]},"belt":{"bright":[[["S",12,12.1212],["s",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,48.4848]],[["S",9,8.3333],["s",9,8.3333],["A",6,6.6667],["xi",0,16.9698],["S",12,2.4242],["s",12,2.4242],["A",9,1.8182],["J",0,53.0301]],[["S",9,9.8958],["s",9,9.8958],["A",6,7.9167],["xi",0,16.7424],["S",12,0.6061],["s",12,0.6061],["A",9,0.4545],["J",0,53.8827]]],"glowing":[[["S",12,12.1212],["s",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,48.4848]],[["S",9,9.375],["s",9,9.375],["A",6,7.5],["xi",0,16.8182],["S",12,1.2121],["s",12,1.2121],["A",9,0.9091],["J",0,53.5984]],[["S",9,10.3125],["s",9,10.3125],["A",6,8.25],["xi",0,16.6818],["S",12,0.1212],["s",12,0.1212],["A",9,0.0909],["J",0,54.1098]]]},"weapon":{"bright":[[["S",12,9.7561],["s",12,9.7561],["T",12,4.878],["D",12,4.878],["A",9,7.3171],["I",35,4.878],["I",40,4.878],["B",35,9.7561],["B",40,4.878],["J",0,39.0242]],[["S",9,9.3023],["s",9,9.3023],["T",9,5.5814],["D",9,5.5814],["A",6,7.4419],["I",30,5.5814],["B",30,5.5814],["S",12,1.9512],["s",12,1.9512],["T",12,0.9756],["D",12,0.9756],["A",9,1.4634],["I",35,0.9756],["I",40,0.9756],["B",35,1.9512],["B",40,0.9756],["J",0,39.4327]],[["S",9,11.0465],["s",9,11.0465],["T",9,6.6279],["D",9,6.6279],["A",6,8.8372],["I",30,6.6279],["B",30,6.6279],["S",12,0.4878],["s",12,0.4878],["T",12,0.2439],["D",12,0.2439],["A",9,0.3659],["I",35,0.2439],["I",40,0.2439],["B",35,0.4878],["B",40,0.2439],["J",0,39.5093]]],"glowing":[[["S",12,9.7561],["s",12,9.7561],["T",12,4.878],["D",12,4.878],["A",9,7.3171],["I",35,4.878],["I",40,4.878],["B",35,9.7561],["B",40,4.878],["J",0,39.0242]],[["S",9,10.4651],["s",9,10.4651],["T",9,6.2791],["D",9,6.2791],["A",6,8.3721],["I",30,6.2791],["B",30,6.2791],["S",12,0.9756],["s",12,0.9756],["T",12,0.4878],["D",12,0.4878],["A",9,0.7317],["I",35,0.4878],["I",40,0.4878],["B",35,0.9756],["B",40,0.4878],["J",0,39.4838]],[["S",9,11.5116],["s",9,11.5116],["T",9,6.907],["D",9,6.907],["A",6,9.2093],["I",30,6.907],["B",30,6.907],["S",12,0.0976],["s",12,0.0976],["T",12,0.0488],["D",12,0.0488],["A",9,0.0732],["I",35,0.0488],["I",40,0.0488],["B",35,0.0976],["B",40,0.0488],["J",0,39.5299]]]},"secondary":{"bright":[[["S",12,8.5106],["s",12,8.5106],["T",12,4.2553],["D",12,4.2553],["A",9,6.383],["I",35,4.2553],["I",40,4.2553],["xi",0,12.766],["B",35,8.5106],["B",40,4.2553],["J",0,34.0424]],[["S",9,7.8431],["s",9,7.8431],["T",9,4.7059],["D",9,4.7059],["A",6,6.2745],["I",30,4.7059],["xi",0,15.1022],["B",30,4.7059],["S",12,1.7021],["s",12,1.7021],["T",12,0.8511],["D",12,0.8511],["A",9,1.2766],["I",35,0.8511],["I",40,0.8511],["B",35,1.7021],["B",40,0.8511],["J",0,33.4752]],[["S",9,9.3137],["s",9,9.3137],["T",9,5.5882],["D",9,5.5882],["A",6,7.451],["I",30,5.5882],["xi",0,15.5402],["B",30,5.5882],["S",12,0.4255],["s",12,0.4255],["T",12,0.2128],["D",12,0.2128],["A",9,0.3191],["I",35,0.2128],["I",40,0.2128],["B",35,0.4255],["B",40,0.2128],["J",0,33.3688]]],"glowing":[[["S",12,8.5106],["s",12,8.5106],["T",12,4.2553],["D",12,4.2553],["A",9,6.383],["I",35,4.2553],["I",40,4.2553],["xi",0,12.766],["B",35,8.5106],["B",40,4.2553],["J",0,34.0424]],[["S",9,8.8235],["s",9,8.8235],["T",9,5.2941],["D",9,5.2941],["A",6,7.0588],["I",30,5.2941],["xi",0,15.3942],["B",30,5.2941],["S",12,0.8511],["s",12,0.8511],["T",12,0.4255],["D",12,0.4255],["A",9,0.6383],["I",35,0.4255],["I",40,0.4255],["B",35,0.8511],["B",40,0.4255],["J",0,33.4041]],[["S",9,9.7059],["s",9,9.7059],["T",9,5.8235],["D",9,5.8235],["A",6,7.7647],["I",30,5.8235],["xi",0,15.657],["B",30,5.8235],["S",12,0.0851],["s",12,0.0851],["T",12,0.0426],["D",12,0.0426],["A",9,0.0638],["I",35,0.0426],["I",40,0.0426],["B",35,0.0851],["B",40,0.0426],["J",0,33.3406]]]},"emblem":{"bright":[[["S",12,11.4286],["s",12,11.4286],["T",12,5.7143],["D",12,5.7143],["A",9,8.5714],["I",35,5.7143],["I",40,5.7143],["J",0,45.7144]],[["S",9,10],["s",9,10],["T",9,6],["D",9,6],["A",6,8],["I",30,6],["S",12,2.2857],["s",12,2.2857],["T",12,1.1429],["D",12,1.1429],["A",9,1.7143],["I",35,1.1429],["I",40,1.1429],["J",0,43.143]],[["S",9,11.875],["s",9,11.875],["T",9,7.125],["D",9,7.125],["A",6,9.5],["I",30,7.125],["S",12,0.5714],["s",12,0.5714],["T",12,0.2857],["D",12,0.2857],["A",9,0.4286],["I",35,0.2857],["I",40,0.2857],["J",0,42.6606]]],"glowing":[[["S",12,11.4286],["s",12,11.4286],["T",12,5.7143],["D",12,5.7143],["A",9,8.5714],["I",35,5.7143],["I",40,5.7143],["J",0,45.7144]],[["S",9,11.25],["s",9,11.25],["T",9,6.75],["D",9,6.75],["A",6,9],["I",30,6.75],["S",12,1.1429],["s",12,1.1429],["T",12,0.5714],["D",12,0.5714],["A",9,0.8571],["I",35,0.5714],["I",40,0.5714],["J",0,42.8214]],[["S",9,12.375],["s",9,12.375],["T",9,7.425],["D",9,7.425],["A",6,9.9],["I",30,7.425],["S",12,0.1143],["s",12,0.1143],["T",12,0.0571],["D",12,0.0571],["A",9,0.0857],["I",35,0.0571],["I",40,0.0571],["J",0,42.532]]]},"hat":{"bright":[[["S",12,9.7561],["s",12,9.7561],["A",9,7.3171],["xi",0,14.6342],["xd",0,7.3171],["J",0,51.2195]],[["S",9,7.6923],["s",9,7.6923],["A",6,6.1538],["xi",0,15.2344],["xd",0,7.6172],["S",12,1.9512],["s",12,1.9512],["A",9,1.4634],["J",0,50.2438]],[["S",9,9.1346],["s",9,9.1346],["A",6,7.3077],["xi",0,15.3472],["xd",0,7.6736],["S",12,0.4878],["s",12,0.4878],["A",9,0.3659],["J",0,50.0609]]],"glowing":[[["S",12,9.7561],["s",12,9.7561],["A",9,7.3171],["xi",0,14.6342],["xd",0,7.3171],["J",0,51.2195]],[["S",9,8.6538],["s",9,8.6538],["A",6,6.9231],["xi",0,15.3096],["xd",0,7.6548],["S",12,0.9756],["s",12,0.9756],["A",9,0.7317],["J",0,50.1218]],[["S",9,9.5192],["s",9,9.5192],["A",6,7.6154],["xi",0,15.3772],["xd",0,7.6886],["S",12,0.0976],["s",12,0.0976],["A",9,0.0732],["J",0,50.0124]]]},"top":{"bright":[[["S",12,10.2564],["s",12,10.2564],["A",9,7.6923],["xi",0,15.3846],["xt",3,7.6923],["xv",0,7.6923],["J",0,41.0256]],[["S",9,6.4516],["s",9,6.4516],["A",6,5.1613],["xi",0,13.3996],["xt",2,5.1613],["xv",0,6.6998],["S",12,2.0513],["s",12,2.0513],["A",9,1.5385],["xt",3,1.5385],["J",0,49.4954]],[["S",9,7.6613],["s",9,7.6613],["A",6,6.129],["xi",0,13.0272],["xt",2,6.129],["xv",0,6.5136],["S",12,0.5128],["s",12,0.5128],["A",9,0.3846],["xt",3,0.3846],["J",0,51.0833]]],"glowing":[[["S",12,10.2564],["s",12,10.2564],["A",9,7.6923],["xi",0,15.3846],["xt",3,7.6923],["xv",0,7.6923],["J",0,41.0256]],[["S",9,7.2581],["s",9,7.2581],["A",6,5.8065],["xi",0,13.1514],["xt",2,5.8065],["xv",0,6.5757],["S",12,1.0256],["s",12,1.0256],["A",9,0.7692],["xt",3,0.7692],["J",0,50.5542]],[["S",9,7.9839],["s",9,7.9839],["A",6,6.3871],["xi",0,12.928],["xt",2,6.3871],["xv",0,6.464],["S",12,0.1026],["s",12,0.1026],["A",9,0.0769],["xt",3,0.0769],["J",0,51.5071]]]},"bottom":{"bright":[[["S",12,12.1212],["s",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,48.4848]],[["S",9,7.6923],["s",9,7.6923],["A",6,6.1538],["xi",0,15.944],["xd",0,6.1538],["S",12,2.4242],["s",12,2.4242],["A",9,1.8182],["J",0,49.6968]],[["S",9,9.1346],["s",9,9.1346],["A",6,7.3077],["xi",0,15.5244],["xd",0,7.3077],["S",12,0.6061],["s",12,0.6061],["A",9,0.4545],["J",0,49.9243]]],"glowing":[[["S",12,12.1212],["s",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,48.4848]],[["S",9,8.6538],["s",9,8.6538],["A",6,6.9231],["xi",0,15.6644],["xd",0,6.9231],["S",12,1.2121],["s",12,1.2121],["A",9,0.9091],["J",0,49.8483]],[["S",9,9.5192],["s",9,9.5192],["A",6,7.6154],["xi",0,15.4126],["xd",0,7.6154],["S",12,0.1212],["s",12,0.1212],["A",9,0.0909],["J",0,49.9848]]]},"shoulder":{"bright":[[["S",12,12.1212],["s",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,48.4848]],[["S",9,8.3333],["s",9,8.3333],["A",6,6.6667],["xi",0,16.9698],["S",12,2.4242],["s",12,2.4242],["A",9,1.8182],["J",0,53.0301]],[["S",9,9.8958],["s",9,9.8958],["A",6,7.9167],["xi",0,16.7424],["S",12,0.6061],["s",12,0.6061],["A",9,0.4545],["J",0,53.8827]]],"glowing":[[["S",12,12.1212],["s",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,48.4848]],[["S",9,9.375],["s",9,9.375],["A",6,7.5],["xi",0,16.8182],["S",12,1.2121],["s",12,1.2121],["A",9,0.9091],["J",0,53.5984]],[["S",9,10.3125],["s",9,10.3125],["A",6,8.25],["xi",0,16.6818],["S",12,0.1212],["s",12,0.1212],["A",9,0.0909],["J",0,54.1098]]]},"cape":{"bright":[[["S",12,12.1212],["s",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,48.4848]],[["S",9,8.3333],["s",9,8.3333],["A",6,6.6667],["xi",0,16.9698],["S",12,2.4242],["s",12,2.4242],["A",9,1.8182],["J",0,53.0301]],[["S",9,9.8958],["s",9,9.8958],["A",6,7.9167],["xi",0,16.7424],["S",12,0.6061],["s",12,0.6061],["A",9,0.4545],["J",0,53.8827]]],"glowing":[[["S",12,12.1212],["s",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,48.4848]],[["S",9,9.375],["s",9,9.375],["A",6,7.5],["xi",0,16.8182],["S",12,1.2121],["s",12,1.2121],["A",9,0.9091],["J",0,53.5984]],[["S",9,10.3125],["s",9,10.3125],["A",6,8.25],["xi",0,16.6818],["S",12,0.1212],["s",12,0.1212],["A",9,0.0909],["J",0,54.1098]]]},"gloves":{"bright":[[["S",12,10],["s",12,10],["C",8,10],["A",9,7.5],["xi",0,15.0],["xd",0,7.5],["J",0,40]],[["S",9,7.1429],["s",9,7.1429],["A",6,5.7143],["F",32,1.4286],["f",32,1.4286],["xi",0,14.4286],["xd",0,7.2143],["S",12,2],["s",12,2],["C",8,2],["A",9,1.5],["J",0,48.0001]],[["S",9,8.4821],["s",9,8.4821],["A",6,6.7857],["F",32,1.6964],["f",32,1.6964],["xi",0,14.3214],["xd",0,7.1607],["S",12,0.5],["s",12,0.5],["C",8,0.5],["A",9,0.375],["J",0,49.4999]]],"glowing":[[["S",12,10],["s",12,10],["C",8,10],["A",9,7.5],["xi",0,15.0],["xd",0,7.5],["J",0,40]],[["S",9,8.0357],["s",9,8.0357],["A",6,6.4286],["F",32,1.6071],["f",32,1.6071],["xi",0,14.3572],["xd",0,7.1786],["S",12,1],["s",12,1],["C",8,1],["A",9,0.75],["J",0,49.0]],[["S",9,8.8393],["s",9,8.8393],["A",6,7.0714],["F",32,1.7679],["f",32,1.7679],["xi",0,14.2928],["xd",0,7.1464],["S",12,0.1],["s",12,0.1],["C",8,0.1],["A",9,0.075],["J",0,49.9]]]},"shoes":{"bright":[[["S",12,11.1111],["s",12,11.1111],["A",9,8.3333],["xi",0,16.6666],["xd",0,8.3333],["J",0,44.4444]],[["S",9,7.6923],["s",9,7.6923],["A",6,6.1538],["xi",0,15.641],["xd",0,7.8205],["S",12,2.2222],["s",12,2.2222],["A",9,1.6667],["J",0,48.8888]],[["S",9,9.1346],["s",9,9.1346],["A",6,7.3077],["xi",0,15.4488],["xd",0,7.7244],["S",12,0.5556],["s",12,0.5556],["A",9,0.4167],["J",0,49.7223]]],"glowing":[[["S",12,11.1111],["s",12,11.1111],["A",9,8.3333],["xi",0,16.6666],["xd",0,8.3333],["J",0,44.4444]],[["S",9,8.6538],["s",9,8.6538],["A",6,6.9231],["xi",0,15.5128],["xd",0,7.7564],["S",12,1.1111],["s",12,1.1111],["A",9,0.8333],["J",0,49.4443]],[["S",9,9.5192],["s",9,9.5192],["A",6,7.6154],["xi",0,15.3974],["xd",0,7.6987],["S",12,0.1111],["s",12,0.1111],["A",9,0.0833],["J",0,49.9444]]]},"heart":{"bright":[[["S",12,14.8148],["s",12,14.8148],["A",9,11.1111],["J",0,59.2592]],[["S",9,10],["s",9,10],["A",6,8],["S",12,2.963],["s",12,2.963],["A",9,2.2222],["J",0,63.852]],[["S",9,11.875],["s",9,11.875],["A",6,9.5],["S",12,0.7407],["s",12,0.7407],["A",9,0.5556],["J",0,64.7128]]],"glowing":[[["S",12,14.8148],["s",12,14.8148],["A",9,11.1111],["J",0,59.2592]],[["S",9,11.25],["s",9,11.25],["A",6,9],["S",12,1.4815],["s",12,1.4815],["A",9,1.1111],["J",0,64.426]],[["S",9,12.375],["s",9,12.375],["A",6,9.9],["S",12,0.1481],["s",12,0.1481],["A",9,0.1111],["J",0,64.9424]]]}};
+const RATES = {"ring":{"bright":[[["S",12,10.2564],["s",12,10.2564],["H",12,10.2564],["A",9,7.6923],["xr",20,7.6923],["J",0,53.8461]],[["S",9,10],["s",9,10],["H",9,12],["A",6,8],["S",12,2.0513],["s",12,2.0513],["H",12,2.0513],["A",9,1.5385],["xr",20,1.5385],["J",0,50.7694]],[["S",9,11.875],["s",9,11.875],["H",9,14.25],["A",6,9.5],["S",12,0.5128],["s",12,0.5128],["H",12,0.5128],["A",9,0.3846],["xr",20,0.3846],["J",0,50.1922]]],"glowing":[[["S",12,10.2564],["s",12,10.2564],["H",12,10.2564],["A",9,7.6923],["xr",20,7.6923],["J",0,53.8461]],[["S",9,11.25],["s",9,11.25],["H",9,13.5],["A",6,9],["S",12,1.0256],["s",12,1.0256],["H",12,1.0256],["A",9,0.7692],["xr",20,0.7692],["J",0,50.3844]],[["S",9,12.375],["s",9,12.375],["H",9,14.85],["A",6,9.9],["S",12,0.1026],["s",12,0.1026],["H",12,0.1026],["A",9,0.0769],["xr",20,0.0769],["J",0,50.0385]]]},"belt":{"bright":[[["S",12,12.1212],["s",12,12.1212],["H",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,36.3636]],[["S",9,8.3333],["s",9,8.3333],["H",9,10],["A",6,6.6667],["xi",0,16.9698],["S",12,2.4242],["s",12,2.4242],["H",12,2.4242],["A",9,1.8182],["J",0,40.6059]],[["S",9,9.8958],["s",9,9.8958],["H",9,11.875],["A",6,7.9167],["xi",0,16.7424],["S",12,0.6061],["s",12,0.6061],["H",12,0.6061],["A",9,0.4545],["J",0,41.4016]]],"glowing":[[["S",12,12.1212],["s",12,12.1212],["H",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,36.3636]],[["S",9,9.375],["s",9,9.375],["H",9,11.25],["A",6,7.5],["xi",0,16.8182],["S",12,1.2121],["s",12,1.2121],["H",12,1.2121],["A",9,0.9091],["J",0,41.1363]],[["S",9,10.3125],["s",9,10.3125],["H",9,12.375],["A",6,8.25],["xi",0,16.6818],["S",12,0.1212],["s",12,0.1212],["H",12,0.1212],["A",9,0.0909],["J",0,41.6136]]]},"weapon":{"bright":[[["S",12,9.7561],["s",12,9.7561],["T",12,4.878],["D",12,4.878],["A",9,7.3171],["I",35,4.878],["I",40,4.878],["B",35,9.7561],["B",40,4.878],["J",0,39.0242]],[["S",9,9.3023],["s",9,9.3023],["T",9,5.5814],["D",9,5.5814],["A",6,7.4419],["I",30,5.5814],["B",30,5.5814],["S",12,1.9512],["s",12,1.9512],["T",12,0.9756],["D",12,0.9756],["A",9,1.4634],["I",35,0.9756],["I",40,0.9756],["B",35,1.9512],["B",40,0.9756],["J",0,39.4327]],[["S",9,11.0465],["s",9,11.0465],["T",9,6.6279],["D",9,6.6279],["A",6,8.8372],["I",30,6.6279],["B",30,6.6279],["S",12,0.4878],["s",12,0.4878],["T",12,0.2439],["D",12,0.2439],["A",9,0.3659],["I",35,0.2439],["I",40,0.2439],["B",35,0.4878],["B",40,0.2439],["J",0,39.5093]]],"glowing":[[["S",12,9.7561],["s",12,9.7561],["T",12,4.878],["D",12,4.878],["A",9,7.3171],["I",35,4.878],["I",40,4.878],["B",35,9.7561],["B",40,4.878],["J",0,39.0242]],[["S",9,10.4651],["s",9,10.4651],["T",9,6.2791],["D",9,6.2791],["A",6,8.3721],["I",30,6.2791],["B",30,6.2791],["S",12,0.9756],["s",12,0.9756],["T",12,0.4878],["D",12,0.4878],["A",9,0.7317],["I",35,0.4878],["I",40,0.4878],["B",35,0.9756],["B",40,0.4878],["J",0,39.4838]],[["S",9,11.5116],["s",9,11.5116],["T",9,6.907],["D",9,6.907],["A",6,9.2093],["I",30,6.907],["B",30,6.907],["S",12,0.0976],["s",12,0.0976],["T",12,0.0488],["D",12,0.0488],["A",9,0.0732],["I",35,0.0488],["I",40,0.0488],["B",35,0.0976],["B",40,0.0488],["J",0,39.5299]]]},"secondary":{"bright":[[["S",12,8.5106],["s",12,8.5106],["T",12,4.2553],["D",12,4.2553],["A",9,6.383],["I",35,4.2553],["I",40,4.2553],["xi",0,12.766],["B",35,8.5106],["B",40,4.2553],["J",0,34.0424]],[["S",9,7.8431],["s",9,7.8431],["T",9,4.7059],["D",9,4.7059],["A",6,6.2745],["I",30,4.7059],["xi",0,15.1022],["B",30,4.7059],["S",12,1.7021],["s",12,1.7021],["T",12,0.8511],["D",12,0.8511],["A",9,1.2766],["I",35,0.8511],["I",40,0.8511],["B",35,1.7021],["B",40,0.8511],["J",0,33.4752]],[["S",9,9.3137],["s",9,9.3137],["T",9,5.5882],["D",9,5.5882],["A",6,7.451],["I",30,5.5882],["xi",0,15.5402],["B",30,5.5882],["S",12,0.4255],["s",12,0.4255],["T",12,0.2128],["D",12,0.2128],["A",9,0.3191],["I",35,0.2128],["I",40,0.2128],["B",35,0.4255],["B",40,0.2128],["J",0,33.3688]]],"glowing":[[["S",12,8.5106],["s",12,8.5106],["T",12,4.2553],["D",12,4.2553],["A",9,6.383],["I",35,4.2553],["I",40,4.2553],["xi",0,12.766],["B",35,8.5106],["B",40,4.2553],["J",0,34.0424]],[["S",9,8.8235],["s",9,8.8235],["T",9,5.2941],["D",9,5.2941],["A",6,7.0588],["I",30,5.2941],["xi",0,15.3942],["B",30,5.2941],["S",12,0.8511],["s",12,0.8511],["T",12,0.4255],["D",12,0.4255],["A",9,0.6383],["I",35,0.4255],["I",40,0.4255],["B",35,0.8511],["B",40,0.4255],["J",0,33.4041]],[["S",9,9.7059],["s",9,9.7059],["T",9,5.8235],["D",9,5.8235],["A",6,7.7647],["I",30,5.8235],["xi",0,15.657],["B",30,5.8235],["S",12,0.0851],["s",12,0.0851],["T",12,0.0426],["D",12,0.0426],["A",9,0.0638],["I",35,0.0426],["I",40,0.0426],["B",35,0.0851],["B",40,0.0426],["J",0,33.3406]]]},"emblem":{"bright":[[["S",12,11.4286],["s",12,11.4286],["T",12,5.7143],["D",12,5.7143],["A",9,8.5714],["I",35,5.7143],["I",40,5.7143],["J",0,45.7144]],[["S",9,10],["s",9,10],["T",9,6],["D",9,6],["A",6,8],["I",30,6],["S",12,2.2857],["s",12,2.2857],["T",12,1.1429],["D",12,1.1429],["A",9,1.7143],["I",35,1.1429],["I",40,1.1429],["J",0,43.143]],[["S",9,11.875],["s",9,11.875],["T",9,7.125],["D",9,7.125],["A",6,9.5],["I",30,7.125],["S",12,0.5714],["s",12,0.5714],["T",12,0.2857],["D",12,0.2857],["A",9,0.4286],["I",35,0.2857],["I",40,0.2857],["J",0,42.6606]]],"glowing":[[["S",12,11.4286],["s",12,11.4286],["T",12,5.7143],["D",12,5.7143],["A",9,8.5714],["I",35,5.7143],["I",40,5.7143],["J",0,45.7144]],[["S",9,11.25],["s",9,11.25],["T",9,6.75],["D",9,6.75],["A",6,9],["I",30,6.75],["S",12,1.1429],["s",12,1.1429],["T",12,0.5714],["D",12,0.5714],["A",9,0.8571],["I",35,0.5714],["I",40,0.5714],["J",0,42.8214]],[["S",9,12.375],["s",9,12.375],["T",9,7.425],["D",9,7.425],["A",6,9.9],["I",30,7.425],["S",12,0.1143],["s",12,0.1143],["T",12,0.0571],["D",12,0.0571],["A",9,0.0857],["I",35,0.0571],["I",40,0.0571],["J",0,42.532]]]},"hat":{"bright":[[["S",12,9.7561],["s",12,9.7561],["H",12,9.7561],["A",9,7.3171],["xi",0,14.6342],["xd",0,7.3171],["J",0,41.4634]],[["S",9,7.6923],["s",9,7.6923],["H",9,9.2308],["A",6,6.1538],["xi",0,15.2344],["xd",0,7.6172],["S",12,1.9512],["s",12,1.9512],["H",12,1.9512],["A",9,1.4634],["J",0,39.0618]],[["S",9,9.1346],["s",9,9.1346],["H",9,10.9615],["A",6,7.3077],["xi",0,15.3472],["xd",0,7.6736],["S",12,0.4878],["s",12,0.4878],["H",12,0.4878],["A",9,0.3659],["J",0,38.6116]]],"glowing":[[["S",12,9.7561],["s",12,9.7561],["H",12,9.7561],["A",9,7.3171],["xi",0,14.6342],["xd",0,7.3171],["J",0,41.4634]],[["S",9,8.6538],["s",9,8.6538],["H",9,10.3846],["A",6,6.9231],["xi",0,15.3096],["xd",0,7.6548],["S",12,0.9756],["s",12,0.9756],["H",12,0.9756],["A",9,0.7317],["J",0,38.7616]],[["S",9,9.5192],["s",9,9.5192],["H",9,11.4231],["A",6,7.6154],["xi",0,15.3772],["xd",0,7.6886],["S",12,0.0976],["s",12,0.0976],["H",12,0.0976],["A",9,0.0732],["J",0,38.4917]]]},"top":{"bright":[[["S",12,10.2564],["s",12,10.2564],["H",12,10.2564],["A",9,7.6923],["xi",0,15.3846],["xt",3,7.6923],["xv",0,7.6923],["J",0,30.7692]],[["S",9,6.4516],["s",9,6.4516],["H",9,7.7419],["A",6,5.1613],["xi",0,13.3996],["xt",2,5.1613],["xv",0,6.6998],["S",12,2.0513],["s",12,2.0513],["H",12,2.0513],["A",9,1.5385],["xt",3,1.5385],["J",0,39.7022]],[["S",9,7.6613],["s",9,7.6613],["H",9,9.1935],["A",6,6.129],["xi",0,13.0272],["xt",2,6.129],["xv",0,6.5136],["S",12,0.5128],["s",12,0.5128],["H",12,0.5128],["A",9,0.3846],["xt",3,0.3846],["J",0,41.377]]],"glowing":[[["S",12,10.2564],["s",12,10.2564],["H",12,10.2564],["A",9,7.6923],["xi",0,15.3846],["xt",3,7.6923],["xv",0,7.6923],["J",0,30.7692]],[["S",9,7.2581],["s",9,7.2581],["H",9,8.7097],["A",6,5.8065],["xi",0,13.1514],["xt",2,5.8065],["xv",0,6.5757],["S",12,1.0256],["s",12,1.0256],["H",12,1.0256],["A",9,0.7692],["xt",3,0.7692],["J",0,40.8189]],[["S",9,7.9839],["s",9,7.9839],["H",9,9.5806],["A",6,6.3871],["xi",0,12.928],["xt",2,6.3871],["xv",0,6.464],["S",12,0.1026],["s",12,0.1026],["H",12,0.1026],["A",9,0.0769],["xt",3,0.0769],["J",0,41.8239]]]},"bottom":{"bright":[[["S",12,12.1212],["s",12,12.1212],["H",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,36.3636]],[["S",9,7.6923],["s",9,7.6923],["H",9,9.2308],["A",6,6.1538],["xi",0,15.944],["xd",0,6.1538],["S",12,2.4242],["s",12,2.4242],["H",12,2.4242],["A",9,1.8182],["J",0,38.0418]],[["S",9,9.1346],["s",9,9.1346],["H",9,10.9615],["A",6,7.3077],["xi",0,15.5244],["xd",0,7.3077],["S",12,0.6061],["s",12,0.6061],["H",12,0.6061],["A",9,0.4545],["J",0,38.3567]]],"glowing":[[["S",12,12.1212],["s",12,12.1212],["H",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,36.3636]],[["S",9,8.6538],["s",9,8.6538],["H",9,10.3846],["A",6,6.9231],["xi",0,15.6644],["xd",0,6.9231],["S",12,1.2121],["s",12,1.2121],["H",12,1.2121],["A",9,0.9091],["J",0,38.2516]],[["S",9,9.5192],["s",9,9.5192],["H",9,11.4231],["A",6,7.6154],["xi",0,15.4126],["xd",0,7.6154],["S",12,0.1212],["s",12,0.1212],["H",12,0.1212],["A",9,0.0909],["J",0,38.4405]]]},"shoulder":{"bright":[[["S",12,12.1212],["s",12,12.1212],["H",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,36.3636]],[["S",9,8.3333],["s",9,8.3333],["H",9,10],["A",6,6.6667],["xi",0,16.9698],["S",12,2.4242],["s",12,2.4242],["H",12,2.4242],["A",9,1.8182],["J",0,40.6059]],[["S",9,9.8958],["s",9,9.8958],["H",9,11.875],["A",6,7.9167],["xi",0,16.7424],["S",12,0.6061],["s",12,0.6061],["H",12,0.6061],["A",9,0.4545],["J",0,41.4016]]],"glowing":[[["S",12,12.1212],["s",12,12.1212],["H",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,36.3636]],[["S",9,9.375],["s",9,9.375],["H",9,11.25],["A",6,7.5],["xi",0,16.8182],["S",12,1.2121],["s",12,1.2121],["H",12,1.2121],["A",9,0.9091],["J",0,41.1363]],[["S",9,10.3125],["s",9,10.3125],["H",9,12.375],["A",6,8.25],["xi",0,16.6818],["S",12,0.1212],["s",12,0.1212],["H",12,0.1212],["A",9,0.0909],["J",0,41.6136]]]},"cape":{"bright":[[["S",12,12.1212],["s",12,12.1212],["H",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,36.3636]],[["S",9,8.3333],["s",9,8.3333],["H",9,10],["A",6,6.6667],["xi",0,16.9698],["S",12,2.4242],["s",12,2.4242],["H",12,2.4242],["A",9,1.8182],["J",0,40.6059]],[["S",9,9.8958],["s",9,9.8958],["H",9,11.875],["A",6,7.9167],["xi",0,16.7424],["S",12,0.6061],["s",12,0.6061],["H",12,0.6061],["A",9,0.4545],["J",0,41.4016]]],"glowing":[[["S",12,12.1212],["s",12,12.1212],["H",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,36.3636]],[["S",9,9.375],["s",9,9.375],["H",9,11.25],["A",6,7.5],["xi",0,16.8182],["S",12,1.2121],["s",12,1.2121],["H",12,1.2121],["A",9,0.9091],["J",0,41.1363]],[["S",9,10.3125],["s",9,10.3125],["H",9,12.375],["A",6,8.25],["xi",0,16.6818],["S",12,0.1212],["s",12,0.1212],["H",12,0.1212],["A",9,0.0909],["J",0,41.6136]]]},"gloves":{"bright":[[["S",12,10],["s",12,10],["H",12,10],["C",8,10],["A",9,7.5],["xi",0,15.0],["xd",0,7.5],["J",0,30]],[["S",9,7.1429],["s",9,7.1429],["H",9,8.5714],["A",6,5.7143],["F",32,1.4286],["f",32,1.4286],["xi",0,14.4286],["xd",0,7.2143],["S",12,2],["s",12,2],["H",12,2],["C",8,2],["A",9,1.5],["J",0,37.4287]],[["S",9,8.4821],["s",9,8.4821],["H",9,10.1786],["A",6,6.7857],["F",32,1.6964],["f",32,1.6964],["xi",0,14.3214],["xd",0,7.1607],["S",12,0.5],["s",12,0.5],["H",12,0.5],["C",8,0.5],["A",9,0.375],["J",0,38.8213]]],"glowing":[[["S",12,10],["s",12,10],["H",12,10],["C",8,10],["A",9,7.5],["xi",0,15.0],["xd",0,7.5],["J",0,30]],[["S",9,8.0357],["s",9,8.0357],["H",9,9.6429],["A",6,6.4286],["F",32,1.6071],["f",32,1.6071],["xi",0,14.3572],["xd",0,7.1786],["S",12,1],["s",12,1],["H",12,1],["C",8,1],["A",9,0.75],["J",0,38.3571]],[["S",9,8.8393],["s",9,8.8393],["H",9,10.6071],["A",6,7.0714],["F",32,1.7679],["f",32,1.7679],["xi",0,14.2928],["xd",0,7.1464],["S",12,0.1],["s",12,0.1],["H",12,0.1],["C",8,0.1],["A",9,0.075],["J",0,39.1929]]]},"shoes":{"bright":[[["S",12,11.1111],["s",12,11.1111],["H",12,11.1111],["A",9,8.3333],["xi",0,16.6666],["xd",0,8.3333],["J",0,33.3333]],[["S",9,7.6923],["s",9,7.6923],["H",9,9.2308],["A",6,6.1538],["xi",0,15.641],["xd",0,7.8205],["S",12,2.2222],["s",12,2.2222],["H",12,2.2222],["A",9,1.6667],["J",0,37.4358]],[["S",9,9.1346],["s",9,9.1346],["H",9,10.9615],["A",6,7.3077],["xi",0,15.4488],["xd",0,7.7244],["S",12,0.5556],["s",12,0.5556],["H",12,0.5556],["A",9,0.4167],["J",0,38.2052]]],"glowing":[[["S",12,11.1111],["s",12,11.1111],["H",12,11.1111],["A",9,8.3333],["xi",0,16.6666],["xd",0,8.3333],["J",0,33.3333]],[["S",9,8.6538],["s",9,8.6538],["H",9,10.3846],["A",6,6.9231],["xi",0,15.5128],["xd",0,7.7564],["S",12,1.1111],["s",12,1.1111],["H",12,1.1111],["A",9,0.8333],["J",0,37.9486]],[["S",9,9.5192],["s",9,9.5192],["H",9,11.4231],["A",6,7.6154],["xi",0,15.3974],["xd",0,7.6987],["S",12,0.1111],["s",12,0.1111],["H",12,0.1111],["A",9,0.0833],["J",0,38.4102]]]},"heart":{"bright":[[["S",12,14.8148],["s",12,14.8148],["H",12,14.8148],["A",9,11.1111],["J",0,44.4444]],[["S",9,10],["s",9,10],["H",9,12],["A",6,8],["S",12,2.963],["s",12,2.963],["H",12,2.963],["A",9,2.2222],["J",0,48.889]],[["S",9,11.875],["s",9,11.875],["H",9,14.25],["A",6,9.5],["S",12,0.7407],["s",12,0.7407],["H",12,0.7407],["A",9,0.5556],["J",0,49.7221]]],"glowing":[[["S",12,14.8148],["s",12,14.8148],["H",12,14.8148],["A",9,11.1111],["J",0,44.4444]],[["S",9,11.25],["s",9,11.25],["H",9,13.5],["A",6,9],["S",12,1.4815],["s",12,1.4815],["H",12,1.4815],["A",9,1.1111],["J",0,49.4445]],[["S",9,12.375],["s",9,12.375],["H",9,14.85],["A",6,9.9],["S",12,0.1481],["s",12,0.1481],["H",12,0.1481],["A",9,0.1111],["J",0,49.9443]]]}};
 const GROUPS = [["WSE",["weapon","secondary","emblem"]],
  ["Accessories",["ring1","ring2","ring3","ring4","face","eye","earring","pend1","pend2"]],
  ["Other",["hat","top","bottom","shoulder","cape","gloves","shoes","heart","badge","belt"]]];
@@ -353,24 +365,35 @@ const ICONS={"Endless Terror":["Endless_Terror"],"Dawn Guardian Angel Ring":["Da
  "Reinforced Gollux Earrings":["Reinforced_Gollux_Earrings"],"Dreamy Belt":["Dreamy_Belt"],"Superior Gollux Belt":["Superior_Engraved_Gollux_Belt"],
  "Total Control":["Total_Control"],"Plasma Heart":["Plasma_Heart"],"Fairy Heart":["Fairy_Heart"],"Ghost Ship Exorcist":["Ghost_Ship_Exorcist"],"Sengoku Hakase":["Sengoku_Hakase_Badge"]};
 const ICON_BASE="https://media.maplestorywiki.net/yetidb/Eqp_";
-const JOBSET={Warrior:["Knight","Helm","Knight",["Royal_Warrior_Helm","Eagle_Eye_Warrior_Armor","Trixter_Warrior_Pants"]],
- Magician:["Mage","Crown","Mage",["Royal_Dunwitch_Hat","Eagle_Eye_Dunwitch_Robe","Trixter_Dunwitch_Pants"]],
- Bowman:["Archer","Hood","Archer",["Royal_Ranger_Beret","Eagle_Eye_Ranger_Cowl","Trixter_Ranger_Pants"]],
- Thief:["Bandit","Hat","Thief",["Royal_Assassin_Hood","Eagle_Eye_Assassin_Shirt","Trixter_Assassin_Pants"]],
- Pirate:["Pirate","Fedora","Pirate",["Royal_Pirate_Hat","Eagle_Eye_Pirate_Coat","Trixter_Pirate_Pants"]]};
-const jobGroup=()=>(CLS[S&&S.cls]||{}).g||({STR:"Warrior",DEX:"Bowman",INT:"Magician",LUK:"Thief"})[MS()];
-const fileName=n=>n.replace(/ /g,"_").replace(/'/g,"%27").replace(/\(/g,"%28").replace(/\)/g,"%29");
+// armor names per job, as the wiki writes them: [Eternal word, Arcane Umbra word, AbsoLab word, AbsoLab hat, CRA hat/top/bottom]
+const ARM={Warrior:["Knight","Knight","Knight","AbsoLab Knight Helm",["Royal Warrior Helm","Eagle Eye Warrior Armor","Trixter Warrior Pants"]],
+ Magician:["Mage","Mage","Mage","AbsoLab Mage Crown",["Royal Dunwitch Hat","Eagle Eye Dunwitch Robe","Trixter Dunwitch Pants"]],
+ Bowman:["Archer","Archer","Archer","AbsoLab Archer Hood",["Royal Ranger Beret","Eagle Eye Ranger Cowl","Trixter Ranger Pants"]],
+ Thief:["Thief","Thief","Bandit","AbsoLab Bandit Cap",["Royal Assassin Hood","Eagle Eye Assassin Shirt","Trixter Assassin Pants"]],
+ Pirate:["Pirate","Pirate","Pirate","AbsoLab Pirate Fedora",["Royal Wanderer Hat","Eagle Eye Wanderer Coat","Trixter Wanderer Pants"]]};
+const ARMOR_SLOTS=["hat","top","bottom","shoulder","cape","gloves","shoes"], HTB=["Hat","Top","Bottom"];
+function armorName(n,g){ const A=ARM[g]; if(!A||!n) return null; let m;
+ if(m=n.match(/^Eternal (Hat|Top|Bottom)$/)) return ETERNAL[g][HTB.indexOf(m[1])];
+ if(m=n.match(/^Eternal (Shoulder|Cape|Gloves|Shoes)$/)) return `Eternal ${A[0]} ${m[1]}`;
+ if(m=n.match(/^Arcane (Hat|Shoulder|Cape|Gloves|Shoes)$/)) return `Arcane Umbra ${A[1]} ${m[1]}`;
+ if(n==="Absolab Hat") return A[3];
+ if(m=n.match(/^Absolab (Shoulder|Cape|Gloves|Shoes)$/)) return `AbsoLab ${A[2]} ${m[1]}`;
+ if(m=n.match(/^CRA (Hat|Top|Bottom)$/)) return A[4][HTB.indexOf(m[1])];
+ return null; }
+const jobGroup=()=>(CLS[S&&S.cls]||{}).g||({STR:"Warrior",HP:"Warrior",DEX:"Bowman",INT:"Magician",LUK:"Thief"})[MS()];
+const fileName=n=>n.replace(/</g,"(").replace(/>/g,")").replace(/ /g,"_").replace(/'/g,"%27").replace(/\(/g,"%28").replace(/\)/g,"%29");
 function iconFiles(n){
  if(!n) return null; if(ICONS[n]) return ICONS[n];
- if(/ Emblem( \(|$)/.test(n)&&n!=="Class Emblem") return [fileName(n)];
- if(/^(Destiny|Genesis|Astra|Eternal) /.test(n)&&!/^Eternal (Hat|Top|Bottom)$/.test(n)) return [fileName(n)];
- const g=jobGroup(), J=JOBSET[g]; if(!J) return null; let m;
+ if(n==="Princess No's Soul Shield") return ["Soul_Shield_of_Justice"];
+ if(FZICON[n]) return [FZICON[n]];
+ if(SECNAMES.has(n)) return [fileName(n)];
+ if((/ Emblem( \(|$)/.test(n)&&n!=="Class Emblem")||n==="Hybrid Heart") return [fileName(n)];
+ let m; // shoulder, cape, gloves and shoes share one picture for every job
+ if(m=n.match(/^(Eternal|Arcane Umbra|AbsoLab) \w+ (Shoulder|Cape|Gloves|Shoes)$/)) return [fileName(m[1]+" "+m[2])];
+ if(/^(Destiny|Genesis|Astra|Eternal|Arcane Umbra|AbsoLab|Royal|Eagle Eye|Trixter) /.test(n)) return [fileName(n)];
+ const g=jobGroup(); if(!ARM[g]) return null;
  if(n==="Mitra's Rage") return ["Mitra%27s_Rage_"+g];
- if(m=n.match(/^Eternal (Hat|Top|Bottom)$/)) return [fileName(ETERNAL[g][["Hat","Top","Bottom"].indexOf(m[1])])];
- if(m=n.match(/^CRA (Hat|Top|Bottom)$/)) return [J[3][["Hat","Top","Bottom"].indexOf(m[1])]];
- if(m=n.match(/^Arcane (Hat|Shoulder|Cape|Gloves|Shoes)$/)) return [`Arcane_Umbra_${J[2]}_${m[1]}`];
- if(m=n.match(/^Absolab (Hat|Shoulder|Cape|Gloves|Shoes)$/)) return [`AbsoLab_${J[0]}_${m[1]==="Hat"?J[1]:m[1]}`];
- return null;
+ const a=armorName(n,g); return a?iconFiles(a):null;
 }
 function paintGic(id){ const el=$("g_"+id), nm=S.gear[id][4]||"", key=nm+"|"+(iconFiles(nm)||[""])[0]; if(el.dataset.n===key&&el.firstChild) return; el.dataset.n=key; el.innerHTML=iconHtml(nm,0,1); }
 function iconHtml(name,big,sm){
@@ -402,36 +425,78 @@ const CLASSES=[
   ["Ark",[W("Claw")],["Astra Path"]],["Mo Xuan",[W("Martial Brace")],["Astra Brace Band"]]]]];
 const ETERNAL={Warrior:["Eternal Knight Helm","Eternal Knight Armor","Eternal Knight Pants"],Magician:["Eternal Mage Hat","Eternal Mage Robe","Eternal Mage Pants"],
  Bowman:["Eternal Archer Hat","Eternal Archer Hood","Eternal Archer Pants"],Thief:["Eternal Thief Bandana","Eternal Thief Shirt","Eternal Thief Pants"],Pirate:["Eternal Pirate Hat","Eternal Pirate Coat","Eternal Pirate Pants"]};
+for(const [,list] of CLASSES) list.sort((a,b)=>a[0].localeCompare(b[0]));
 const CLS={}; for(const [g,list] of CLASSES) for(const [n,w,a] of list) CLS[n]={g,w,a};
+// [Princess No secondary (Lv 140), Lv 100 secondary from Neville]
+const PN=n=>"Princess No's "+n, CYG=[PN("Floral Jewel"),"Ereve Brilliance"], DEM=[PN("Accursed Shield"),"Force Shield of Extremes"];
+const SEC2={"Hero":[PN("Medal"),"Virtues Medallion"],"Paladin":[PN("Rosary"),"Sacred Rosary"],"Dark Knight":[PN("Flower Chain"),"Berserk Chain"],
+ "Arch Mage (Fire, Poison)":[PN("Flaming Book"),"Rusty Book <Epode>"],"Arch Mage (Ice, Lightning)":[PN("Damp Book"),"Metallic Blue Book <Epode>"],"Bishop":[PN("Golden Book"),"White Gold Book <Epode>"],
+ "Bowmaster":[PN("Feather"),"Blasted Feather"],"Marksman":[PN("Wreath"),"True Shot"],"Pathfinder":[PN("Immortal Relic"),"Perfect Relic"],
+ "Night Lord":[PN("Charm"),"Death Sender Charm"],"Shadower":[PN("Purple Shadow"),"Slashing Shadow"],"Dual Blade":[PN("Poisoned Sword")],
+ "Buccaneer":[PN("Skull Armor"),"Wrist Armor"],"Corsair":[PN("Falcon Eye"),"Falcon Eye"],"Cannoneer":[PN("Fire Bomb"),"Center Fire Bomb"],
+ "Dawn Warrior":CYG,"Blaze Wizard":CYG,"Wind Archer":CYG,"Night Walker":CYG,"Thunder Breaker":CYG,
+ "Aran":[PN("Flower Ballast"),"Dragon Mass"],"Evan":[PN("Dragon Legacy"),"Dragon Master's Legacy"],"Mercedes":[PN("Accursed Arrow"),"Infinite Magic Arrows"],
+ "Phantom":[PN("Carte"),"Carte Finale"],"Shade":[PN("Fox Marble"),"Golden Fox Marble"],"Luminous":[PN("Soul Orb"),"Karma Orb"],
+ "Demon Slayer":DEM,"Demon Avenger":DEM,"Battle Mage":[PN("Accursed Marble"),"Maximizer Ball"],"Wild Hunter":[PN("Arrowhead"),"Wild Heron"],
+ "Mechanic":[PN("Magnum"),"Eternal Magnum"],"Xenon":[PN("Controller"),"Octa Core Controller"],"Blaster":[PN("Megaton Charges"),"Masterwork Charges"],
+ "Hayato":[PN("Wakizashi"),"Fire Phoenix Blade"],"Kanna":[PN("Talisman"),"Shikigami Talisman"],"Mihile":[PN("Soul Shield"),"Soul Shield of Justice"],
+ "Kaiser":[PN("Dragon Essence"),"Nova Truth Essence"],"Kain":[PN("Immortal Weapon Belt"),"D100 Custom Weapon Belt"],"Cadena":[PN("Transmitter"),"Transmitter Type-A"],
+ "Angelic Buster":[PN("Soul Ring"),"Green Soul Ring"],"Kinesis":[PN("Oriental King Chess Piece"),"Queen Chess Piece"],"Adele":[PN("Immortal Bladebinder"),"Noble Bladebinder"],
+ "Illium":[PN("Lucent Wings"),"Glory Lucent Wings"],"Khali":[PN("Immortal Hex Seeker"),"Infinite Hex Seeker"],"Ark":[PN("Path"),"Ultimate Path"],
+ "Ren":[PN("Imugi Gem"),"Violet Imugi Gem"],"Lara":[PN("Immortal Four-Jade Ornament"),"Radiant Four-Jade Ornament"],"Hoyoung":[PN("Fan Tassel"),"Moonstone Fan Tassel"],
+ "Lynn":[PN("Leaf"),"Golden Pearl Leaf"],"Mo Xuan":[PN("Brace Band"),"Boundless Brace Band"],"Erel Light":[PN("Keir"),"Imper Keir"],
+ "Sia Astelle":[PN("Compass"),"Oort Compass"],"Lethe":[PN("Quill"),"Nox Quill"]};
+// Frozen secondaries (Lv 100, event): [name, icon file] (many share the Onyx Maple picture)
+const FZ_CYG=["Frozen Ereve Brilliance","Onyx_Maple_Ereve_Brilliance"], FZ_DEM=["Frozen Force Shield","Onyx_Maple_Force_Shield"];
+const FROZEN={"Hero":["Frozen Medal","Virtues_Medallion"],"Paladin":["Frozen Rosary","Frozen_Rosary"],"Dark Knight":["Frozen Chain","Onyx_Maple_Chain"],
+ "Arch Mage (Fire, Poison)":["Frozen Rusty Book","Frozen_Rusty_Book"],"Arch Mage (Ice, Lightning)":["Frozen Metallic Book","Frozen_Metallic_Book"],"Bishop":["Frozen White Gold Book","Frozen_White_Gold_Book"],
+ "Bowmaster":["Frozen Feather","Onyx_Maple_Feather"],"Marksman":["Frozen True Shot","Onyx_Maple_True_Shot"],"Pathfinder":["Frozen Relic","Onyx_Maple_Relic"],
+ "Night Lord":["Frozen Death Sender Charm","Onyx_Maple_Death_Sender_Charm"],"Shadower":["Frozen Shadow","Onyx_Maple_Shadow"],"Dual Blade":["Frozen Katara","Onyx_Maple_Katara"],
+ "Buccaneer":["Frozen Wrist Armor","Onyx_Maple_Wrist_Armor"],"Corsair":["Frozen Falcon Eye","Onyx_Maple_Falcon_Eye"],"Cannoneer":["Frozen Center Fire Bomb","Onyx_Maple_Center_Fire_Bomb"],
+ "Dawn Warrior":FZ_CYG,"Blaze Wizard":FZ_CYG,"Wind Archer":FZ_CYG,"Night Walker":FZ_CYG,"Thunder Breaker":FZ_CYG,
+ "Aran":["Frozen Dragon Mass","Onyx_Maple_Dragon_Mass"],"Evan":["Frozen Dragon Master's Legacy","Onyx_Maple_Dragon_Master%27s_Legacy"],"Mercedes":["Frozen Magic Arrows","Frozen_Magic_Arrows"],
+ "Phantom":["Carte Frozen","Carte_Onyx_Maple"],"Shade":["Frozen Fox Marble","Onyx_Maple_Fox_Marble"],"Luminous":["Frozen Orb","Onyx_Maple_Orb"],"Demon Slayer":FZ_DEM,"Demon Avenger":FZ_DEM,
+ "Battle Mage":["Frozen Maximizer Ball","Frozen_Maximizer_Ball"],"Wild Hunter":["Frozen Wild Heron","Frozen_Wild_Heron"],"Mechanic":["Frozen Magnum","Onyx_Maple_Magnum"],
+ "Xenon":["Frozen Octo Core Controller","Onyx_Maple_Octo_Core_Controller"],"Blaster":["Frozen Charges","Onyx_Maple_Charges"],"Hayato":["Frozen Tiger Blade","Onyx_Maple_Blade"],
+ "Kanna":["Frozen Talisman","Onyx_Maple_Talisman"],"Mihile":["Frozen Soul Shield","Frozen_Soul_Shield"],"Kaiser":["Nova Frozen Essence","Nova_Onyx_Maple_Essence"],
+ "Kain":["Frozen D100 Weapon Belt","Onyx_Maple_D100_Weapon_Belt"],"Cadena":["Frozen Transmitter","Onyx_Maple_Transmitter"],"Angelic Buster":["Frozen Soul Ring","Onyx_Maple_Soul_Ring"],
+ "Kinesis":["Frozen Queen Chess Piece","Onyx_Maple_Queen_Chess_Piece"],"Adele":["Frozen Shiny Bladebinder","Onyx_Maple_Shiny_Bladebinder"],"Illium":["Frozen Lucent Wings","Onyx_Maple_Lucent_Wings"],
+ "Khali":["Frozen Infinite Hex Seeker","Onyx_Maple_Infinite_Hex_Seeker"],"Ark":["Frozen Path","Onyx_Maple_Path"],"Ren":["Frozen Imugi Gem","Frozen_Imugi_Gem"],
+ "Lara":["Frozen Four-Jade Ornament","Onyx_Maple_Four-Jade_Ornament"],"Hoyoung":["Frozen Fan Tassel","Onyx_Maple_Fan_Tassel"],"Lynn":["Frozen Leaf","Onyx_Maple_Pearl_Leaf"],
+ "Mo Xuan":["Frozen Brace Band","Onyx_Maple_Brace_Band"],"Erel Light":["Frozen Keir","Onyx_Maple_Keir"],"Sia Astelle":["Frozen Compass","Frozen_Compass"],"Lethe":["Frozen Intempestus Quill","Onyx_Maple_Intempestus_Quill"]};
+const FZICON={}; for(const [n,f] of Object.values(FROZEN)) FZICON[n]=f;
+const SHIELD={}; for(const [n,cs] of [["Deimos Sage Shield",["Arch Mage (Fire, Poison)","Arch Mage (Ice, Lightning)","Bishop","Blaze Wizard","Evan","Battle Mage","Lynn"]],
+ ["Deimos Warrior Shield",["Hero","Paladin","Dawn Warrior"]],["Deimos Shadow Shield",["Shadower"]]]) for(const c of cs) SHIELD[c]=n;
+const EXTRA2={"Dual Blade":["Sweetwater Katara",160,"sweet"]};
+const SECNAMES=new Set([...Object.values(SEC2).flat(),...Object.values(SHIELD),...Object.values(EXTRA2).map(x=>x[0])]);
 const EMB={}; for(const [e,cs] of [["Gold Maple Leaf Emblem",["Hero","Paladin","Dark Knight","Arch Mage (Fire, Poison)","Arch Mage (Ice, Lightning)","Bishop","Bowmaster","Marksman","Pathfinder","Night Lord","Shadower","Dual Blade","Buccaneer","Corsair","Cannoneer"]],
  ["Gold Cygnus Emblem",["Dawn Warrior","Blaze Wizard","Wind Archer","Night Walker","Thunder Breaker","Mihile"]],["Gold Demon Emblem",["Demon Slayer","Demon Avenger"]],
  ["Gold Resistance Emblem",["Battle Mage","Wild Hunter","Mechanic","Blaster"]],["Gold Crescent Emblem",["Hayato"]],["Gold Blossom Emblem",["Kanna"]],["Dragon Emblem",["Kaiser"]],["Angel Emblem",["Angelic Buster"]],
- ["Gold Hitman Emblem",["Kain"]],["Gold Agent Emblem",["Cadena"]],["Eternal Time Emblem",["Zero"]],["Gold Kinesis Emblem",["Kinesis"]],["Gold Knight's Emblem",["Adele"]],["Gold Crystal Emblem",["Illium"]],
+ ["Gold Hitman Emblem",["Kain"]],["Gold Agent Emblem",["Cadena"]],["Eternal Time Emblem",["Zero"]],["Gold Kinesis Emblem",["Kinesis"]],["Gold Knight's Emblem",["Adele","Erel Light"]],["Gold Summoner Emblem",["Lethe"]],["Hybrid Heart",["Xenon"]],["Gold Crystal Emblem",["Illium"]],
  ["Gold Chaser Emblem",["Khali"]],["Gold Abyssal Emblem",["Ark"]],["Gold Sword Emblem",["Ren"]],["Gold Earthseer Emblem",["Lara"]],["Gold Three Paths Emblem",["Hoyoung"]],["Gold Forest Emblem",["Lynn"]],
  ["Gold Xuanshan School Emblem",["Mo Xuan"]],["Gold Guardian Emblem",["Sia Astelle"]],
  ...["Aran","Evan","Mercedes","Phantom","Shade","Luminous"].map(c=>[`Gold Heroes Emblem (${c})`,[c]])]) for(const c of cs) EMB[c]=e;
 const DEXP=["Corsair","Mechanic","Angelic Buster"];
-function clsStats(n){ const C=CLS[n]; if(!C||n==="Xenon"||n==="Demon Avenger") return null;
+function clsStats(n){ const C=CLS[n]; if(n==="Demon Avenger") return ["HP","STR"]; if(!C||n==="Xenon") return null;
  if(C.g==="Pirate") return DEXP.includes(n)?["DEX","STR"]:["STR","DEX"];
  return {Warrior:["STR","DEX"],Magician:["INT","LUK"],Bowman:["DEX","STR"],Thief:["LUK","DEX"]}[C.g]; }
 function itemList(s){
  const C=CLS[S&&S.cls];
  if(C){ const E=ETERNAL[C.g];
   if(s.list==="weapon") return [...C.w.map(w=>[w[0],250]),...C.w.map(w=>[w[1],200])];
-  if(s.list==="secondary") return C.a.map(a=>[a,200]);
-  if(s.list==="hat") return [[E[0],250],...ITEMS.hat.slice(1)];
-  if(s.list==="top") return [[E[1],250],...ITEMS.top.slice(1)];
-  if(s.list==="bottom") return [[E[2],250],...ITEMS.bottom.slice(1)];
+  if(s.list==="secondary"){ const x=SEC2[S.cls]||[], d=SHIELD[S.cls], f=FROZEN[S.cls];
+   return [...C.a.map(a=>[a,200,"astra"]),...(EXTRA2[S.cls]?[EXTRA2[S.cls]]:[]),...(d?[[d,130,"shield"]]:[]),...(x[0]?[[x[0],140,"pno"]]:[]),...(x[1]?[[x[1],100,"lv100"]]:[]),...(f?[[f[0],100,"frozen"]]:[])]; }
+  if(ARMOR_SLOTS.includes(s.list)) return ITEMS[s.list].map(([n,l])=>[armorName(n,C.g)||n,l]);
   if(s.list==="emblem") return [ITEMS.emblem[0],[EMB[S.cls]||"Class Emblem",100]];
  }
  return ITEMS[s.list]||[];
 }
 function setClass(nc){
- const oldL={}; for(const id of ["weapon","secondary","emblem","hat","top","bottom"]) oldL[id]=itemList(SID[id]);
+ const oldL={}; for(const id of ["weapon","secondary","emblem",...ARMOR_SLOTS]) oldL[id]=itemList(SID[id]);
  S.cls=nc;
  for(const id in oldL){ const g=S.gear[id], nl=itemList(SID[id]), i=oldL[id].findIndex(([n])=>n===g[4]); if(i<0||!nl.length) continue;
-  if(id==="weapon"){ const gen=/^Genesis/.test(g[4])||(oldL[id][i][1]===200); const pick=nl.find(([,l])=>gen?l===200:l===250)||nl[0]; g[4]=pick[0]; }
-  else g[4]=nl[Math.min(i,nl.length-1)][0];
+  const lv=oldL[id][i][1], ty=oldL[id][i][2], pick=(ty&&nl.find(x=>x[2]===ty))||nl.find(([,l])=>l===lv)||[...nl].sort((a,b)=>Math.abs(a[1]-lv)-Math.abs(b[1]-lv))[0]; g[4]=pick[0];
+  if(pick[1]&&pick[1]!==lv&&+g[0]===lv) setLevel(SID[id],pick[1]);
  }
 }
 const SID = Object.fromEntries(SLOTS.map(s=>[s.id,s]));
@@ -443,7 +508,7 @@ const ITEMS = {
  earring:[["Commanding Force Earring",200],["Estella Earrings",160],["Superior Gollux Earrings",150],["Meister Earrings",140],["Reinforced Gollux Earrings",140]],
  belt:[["Dreamy Belt",200],["Superior Gollux Belt",150]],
  weapon:[["Destiny Weapon",250],["Genesis Weapon",200]],
- secondary:[["Astra Secondary",200]],
+ secondary:[["Astra Secondary",200,"astra"],["Deimos Shield",130,"shield"],["Princess No Secondary",140,"pno"],["Class Secondary",100,"lv100"],["Frozen Secondary",100,"frozen"]],
  emblem:[["Mitra's Rage",200],["Class Emblem",100]],
  hat:[["Eternal Hat",250],["Arcane Hat",200],["Absolab Hat",160],["CRA Hat",150]],
  top:[["Eternal Top",250],["CRA Top",150]],
@@ -465,7 +530,7 @@ const TEMPLATE = {cube:"bright",ms:"INT",ss:"LUK",cls:"Kanna",name:"",
   pend1:[140,"S12","S9","S9","Daybreak Pendant"],pend2:[160,"S13","S10","S10","Source of Suffering"],eye:[160,"S13","S13","A7","Magic Eyepatch"],face:[160,"S13","S10","S10","Berserked"],
   earring:[200,"S13","S13","A7","Commanding Force Earring"],belt:[200,"S13","S13","S10","Dreamy Belt"],weapon:[250,"T13","B40","T10","Destiny Spirit Walker Fan"],secondary:[200,"B40","T10","T10","Astra Talisman"],
   emblem:[200,"T13","T10","T10","Mitra's Rage"],hat:[250,"S13","S10","S13","Eternal Mage Hat"],top:[250,"S13","S10","S10","Eternal Mage Robe"],bottom:[250,"S13","S10","S10","Eternal Mage Pants"],
-  shoulder:[250,"S13","S10","S10","Eternal Shoulder"],cape:[250,"S13","S10","S10","Eternal Cape"],gloves:[250,"C8","C8","A7","Eternal Gloves"],shoes:[250,"S13","S13","S10","Eternal Shoes"],
+  shoulder:[250,"S13","S10","S10","Eternal Mage Shoulder"],cape:[250,"S13","S10","S10","Eternal Mage Cape"],gloves:[250,"C8","C8","A7","Eternal Mage Gloves"],shoes:[250,"S13","S13","S10","Eternal Mage Shoes"],
   heart:[200,"S13","S13","S10","Total Control"],badge:[150,"S12","S9","S9","Ghost Ship Exorcist"]}};
 const ORDER = "TSACBIDsFf";
 const MAXC = {xd:1,xt:1,I:3,B:3,xr:3,xi:2,xv:2};
@@ -477,9 +542,18 @@ const fmt = n=>Math.round(n).toLocaleString("en-US");
 let S, step=1;
 
 const MS=()=>S.ms||"INT", SS=()=>S.ss||"LUK", ATTN=()=>MS()==="INT"?"Magic ATT":"ATT";
+const HPM=()=>MS()==="HP", MSN=()=>HPM()?"Max HP":MS();   // Demon Avenger: Max HP % lines are the main stat
+// line dropdowns: Legendary / Unique groups, and an L or U badge on the closed box
+const primeSet=(kind,lvl)=>new Set(pools(kind,"bright",lvl)[0].map(e=>e.c+e.v));
+function lineOpts(kind,lvl,i,cur){
+ const opts=options(kind,lvl,i), pr=primeSet(kind,lvl), o=c=>`<option value="${c}"${c===cur?" selected":""}>${esc(lineLabel(c))}</option>`;
+ const L=opts.filter(c=>c!=="J0"&&pr.has(c)), U=opts.filter(c=>c!=="J0"&&!pr.has(c));
+ return (L.length?`<optgroup label="Legendary">${L.map(o).join("")}</optgroup>`:"")+(U.length?`<optgroup label="Unique">${U.map(o).join("")}</optgroup>`:"")+o("J0");
+}
+function tierMark(el,kind,lvl){ const v=el.value, pr=primeSet(kind,lvl); el.classList.toggle("J",v==="J0"); el.classList.toggle("tL",v!=="J0"&&pr.has(v)); el.classList.toggle("tU",v!=="J0"&&!pr.has(v)); }
 function lineLabel(code){
  const c=code.replace(/[0-9.]+$/,""), v=code.slice(c.length);
- return ({S:`${MS()} +${v}%`,s:`${SS()} +${v}%`,A:`All Stats +${v}%`,T:`${ATTN()} +${v}%`,B:`Boss Damage +${v}%`,I:`IED +${v}%`,
+ return ({S:`${MSN()} +${v}%`,s:`${SS()} +${v}%`,A:`All Stats +${v}%`,T:`${ATTN()} +${v}%`,B:`Boss Damage +${v}%`,I:`IED +${v}%`,
   C:`Crit Damage +${v}%`,D:`Damage +${v}%`,F:`${MS()} +${v}`,f:`${SS()} +${v}`})[c]||"Other potential";
 }
 const parse = code=>{const c=code.replace(/[0-9.]+$/,"");return [c,+code.slice(c.length)||0]};
@@ -489,8 +563,10 @@ const poolCache = {};
 const WSE=new Set(["weapon","secondary","emblem"]);
 const boss250=(kind,lvl)=>WSE.has(kind)&&lvl>=250;   // Lv 250 WSE: Boss 45/40 (prime) and 35 instead of 40/35 and 30
 function pools(kind,cube,lvl){
- const hi = lvl>=160, b5=boss250(kind,lvl), k=kind+cube+hi+b5;
- if(!poolCache[k]) poolCache[k]=RATES[kind][cube].map(L=>L.map(([c,v,r])=>({c,v:(hi&&ADJ.has(c))?v+1:(b5&&c==="B")?v+5:v,r})));
+ const hi = lvl>=160, b5=boss250(kind,lvl), hp=HPM(), k=kind+cube+hi+b5+hp;
+ // Max HP % lines (H) only matter for Demon Avenger: they take the main stat's place, and stat % lines become junk
+ const code=c=>c==="H"?(hp?"S":"J"):(hp&&(c==="S"||c==="F"))?"J":c;
+ if(!poolCache[k]) poolCache[k]=RATES[kind][cube].map(L=>L.map(([c0,v0,r])=>{const c=code(c0),v=c==="J"?0:v0;return {c,v:(hi&&(ADJ.has(c)))?v+1:(b5&&c==="B")?v+5:v,r};}));
  return poolCache[k];
 }
 function options(kind,lvl,i){
@@ -538,7 +614,7 @@ function adjRate(e,prev,pool){
 }
 function stats(lines,P){
  let A=0,St=0,K=0,B=0,fd=0;
- for(const [c,v] of lines){fd+=lineFd(c,v,P); if(c==="T")A+=v; else if(c==="S"||c==="A")St+=v; else if(c==="C")K++; else if(c==="B")B+=v;}
+ const hp=HPM(); for(const [c,v] of lines){fd+=lineFd(c,v,P); if(c==="T")A+=v; else if(c==="S"||(c==="A"&&!hp))St+=v; else if(c==="C")K++; else if(c==="B")B+=v;}
  return {A,S:St,K,B,fd};
 }
 function outcomes(kind,cube,lvl,P){
@@ -560,7 +636,7 @@ function tParts(t){
  const parts=[];
  if(t.K) parts.push(`${t.K*8}%+ Crit Damage`);
  if(t.A) parts.push(`${t.A}%+ ${ATTN()}`);
- if(t.S) parts.push(`${t.S}%+ ${MS()}`);
+ if(t.S) parts.push(`${t.S}%+ ${MSN()}`);
  if(t.B) parts.push(`${t.B}%+ Boss Damage`);
  return parts;
 }
@@ -598,7 +674,7 @@ const showOrder=codes=>[...codes].sort((a,b)=>{const[ca,va]=parse(a),[cb,vb]=par
 const USEFUL=new Set(["S","s","A","T","B","I","C","D","F","f"]);
 /* in-game target counts totals per stat, in any order: 13/10/10 Magic ATT = Magic ATT 33%+,
    13 ATT/Boss 30/10 ATT = ATT 23%+ and Boss 30%+. All Stats also counts toward INT (or LUK) */
-const tot=(l,c)=>l.reduce((x,e)=>x+(e.c===c||(e.c==="A"&&(c==="S"||c==="s"))?e.v:0),0);
+const tot=(l,c)=>l.reduce((x,e)=>x+(e.c===c||(e.c==="A"&&((c==="S"&&!HPM())||c==="s"))?e.v:0),0);
 const reqOf=l=>{const r={};for(const e of l) r[e.c]=(r[e.c]||0)+e.v;return r;};
 function presets(slot,cube,P){
  const g=S.gear[slot.id], lvl=+g[0]||0, cur=stats(g.slice(1,4).map(parse),P);
@@ -670,7 +746,7 @@ function paintNums(root){
 function tryHtml(slot){
  const g=S.gear[slot.id], lvl=optLvl(+g[0]||0);
  return `<div class="tryh"><b>Try other potentials</b><span>See how much FD you'd gain or lose. Rolled it? Save it as your potentials.</span></div>
- <div class="tryrow">${[0,1,2].map(i=>`<select data-i="${i}" aria-label="Try potential ${i+1}">${options(slot.kind,lvl,i).map(o=>`<option value="${o}"${o===g[i+1]?" selected":""}>${esc(lineLabel(o))}</option>`).join("")}</select>`).join("")}
+ <div class="tryrow">${[0,1,2].map(i=>`<select data-i="${i}" aria-label="Try potential ${i+1}">${lineOpts(slot.kind,lvl,i,g[i+1])}</select>`).join("")}
  <span class="trydiff" aria-live="polite"></span><button type="button" class="btn accent trysave" disabled>Save as my potentials</button></div>`;
 }
 function paintTry(box){
@@ -679,7 +755,7 @@ function paintTry(box){
  el.className="trydiff"+(d>1e-6?" up":d<-1e-6?" down":"");
  el.textContent=Math.abs(d)<=1e-6?(same?"Your current potentials":"Same FD as now"):`${d>0?"+":"−"}${Math.abs(d).toFixed(3)}% FD`;
  box.querySelector(".trysave").disabled=same;
- for(const x of box.querySelectorAll("select")) x.classList.toggle("J",x.value==="J0");
+ const s0=SID[id]; for(const x of box.querySelectorAll("select")) tierMark(x,s0.kind,optLvl(+S.gear[id][0]||0));
 }
 let keepOpen=null;
 function fillPresets(d){
@@ -689,7 +765,7 @@ function fillPresets(d){
  if(h){ el.innerHTML=h; paintNums(el); } else el.remove();
 }
 /* ---------- step 1 ---------- */
-const lab=s=>s.label.replace("{M}",MS()).replace("{S}",SS()).replace("{A}",ATTN());
+const lab=s=>s.label.replace("{M}",MSN()).replace("{S}",SS()).replace("{A}",ATTN());
 const missing = ()=>SCOUT.filter(s=>s.req&&!(parseFloat(S.scout[s.id][1])>0&&+S.scout[s.id][0]>0));
 function buildScout(){
  $("scBody").innerHTML=SCOUT.map(s=>`<tr><td><span id="lb_${s.id}">${lab(s)}</span>${s.star?'<span class="req">*</span>':""}${s.hint?`<small>${s.hint}</small>`:""}</td>
@@ -744,7 +820,7 @@ function buildGear(){
   });
   n.addEventListener("input",()=>{S.gear[s.id][4]=n.value.trim().slice(0,60);paintGic(s.id);changed();});
   $("l_"+s.id).addEventListener("change",e=>{setLevel(s,parseInt(e.target.value)||0);changed();});
-  for(const i of [0,1,2]) $(`p_${s.id}_${i}`).addEventListener("change",e=>{S.gear[s.id][i+1]=e.target.value;e.target.classList.toggle("J",e.target.value==="J0");changed();});
+  for(const i of [0,1,2]) $(`p_${s.id}_${i}`).addEventListener("change",e=>{S.gear[s.id][i+1]=e.target.value;tierMark(e.target,s.kind,optLvl(+S.gear[s.id][0]||0));changed();});
  }
 }
 function paintR4(){ $("r_ring4").hidden=!S.r4; $("r4add").hidden=!!S.r4; }
@@ -770,8 +846,8 @@ function fillSlot(s){
  for(const i of [0,1,2]){
   const opts=options(s.kind,optLvl(lvl),i), el=$(`p_${s.id}_${i}`);
   let v=g[i+1]; if(!opts.includes(v)){const [c,val]=parse(v);const same=opts.filter(o=>parse(o)[0]===c).sort((a,b)=>Math.abs(parse(a)[1]-val)-Math.abs(parse(b)[1]-val)||parse(a)[1]-parse(b)[1]);v=same[0]||"J0";g[i+1]=v;}
-  el.innerHTML=opts.map(o=>`<option value="${o}">${lineLabel(o)}</option>`).join("");
-  el.value=v; el.classList.toggle("J",v==="J0");
+  el.innerHTML=lineOpts(s.kind,optLvl(lvl),i,v);
+  el.value=v; tierMark(el,s.kind,optLvl(lvl));
  }
 }
 const isTemplateGear=()=>SLOTS.every(s=>JSON.stringify(S.gear[s.id])===JSON.stringify(TEMPLATE.gear[s.id]));
@@ -849,10 +925,11 @@ function valid(st){
  st.name=String(st.name||"").slice(0,30); if(!CLS[st.cls]) st.cls="";
  if(st.reg!=="eu") st.reg="na";
  if(st.gear.emblem&&st.gear.emblem[4]==="Class Emblem"&&EMB[st.cls]) st.gear.emblem[4]=EMB[st.cls];
+ if(CLS[st.cls]) for(const id of ARMOR_SLOTS){ const a=armorName(st.gear[id][4],CLS[st.cls].g); if(a) st.gear[id][4]=a; }
  const R=st.rank; if(R&&typeof R==="object"&&/^https:\/\/([a-z0-9-]+\.)*nexon\.(net|com)\//i.test(String(R.img||"")))
   st.rank={region:R.region==="eu"?"eu":"na",name:String(R.name||"").slice(0,13),level:parseInt(R.level)||0,job:String(R.job||"").slice(0,40),world:String(R.world||"").slice(0,20),img:String(R.img),at:+R.at||0};
  else delete st.rank;
- const ST=["STR","DEX","INT","LUK"]; if(!ST.includes(st.ms)) st.ms="INT"; if(!ST.includes(st.ss)) st.ss="LUK";
+ const ST=["STR","DEX","INT","LUK"]; if(!ST.includes(st.ms)&&st.ms!=="HP") st.ms="INT"; if(!ST.includes(st.ss)) st.ss="LUK";
  return true;
 }
 // Character pictures come from Nexon's NA/EU rankings, through the maplewordle Worker (Nexon doesn't let browsers ask it directly).
@@ -862,10 +939,10 @@ function jobToClass(j){ const k=x=>String(x||"").toLowerCase().replace(/[^a-z]/g
  if(t.startsWith("archmage")){ if(/fire|fp/.test(t)) return "Arch Mage (Fire, Poison)"; if(/ice|il/.test(t)) return "Arch Mage (Ice, Lightning)"; }
  return Object.keys(CLS).find(n=>k(n)===t)||""; }
 async function lookupRank(region,name){
- let r; try{ r=await fetch(`${RANK_API}?region=${region}&name=${encodeURIComponent(name)}`); }catch(e){ return {bad:"Can't reach the MapleStory rankings right now. Try again in a bit."}; }
+ let r; try{ r=await fetch(`${RANK_API}?region=${region}&name=${encodeURIComponent(name)}`); }catch(e){ return {bad:"Couldn't connect to the lookup server from this page."}; }
  if(r.status===404) return {bad:`Couldn't find ${name} on the ${region.toUpperCase()} rankings. Check the name and region.`};
  if(r.status===400) return {bad:"Character names are 2 to 13 letters or numbers."};
- const d=await r.json().catch(()=>null); if(!r.ok||!d||!d.img) return {bad:"Can't reach the MapleStory rankings right now. Try again in a bit."};
+ const d=await r.json().catch(()=>null); if(!r.ok||!d||!d.img) return {bad:"The MapleStory rankings aren't answering right now. Try again in a bit."};
  return {m:{region,name:d.name,level:d.level,job:d.job,world:d.world||"",img:d.img,at:Date.now()}};
 }
 const rkSay=(t,bad)=>{ const m=$("rkMsg"); m.textContent=t; m.classList.toggle("bad",!!bad); };
@@ -905,7 +982,7 @@ function renderProfiles(){
  $("profSel").innerHTML=DB.list.map((p,i)=>`<option value="${p.id}">${esc(profLabel(p,i))}</option>`).join("");
  $("profSel").value=DB.cur; $("profDel").disabled=DB.list.length<2;
 }
-function fillChar(){ $("charName").value=S.name||""; $("clsSel").value=S.cls||""; }
+function fillChar(){ $("charName").value=S.name||""; $("clsIn").value=S.cls||""; }
 function switchTo(id){ if(DB.cur) save(); DB.cur=id; S=DB.list.find(p=>p.id===id).state; valid(S); applyAll(); renderProfiles(); go(missing().length?1:3); }
 function addProfile(st,msg){ valid(st); const id=uid(); DB.list.push({id,state:st}); switchTo(id); if(msg) say(msg); }
 const sameChar=(a,b)=>JSON.stringify([a.name,a.cls,a.ms,a.ss,a.scout,a.gear])===JSON.stringify([b.name,b.cls,b.ms,b.ss,b.scout,b.gear]);
@@ -919,7 +996,6 @@ function applyAll(){ fillChar(); paintRank(); refreshRank(); fillScout(); for(co
 function say(t){ $("msg").textContent=t; setTimeout(()=>{if($("msg").textContent===t)$("msg").textContent="";},4500); }
 
 DB=loadDB(); S=DB.list.find(p=>p.id===DB.cur).state; valid(S);
-$("clsSel").innerHTML='<option value="">Pick class (optional)</option>'+CLASSES.map(([g,l])=>`<optgroup label="${g}">${l.map(([n])=>`<option>${esc(n)}</option>`).join("")}</optgroup>`).join("");
 buildScout(); buildGear(); applyAll(); renderProfiles();
 go(missing().length?1:3);
 $("profSel").addEventListener("change",e=>switchTo(e.target.value));
@@ -932,9 +1008,34 @@ let delT; $("profDel").addEventListener("click",()=>{
  S=DB.list.find(p=>p.id===DB.cur).state; valid(S); applyAll(); renderProfiles(); go(missing().length?1:3); say(`Deleted ${gone}.`);
 });
 $("charName").addEventListener("input",e=>{ S.name=e.target.value.slice(0,30); save(); renderProfiles(); renderResults(); });
-function applyClass(nc){ setClass(nc); $("clsSel").value=S.cls||""; const st=clsStats(S.cls); if(st){ [S.ms,S.ss]=st; $("msSel").value=S.ms; $("ssSel").value=S.ss; }
+function applyClass(nc){ setClass(nc); $("clsIn").value=S.cls||""; const st=clsStats(S.cls); if(st){ [S.ms,S.ss]=st; $("msSel").value=S.ms; $("ssSel").value=S.ss; }
  for(const s of SLOTS) fillSlot(s); renderProfiles(); changed(); }
-$("clsSel").addEventListener("change",e=>applyClass(e.target.value));
+/* class picker: type to filter (any part of the name, or the job type like "pirate") */
+(()=>{
+ const inp=$("clsIn"), ul=$("clsList"); let opts=[], act=-1, typed=false;
+ const exact=t=>Object.keys(CLS).find(n=>n.toLowerCase()===t.trim().toLowerCase());
+ const open=on=>{ ul.hidden=!on; inp.setAttribute("aria-expanded",on); };
+ function draw(q){
+  q=(q||"").trim().toLowerCase(); opts=[]; let h="";
+  for(const [g,l] of CLASSES){ const hit=l.filter(([n])=>!q||(" "+n.toLowerCase().replace(/[(),-]/g," ")).includes(" "+q)||g.toLowerCase().startsWith(q)); if(!hit.length) continue;
+   h+=`<li class="gh" role="presentation">${g}</li>`+hit.map(([n])=>{opts.push(n);return `<li class="op${n===S.cls?" cur":""}" role="option" id="co${opts.length-1}" data-i="${opts.length-1}">${esc(n)}</li>`;}).join(""); }
+  ul.innerHTML=h||'<li class="none">No class matches</li>';
+  act=q?Math.max(0,opts.findIndex(n=>n.toLowerCase().startsWith(q))):Math.max(0,opts.indexOf(S.cls)); mark(!q);
+ }
+ function mark(center){ for(const li of ul.querySelectorAll(".op")) li.classList.toggle("on",+li.dataset.i===act);
+  const li=ul.querySelector(`.op[data-i="${act}"]`); if(li){ inp.setAttribute("aria-activedescendant",li.id); li.scrollIntoView({block:center?"center":"nearest"}); } else inp.removeAttribute("aria-activedescendant"); }
+ function pick(n){ open(false); if(n!==S.cls) applyClass(n); else inp.value=S.cls||""; }
+ inp.addEventListener("focus",()=>{ typed=false; draw(""); open(true); inp.select(); });
+ inp.addEventListener("input",()=>{ typed=true; draw(inp.value); open(true); });
+ inp.addEventListener("keydown",e=>{
+  if(e.key==="ArrowDown"||e.key==="ArrowUp"){ e.preventDefault(); if(ul.hidden){ draw(""); open(true); return; } if(opts.length){ act=(act+(e.key==="ArrowDown"?1:-1)+opts.length)%opts.length; mark(); } }
+  else if(e.key==="Enter"){ e.preventDefault(); if(!inp.value.trim()) pick(""); else pick(exact(inp.value)||opts[act]||S.cls||""); inp.blur(); }
+  else if(e.key==="Escape"){ inp.value=S.cls||""; open(false); inp.blur(); }
+ });
+ inp.addEventListener("blur",()=>{ if(ul.hidden) return; const t=inp.value.trim();
+  if(!t) pick(""); else { const ex=exact(t)||(typed&&opts[act]); if(ex) pick(ex); else { inp.value=S.cls||""; open(false); } } });
+ ul.addEventListener("mousedown",e=>{ const li=e.target.closest(".op"); e.preventDefault(); if(li){ pick(opts[+li.dataset.i]); inp.blur(); } });
+})();
 for(const b of document.querySelectorAll("[data-reg]")) b.addEventListener("click",()=>{ S.reg=b.dataset.reg; paintRank(); save(); });
 $("rkFind").addEventListener("click",findRank);
 $("rkCard").addEventListener("click",e=>{ if(e.target.closest("#rkRm")){ delete S.rank; paintRank(); save(); rkSay(""); } });
@@ -1007,6 +1108,53 @@ $("whereBtn").addEventListener("click",()=>{wm.hidden=false;document.body.style.
 $("whereClose").addEventListener("click",closeWhere);
 wm.addEventListener("click",e=>{if(e.target===wm) closeWhere();});
 addEventListener("keydown",e=>{if(e.key==="Escape"&&!wm.hidden) closeWhere();});
+/* dropdown lists in the site's font (Chrome draws native lists in the system font). Phones keep their own picker. */
+(()=>{
+ if(matchMedia("(pointer:coarse)").matches) return;
+ let sel=null, ul=null, items=[], act=-1, typed="", tt;
+ const close=()=>{ if(ul){ ul.remove(); ul=null; } sel=null; };
+ function open(s){
+  close(); sel=s; ul=document.createElement("ul"); ul.className="sp"; ul.setAttribute("role","listbox"); items=[]; let h="";
+  for(const el of s.children){
+   if(el.tagName==="OPTGROUP"){ const t=el.label==="Legendary"?"L":el.label==="Unique"?"U":"";
+    h+=`<li class="gh" role="presentation">${esc(el.label)}</li>`; for(const o of el.children) h+=row(o,t,1); }
+   else h+=row(el,"",0);
+  }
+  ul.innerHTML=h; document.body.appendChild(ul);
+  const r=s.getBoundingClientRect(), below=innerHeight-r.bottom-8, above=r.top-8;
+  ul.style.minWidth=r.width+"px"; ul.style.maxHeight=Math.max(160,Math.min(360,Math.max(below,above)))+"px";
+  const hgt=ul.offsetHeight, left=Math.min(r.left,innerWidth-ul.offsetWidth-8);
+  ul.style.left=Math.max(8,left)+"px"; ul.style.top=(below>=Math.min(hgt,200)||below>=above?r.bottom+4:r.top-4-hgt)+"px";
+  act=items.findIndex(o=>o.value===s.value&&o.selected); if(act<0) act=0; mark(true);
+ }
+ function row(o,t,g){ const i=items.length; items.push(o);
+  return `<li role="option" data-i="${i}" class="${g?"ig ":""}${o.selected?"sel ":""}${o.disabled?"dis":""}">${t&&o.value!=="J0"?`<i class="${t}">${t}</i>`:""}${esc(o.text)}</li>`; }
+ function mark(center){ for(const li of ul.querySelectorAll("li[data-i]")) li.classList.toggle("on",+li.dataset.i===act);
+  const li=ul.querySelector(`li[data-i="${act}"]`); if(!li) return; const t=li.offsetTop, b=t+li.offsetHeight;
+  if(center) ul.scrollTop=t-ul.clientHeight/2+li.offsetHeight/2; else if(t<ul.scrollTop) ul.scrollTop=t-4; else if(b>ul.scrollTop+ul.clientHeight) ul.scrollTop=b-ul.clientHeight+4; }
+ function pick(i){ const o=items[i], s=sel; if(!o||o.disabled) return; close(); s.focus();
+  if(s.value!==o.value||!o.selected){ s.value=o.value; s.dispatchEvent(new Event("input",{bubbles:true})); s.dispatchEvent(new Event("change",{bubbles:true})); } }
+ function step(d){ let i=act; do{ i+=d; }while(items[i]&&items[i].disabled); if(items[i]){ act=i; mark(); } }
+ document.addEventListener("mousedown",e=>{
+  if(ul&&ul.contains(e.target)){ e.preventDefault(); const li=e.target.closest("li[data-i]"); if(li) pick(+li.dataset.i); return; }
+  const s=e.target.closest&&e.target.closest("select");
+  if(s&&!s.disabled&&e.button===0&&!s.multiple){ e.preventDefault(); if(sel===s) close(); else { s.focus(); open(s); } return; }
+  close();
+ },true);
+ document.addEventListener("keydown",e=>{
+  const s=e.target; if(!(s instanceof HTMLSelectElement)) return;
+  if(!ul){ if(e.key===" "||e.key==="Enter"||(e.altKey&&e.key==="ArrowDown")||e.key==="F4"){ e.preventDefault(); open(s); } return; }
+  if(e.key==="ArrowDown"||e.key==="ArrowUp"){ e.preventDefault(); step(e.key==="ArrowDown"?1:-1); }
+  else if(e.key==="Home"||e.key==="End"){ e.preventDefault(); act=e.key==="Home"?0:items.length-1; mark(); }
+  else if(e.key==="Enter"||e.key===" "){ e.preventDefault(); pick(act); }
+  else if(e.key==="Escape"){ e.preventDefault(); close(); }
+  else if(e.key==="Tab"){ close(); }
+  else if(e.key.length===1){ typed+=e.key.toLowerCase(); clearTimeout(tt); tt=setTimeout(()=>typed="",700);
+   const i=items.findIndex(o=>!o.disabled&&o.text.toLowerCase().startsWith(typed)); if(i>=0){ act=i; mark(); } e.preventDefault(); }
+ },true);
+ addEventListener("scroll",e=>{ if(ul&&!ul.contains(e.target)) close(); },true);
+ addEventListener("resize",close); addEventListener("blur",close);
+})();
 $("themeBtn").addEventListener("click",()=>{const t=root.dataset.theme==="light"?"dark":"light";root.dataset.theme=t;try{localStorage.setItem("cubeRoi.theme",t);}catch(e){}});
 }
 </script>
