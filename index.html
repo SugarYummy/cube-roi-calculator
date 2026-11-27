@@ -120,7 +120,8 @@ table.sc{width:100%;border-collapse:collapse}
 .sp li{padding:7px 10px;border-radius:7px;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:8px}
 .sp li.gh{font-weight:700;font-size:13px;color:var(--muted);cursor:default;padding:8px 10px 3px}
 .sp li.on{background:var(--sunk);outline:1px solid var(--line)}.sp li.sel{color:var(--accent);font-weight:600}.sp li.dis{color:var(--muted);cursor:default}
-.sp li.ig{padding-left:14px}.sp li i{font:700 10px var(--body);font-style:normal;width:16px;height:16px;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;color:#10200b;flex:none}
+.sp li.ig{padding-left:14px}
+.sp .ic.sm{width:30px;height:30px;border-radius:7px}.sp .ic.sm img{max-width:24px;max-height:24px}.sp .ic.blank{background:none;border-color:transparent}.sp li:has(.ic){padding-top:4px;padding-bottom:4px;gap:10px}.sp li i{font:700 10px var(--body);font-style:normal;width:16px;height:16px;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;color:#10200b;flex:none}
 .combo{position:relative;display:block}.combo input{width:250px;padding-right:28px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%2398a3b6' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:12px 8px}
 .combo ul{position:absolute;z-index:30;left:0;top:calc(100% + 4px);min-width:100%;width:max-content;max-width:min(320px,90vw);max-height:340px;overflow:auto;margin:0;padding:4px;list-style:none;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.35);font-weight:400}
 .combo li{padding:7px 10px;border-radius:7px;cursor:pointer;white-space:nowrap}
@@ -1165,7 +1166,8 @@ addEventListener("keydown",e=>{if(e.key==="Escape"&&!wm.hidden) closeWhere();});
   act=items.findIndex(o=>o.value===s.value&&o.selected); if(act<0) act=0; mark(true);
  }
  function row(o,t,g){ const i=items.length; items.push(o);
-  return `<li role="option" data-i="${i}" class="${g?"ig ":""}${o.selected?"sel ":""}${o.disabled?"dis":""}">${t&&o.value!=="J0"?`<i class="${t}">${t}</i>`:""}${esc(o.text)}</li>`; }
+  const ico=sel.id.startsWith("i_")?(o.value&&o.value!=="__c"?iconHtml(o.value,0,1):'<span class="ic sm blank"></span>'):"";
+  return `<li role="option" data-i="${i}" class="${g?"ig ":""}${o.selected?"sel ":""}${o.disabled?"dis":""}">${ico}${t&&o.value!=="J0"?`<i class="${t}">${t}</i>`:""}${esc(o.text)}</li>`; }
  function mark(center){ for(const li of ul.querySelectorAll("li[data-i]")) li.classList.toggle("on",+li.dataset.i===act);
   const li=ul.querySelector(`li[data-i="${act}"]`); if(!li) return; const t=li.offsetTop, b=t+li.offsetHeight;
   if(center) ul.scrollTop=t-ul.clientHeight/2+li.offsetHeight/2; else if(t<ul.scrollTop) ul.scrollTop=t-4; else if(b>ul.scrollTop+ul.clientHeight) ul.scrollTop=b-ul.clientHeight+4; }
