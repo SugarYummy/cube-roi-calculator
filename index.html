@@ -153,6 +153,7 @@ table.sc{width:100%;border-collapse:collapse}
 .gr select{font-size:15px;padding:7px 26px 7px 8px;background-position:right 8px center;text-overflow:ellipsis}
 select.tL,select.tU{background-repeat:no-repeat;background-position:left 8px center,right 8px center;background-size:16px 16px,11px 8px;padding-left:31px!important}select.tL{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%238bd448'/%3E%3Ctext x='8' y='12' text-anchor='middle' font-family='Arial,sans-serif' font-weight='700' font-size='10' fill='%2310200b'%3EL%3C/text%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%2398a3b6' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}select.tU{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%23f2b632'/%3E%3Ctext x='8' y='12' text-anchor='middle' font-family='Arial,sans-serif' font-weight='700' font-size='10' fill='%2310200b'%3EU%3C/text%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%2398a3b6' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}select optgroup{font-style:normal;font-weight:700;color:var(--muted)}
 select.J{color:var(--muted)}
+select:disabled{opacity:.55;cursor:not-allowed}
 .gr.empty{border-style:dashed}
 .gr[hidden]{display:none}
 .addr4{display:block;width:100%;margin:0 0 6px;padding:9px 12px;border:1px dashed var(--line);border-radius:10px;background:transparent;color:var(--muted);font-weight:600;text-align:left}
@@ -332,6 +333,13 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
  </div>
 </div>
 
+<div class="modal" id="noModal" role="alertdialog" aria-modal="true" aria-labelledby="noTitle" aria-describedby="noText" hidden>
+ <div class="mbox" style="width:min(380px,100%)">
+  <h2 id="noTitle" style="font-size:18px">Not allowed</h2>
+  <p id="noText" style="margin:8px 0 0;font-size:15px"></p>
+  <div class="row" style="margin-top:16px;justify-content:flex-end"><button class="btn accent" id="noOk" type="button">OK</button></div>
+ </div>
+</div>
 <div class="modal" id="cfModal" role="dialog" aria-modal="true" aria-labelledby="cfTitle" hidden>
  <div class="mbox" style="width:min(420px,100%)">
   <h2 id="cfTitle" style="font-size:18px"></h2>
@@ -385,6 +393,7 @@ const fileName=n=>n.replace(/</g,"(").replace(/>/g,")").replace(/ /g,"_").replac
 function iconFiles(n){
  if(!n) return null; if(ICONS[n]) return ICONS[n];
  if(n==="Princess No's Soul Shield") return ["Soul_Shield_of_Justice"];
+ if(NOPOT.has(n)) return [fileName(n)];
  if(FZICON[n]) return [FZICON[n]];
  if(SECNAMES.has(n)) return [fileName(n)];
  if((/ Emblem( \(|$)/.test(n)&&n!=="Class Emblem")||n==="Hybrid Heart") return [fileName(n)];
@@ -480,10 +489,26 @@ const DEXP=["Corsair","Mechanic","Angelic Buster"];
 function clsStats(n){ const C=CLS[n]; if(n==="Demon Avenger") return ["HP","STR"]; if(!C||n==="Xenon") return null;
  if(C.g==="Pirate") return DEXP.includes(n)?["DEX","STR"]:["STR","DEX"];
  return {Warrior:["STR","DEX"],Magician:["INT","LUK"],Bowman:["DEX","STR"],Thief:["LUK","DEX"]}[C.g]; }
+// Zero: without Astra Hourglass, the secondary (Lapis) copies the weapon, potentials included
+const zeroMirror=()=>S.cls==="Zero"&&S.gear.secondary[4]!=="Astra Hourglass";
+const lapisName=()=>{ const m=(S.gear.weapon[4]||"").match(/^(Destiny|Genesis) Lazuli$/); return m?m[1]+" Lapis":"Lapis"; };
+function syncZero(){ if(!zeroMirror()) return false; const w=S.gear.weapon, n=[w[0],w[1],w[2],w[3],lapisName()];
+ if(JSON.stringify(S.gear.secondary)===JSON.stringify(n)) return false; S.gear.secondary=n; return true; }
+// the weapon's potentials count twice while the Lapis copies them (13/10/10 -> 13/13/10 Magic ATT = +6%, not +3%)
+function slotP(slot,P){ if(!(slot.id==="weapon"&&zeroMirror())) return P; const D={...P};
+ for(const k of ["boss","att","stat","statp","crit","sec","secp","allp"]) D[k]*=2; D.ied=v=>P.ied(100*(1-Math.pow(1-v/100,2))); return D; }
+const NOPOT=new Set(["Genesis Badge","Crystal Ventus Badge"]);   // can't have potentials
+const noPot=id=>NOPOT.has(S.gear[id][4]);
+// you can't wear 2 of the same ring, or 2 of the same pendant (Gollux pendants are fine)
+function dupSlot(s,v){ if(!v||v==="__c") return null;
+ const grp=s.list==="ring"?["ring1","ring2","ring3","ring4"]:s.list==="pendant"&&!/Gollux/.test(v)?["pend1","pend2"]:null;
+ return grp&&grp.find(id=>id!==s.id&&S.gear[id][4]===v&&(id!=="ring4"||S.r4)); }
+function notAllowed(t){ const m=$("noModal"); $("noText").textContent=t; m.hidden=false; document.body.style.overflow="hidden"; $("noOk").focus(); }
 function itemList(s){
  const C=CLS[S&&S.cls];
  if(C){ const E=ETERNAL[C.g];
   if(s.list==="weapon") return [...C.w.map(w=>[w[0],250]),...C.w.map(w=>[w[1],200])];
+  if(s.list==="secondary"&&S.cls==="Zero") return [[lapisName(),+S.gear.weapon[0]||250,"mirror"],["Astra Hourglass",200,"astra"]];
   if(s.list==="secondary"){ const x=SEC2[S.cls]||[], d=SHIELD[S.cls], f=FROZEN[S.cls];
    return [...C.a.map(a=>[a,200,"astra"]),...(EXTRA2[S.cls]?[EXTRA2[S.cls]]:[]),...(d?[[d,130,"shield"]]:[]),...(x[0]?[[x[0],140,"pno"]]:[]),...(x[1]?[[x[1],100,"lv100"]]:[]),...(f?[[f[0],100,"frozen"]]:[])]; }
   if(ARMOR_SLOTS.includes(s.list)) return ITEMS[s.list].map(([n,l])=>[armorName(n,C.g)||n,l]);
@@ -493,11 +518,12 @@ function itemList(s){
 }
 function setClass(nc){
  const oldL={}; for(const id of ["weapon","secondary","emblem",...ARMOR_SLOTS]) oldL[id]=itemList(SID[id]);
- S.cls=nc;
+ const was=S.cls; S.cls=nc;
  for(const id in oldL){ const g=S.gear[id], nl=itemList(SID[id]), i=oldL[id].findIndex(([n])=>n===g[4]); if(i<0||!nl.length) continue;
   const lv=oldL[id][i][1], ty=oldL[id][i][2], pick=(ty&&nl.find(x=>x[2]===ty))||nl.find(([,l])=>l===lv)||[...nl].sort((a,b)=>Math.abs(a[1]-lv)-Math.abs(b[1]-lv))[0]; g[4]=pick[0];
   if(pick[1]&&pick[1]!==lv&&+g[0]===lv) setLevel(SID[id],pick[1]);
  }
+ if(nc==="Zero"&&was!=="Zero") S.gear.secondary[4]=lapisName();
 }
 const SID = Object.fromEntries(SLOTS.map(s=>[s.id,s]));
 const ITEMS = {
@@ -518,7 +544,7 @@ const ITEMS = {
  gloves:[["Eternal Gloves",250],["Arcane Gloves",200],["Absolab Gloves",160]],
  shoes:[["Eternal Shoes",250],["Arcane Shoes",200],["Absolab Shoes",160]],
  heart:[["Total Control",200],["Plasma Heart",130],["Fairy Heart",100]],
- badge:[["Ghost Ship Exorcist",150],["Sengoku Hakase",160]]
+ badge:[["Ghost Ship Exorcist",150],["Sengoku Hakase",160],["Genesis Badge",200],["Crystal Ventus Badge",130]]
 };
 const SCOUT = [
  ["boss","Boss Damage",40,1],["att","{A} %",12,1],["crit","Crit Damage",8,1],["ied","IED (380)",40,1,"",1],
@@ -642,7 +668,7 @@ function tParts(t){
 }
 const tHtml=t=>tParts(t).map(x=>`<span class="tl">${esc(x)}</span>`).join("");
 function analyze(slot,P,cube){
- const g=S.gear[slot.id], lvl=+g[0]||0;
+ P=slotP(slot,P); const g=S.gear[slot.id], lvl=+g[0]||0;
  const cur=stats(g.slice(1,4).map(parse),P);
  const outs=outcomes(slot.kind,cube,lvl,P);
  let pb=0;
@@ -677,7 +703,7 @@ const USEFUL=new Set(["S","s","A","T","B","I","C","D","F","f"]);
 const tot=(l,c)=>l.reduce((x,e)=>x+(e.c===c||(e.c==="A"&&((c==="S"&&!HPM())||c==="s"))?e.v:0),0);
 const reqOf=l=>{const r={};for(const e of l) r[e.c]=(r[e.c]||0)+e.v;return r;};
 function presets(slot,cube,P){
- const g=S.gear[slot.id], lvl=+g[0]||0, cur=stats(g.slice(1,4).map(parse),P);
+ P=slotP(slot,P); const g=S.gear[slot.id], lvl=+g[0]||0, cur=stats(g.slice(1,4).map(parse),P);
  const [L1,L2,L3]=pools(slot.kind,cube,lvl), prime=new Set(L1.map(e=>e.c+e.v)), agg=new Map();
  // every possible result, grouped by its lines (order doesn't matter for targets)
  for(const a of L1) for(const b of L2){ const pb=adjRate(b,[a],L2); if(!pb) continue;
@@ -750,7 +776,7 @@ function tryHtml(slot){
  <span class="trydiff" aria-live="polite"></span><button type="button" class="btn accent trysave" disabled>Save as my potentials</button></div>`;
 }
 function paintTry(box){
- const id=box.dataset.slot, now=S.gear[id].slice(1,4), pick=[...box.querySelectorAll("select")].map(x=>x.value), P=perValues();
+ const id=box.dataset.slot, now=S.gear[id].slice(1,4), pick=[...box.querySelectorAll("select")].map(x=>x.value), P=slotP(SID[id],perValues());
  const d=stats(pick.map(parse),P).fd-stats(now.map(parse),P).fd, same=pick.every((c,i)=>c===now[i]), el=box.querySelector(".trydiff");
  el.className="trydiff"+(d>1e-6?" up":d<-1e-6?" down":"");
  el.textContent=Math.abs(d)<=1e-6?(same?"Your current potentials":"Same FD as now"):`${d>0?"+":"−"}${Math.abs(d).toFixed(3)}% FD`;
@@ -813,7 +839,8 @@ function buildGear(){
  for(const s of SLOTS){
   const sel=$("i_"+s.id), n=$("n_"+s.id);
   sel.addEventListener("change",()=>{
-   const g=S.gear[s.id], v=sel.value;
+   const g=S.gear[s.id], v=sel.value, dup=dupSlot(s,v);
+   if(dup){ sel.value=g[4]&&itemList(s).some(([n])=>n===g[4])?g[4]:(g[4]?"__c":""); notAllowed(`You can't wear 2 ${v}. It's already in ${SID[dup].name}.`); return; }
    if(v==="__c"){ n.hidden=false; n.focus(); g[4]=n.value.trim(); paintGic(s.id); }
    else{ n.hidden=true; g[4]=v; const hit=itemList(s).find(([nm])=>nm===v); if(hit&&hit[1]) setLevel(s,hit[1]); else fillSlot(s); }
    changed();
@@ -832,6 +859,8 @@ function setLevel(s,nv){
  fillSlot(s);
 }
 function fillSlot(s){
+ if(s.id==="secondary") syncZero();
+ if(NOPOT.has(S.gear[s.id][4])) for(let i=1;i<4;i++) S.gear[s.id][i]="J0";
  const g=S.gear[s.id], lvl=+g[0]||0, list=itemList(s), name=g[4]||"";
  const known=list.some(([nm])=>nm===name), custom=!!name&&!known;
  const sel=$("i_"+s.id);
@@ -842,13 +871,16 @@ function fillSlot(s){
  lv.innerHTML=`<option value="0">Level</option>`+levels.map(l=>`<option value="${l}">Level ${l}</option>`).join("");
  lv.value=String(lvl); lv.classList.toggle("J",!lvl);
  $("r_"+s.id).classList.toggle("empty",!lvl);
- $("w_"+s.id).textContent=lvl&&lvl<120?"Under Lv 120: odds are estimated":"";
+ const mir=s.id==="secondary"&&zeroMirror(), np=NOPOT.has(name);
+ $("w_"+s.id).textContent=mir?"Copies your weapon":np?"Can't have potentials":lvl&&lvl<120?"Under Lv 120: odds are estimated":"";
+ lv.disabled=mir;
  for(const i of [0,1,2]){
   const opts=options(s.kind,optLvl(lvl),i), el=$(`p_${s.id}_${i}`);
   let v=g[i+1]; if(!opts.includes(v)){const [c,val]=parse(v);const same=opts.filter(o=>parse(o)[0]===c).sort((a,b)=>Math.abs(parse(a)[1]-val)-Math.abs(parse(b)[1]-val)||parse(a)[1]-parse(b)[1]);v=same[0]||"J0";g[i+1]=v;}
   el.innerHTML=lineOpts(s.kind,optLvl(lvl),i,v);
-  el.value=v; tierMark(el,s.kind,optLvl(lvl));
+  el.value=v; tierMark(el,s.kind,optLvl(lvl)); el.disabled=mir||np;
  }
+ if(s.id==="weapon"&&S.cls==="Zero") fillSlot(SID.secondary);
 }
 const isTemplateGear=()=>SLOTS.every(s=>JSON.stringify(S.gear[s.id])===JSON.stringify(TEMPLATE.gear[s.id]));
 
@@ -858,7 +890,7 @@ function renderResults(){
  const P=perValues();
  $("sortNote").textContent=S.sort==="cheap"?"Cheapest upgrade (fewest cubes) is at the top. Tap a row to see its auto-reroll targets.":"Best value per cube is at the top. Tap a row to see its auto-reroll targets.";
  if(missing().length){$("out").innerHTML='<p class="note">Finish step 1 (scouter values) first.</p>';return;}
- const use=SLOTS.filter(s=>+S.gear[s.id][0]>0&&(s.id!=="ring4"||S.r4)), skip=SLOTS.filter(s=>s.id!=="ring4"&&!(+S.gear[s.id][0]>0));
+ const use=SLOTS.filter(s=>+S.gear[s.id][0]>0&&(s.id!=="ring4"||S.r4)&&!noPot(s.id)&&!(s.id==="secondary"&&zeroMirror())), skip=SLOTS.filter(s=>s.id!=="ring4"&&!(+S.gear[s.id][0]>0));
  const both=S.cube==="both", cubes=both?["bright","glowing"]:[S.cube];
  const res=use.map(s=>{const per=cubes.map(c=>analyze(s,P,c));const w=per.filter(x=>pickT(x)).sort((a,b)=>score(pickT(b))-score(pickT(a)))[0]||per[0];return {...w,per};});
  const ok=res.filter(r=>pickT(r)).sort((a,b)=>score(pickT(b))-score(pickT(a))||pickT(b).roi-pickT(a).roi), done=res.filter(r=>!pickT(r));
@@ -991,7 +1023,7 @@ function addShared(st,msg){
  const fresh=DB.list.length===1&&!S.name&&missing().length===SCOUT.length&&isTemplateGear();
  if(fresh){ DB.list=[]; DB.cur=null; } addProfile(st,msg);
 }
-let tm; function changed(){ save(); updateStep1(); $("exNote").style.display=isTemplateGear()?"":"none"; clearTimeout(tm); tm=setTimeout(renderResults,150); }
+let tm; function changed(){ if(syncZero()) fillSlot(SID.secondary); save(); updateStep1(); $("exNote").style.display=isTemplateGear()?"":"none"; clearTimeout(tm); tm=setTimeout(renderResults,150); }
 function applyAll(){ fillChar(); paintRank(); refreshRank(); fillScout(); for(const s of SLOTS) fillSlot(s); paintR4(); save(); updateStep1(); }
 function say(t){ $("msg").textContent=t; setTimeout(()=>{if($("msg").textContent===t)$("msg").textContent="";},4500); }
 
@@ -1095,6 +1127,9 @@ $("out").addEventListener("click",e=>{
  cf.hidden=false; document.body.style.overflow="hidden"; $("cfYes").focus();
 });
 $("cfNo").addEventListener("click",closeCf);
+const noM=$("noModal"), closeNo=()=>{ noM.hidden=true; document.body.style.overflow=""; };
+$("noOk").addEventListener("click",closeNo); noM.addEventListener("click",e=>{ if(e.target===noM) closeNo(); });
+addEventListener("keydown",e=>{ if(e.key==="Escape"&&!noM.hidden) closeNo(); });
 cf.addEventListener("click",e=>{if(e.target===cf) closeCf();});
 addEventListener("keydown",e=>{if(e.key==="Escape"&&!cf.hidden) closeCf();});
 $("cfYes").addEventListener("click",()=>{
