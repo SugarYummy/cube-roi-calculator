@@ -247,11 +247,11 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
  </section>
 
  <section class="panel step" id="step2">
-  <div class="stephead"><div><h2>Step 2: Input your gear</h2><p>Pick each item and its 3 lines.</p></div>
+  <div class="stephead"><div><h2>Step 2: Input your gear</h2><p>Pick each item and its 3 potential lines.</p></div>
    <div class="row"><button class="btn" id="bReset" type="button">Reset (clear gear)</button><button class="btn ghost" id="bTemplate" type="button">Load example</button><button class="btn accent" type="button" data-go="3">See results →</button></div></div>
   <div class="callout" id="exNote"><b>This is an example (Moeko's gear).</b> Click <b>Reset</b> to clear it, then fill in your own.</div>
   <div class="callout warn"><ul>
-   <li><b>Hat:</b> only Stat hats are calculated. Cooldown (CD) hat lines aren't counted.</li>
+   <li><b>Hat:</b> only Stat hats are calculated. Cooldown (CD) hat potentials aren't counted.</li>
    <li>All items count as Legendary.</li>
    <li>This tool might have mistakes. Use it at your own risk.</li>
   </ul></div>
@@ -261,7 +261,7 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
  </section>
 
  <section class="panel step" id="step3">
-  <div class="stephead"><div><h2>Step 3: What to cube next <span class="chip" id="cubeNote"></span></h2><p>Best value per cube is at the top. Tap a row to see its auto-reroll targets.</p></div></div>
+  <div class="stephead"><div><h2>Step 3: What to cube next <span class="chip" id="cubeNote"></span></h2><p id="sortNote">Best value per cube is at the top. Tap a row to see its auto-reroll targets.</p></div></div>
   <div id="out"></div>
   <p class="note">This tool might have mistakes. Use it at your own risk.</p>
   <div class="foot"><button class="btn" type="button" data-go="2">← Back to gear</button><button class="btn ghost" type="button" data-go="1">Edit scouter values</button></div>
@@ -285,7 +285,7 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
 <div class="modal" id="cfModal" role="dialog" aria-modal="true" aria-labelledby="cfTitle" hidden>
  <div class="mbox" style="width:min(420px,100%)">
   <h2 id="cfTitle" style="font-size:18px"></h2>
-  <p class="muted" style="margin:6px 0 10px;font-size:14px">Make your new item have these lines?</p>
+  <p class="muted" style="margin:6px 0 10px;font-size:14px">Make your new item have these potentials?</p>
   <div id="cfLines" class="cflines"></div>
   <p class="note" id="cfNote" style="margin-top:8px"></p>
   <div class="row" style="margin-top:14px;justify-content:flex-end"><button class="btn" id="cfNo" type="button">Cancel</button><button class="btn accent" id="cfYes" type="button">Yes, update</button></div>
@@ -325,7 +325,7 @@ const ITEMS = {
  gloves:[["Eternal Gloves",250],["Arcane Gloves",200],["Absolab Gloves",160]],
  shoes:[["Eternal Shoes",250],["Arcane Shoes",200],["Absolab Shoes",160]],
  heart:[["Total Control",200],["Plasma Heart",130],["Fairy Heart",100]],
- badge:[["Ghost Ship Exorcist",150],["Sengoku Hakase",null],["Inspector's Mapae",null]]
+ badge:[["Ghost Ship Exorcist",150],["Sengoku Hakase",null]]
 };
 const SCOUT = [
  ["boss","Boss Damage",40,1],["att","{A} %",12,1],["crit","Crit Damage",8,1],["ied","IED (380)",40,1,"",1],
@@ -352,7 +352,7 @@ const MS=()=>S.ms||"INT", SS=()=>S.ss||"LUK", ATTN=()=>MS()==="INT"?"Magic ATT":
 function lineLabel(code){
  const c=code.replace(/[0-9.]+$/,""), v=code.slice(c.length);
  return ({S:`${MS()} +${v}%`,s:`${SS()} +${v}%`,A:`All Stats +${v}%`,T:`${ATTN()} +${v}%`,B:`Boss Damage +${v}%`,I:`IED +${v}%`,
-  C:`Crit Damage +${v}%`,D:`Damage +${v}%`,F:`${MS()} +${v}`,f:`${SS()} +${v}`})[c]||"Other line";
+  C:`Crit Damage +${v}%`,D:`Damage +${v}%`,F:`${MS()} +${v}`,f:`${SS()} +${v}`})[c]||"Other potential";
 }
 const parse = code=>{const c=code.replace(/[0-9.]+$/,"");return [c,+code.slice(c.length)||0]};
 const optLvl = lvl=>lvl||200;
@@ -458,9 +458,11 @@ function analyze(slot,P,cube){
  const pareto=cand.filter(x=>!cand.some(y=>y!==x&&y.p>=x.p-1e-15&&y.gain>=x.gain-1e-9&&(y.p>x.p+1e-15||y.gain>x.gain+1e-9)));
  const uniq=[];for(const x of pareto.sort((a,b)=>b.p-a.p)) if(!uniq.some(u=>Math.abs(u.p-x.p)<1e-15&&Math.abs(u.gain-x.gain)<1e-9)) uniq.push(x);
  const best=uniq.reduce((a,b)=>!a||b.roi>a.roi?b:a,null);
- return {slot,lvl,cube,pb,targets:uniq.slice(0,8),best};
+ return {slot,lvl,cube,pb,targets:uniq.slice(0,8),best,cheap:uniq[0]||null};
 }
 const itemName = s=>S.gear[s.id][4]||s.name;
+const pickT=r=>r&&(S.sort==="cheap"?r.cheap:r.best);
+const score=t=>S.sort==="cheap"?t.p:t.roi;
 const PRI={T:0,C:1,B:2,D:3,I:4,S:5,A:6,s:7,F:8,f:9};
 const showOrder=codes=>[...codes].sort((a,b)=>{const[ca,va]=parse(a),[cb,vb]=parse(b);return (PRI[ca]??9)-(PRI[cb]??9)||vb-va;});
 const USEFUL=new Set(["S","s","A","T","B","I","C","D","F","f"]);
@@ -501,7 +503,7 @@ function presets(slot,cube,P){
  if(!cands.length) return null;
  const pool=cands.sort((x,y)=>y.val-x.val).slice(0,80), picked=[], covered=new Set();
  // target 1 = the same target as the ranking (e.g. Magic ATT 33%+ -> 13/10/10)
- const bt=analyze(slot,P,cube).best;
+ const bt=pickT(analyze(slot,P,cube));
  if(bt){
   const t=bt.t, fits=o=>{const st=stats(o.l.map(e=>[e.c,e.v]),P);return Object.keys(t).every(d=>st[d]>=t[d]);};
   const first=cands.filter(c=>hits(c).every(fits)).sort((x,y)=>y.p-x.p||y.val-x.val)[0];
@@ -519,7 +521,7 @@ const anyLine='<span class="pl any"><i class="O">-</i>Not selected</span>';
 function presetHtml(slot,cube,P){
  const ps=presets(slot,cube,P); if(!ps) return "";
  return `<div class="ph"><b>Auto-reroll targets${S.cube==="both"?` (${CUBE[cube]})`:""}</b><span>Put these in the Target presets. When you hit one, tap it to update your gear.${["weapon","secondary","emblem"].includes(slot.kind)?"":" Stop Upon Combat Power Increase also works here."}</span></div>
-  ${["weapon","secondary","emblem"].includes(slot.kind)?`<div class="cpwarn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.5"/></svg><span><b>Turn OFF Stop Upon Combat Power Increase!</b> On WSE, Boss raises Combat Power way more than it's worth, so it will stop on bad lines.</span></div>`:""}
+  ${["weapon","secondary","emblem"].includes(slot.kind)?`<div class="cpwarn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.5"/></svg><span><b>Turn OFF Stop Upon Combat Power Increase!</b> On WSE, Boss raises Combat Power way more than it's worth, so it will stop on bad potentials.</span></div>`:""}
   <div class="pgrid">${ps.picked.map((x,k)=>`<button type="button" class="preset" data-slot="${slot.id}" data-codes="${x.pos.join(",")}">
    <span class="pn">${k+1}${k===0?' <em>Recommended</em>':""}</span>
    ${showOrder(x.pos.filter(c=>c!=="J0")).map(c=>{const L=ps.prime.has(c);return `<span class="pl"><i class="${L?"L":"U"}">${L?"L":"U"}</i>${esc(lineLabel(c))}</span>`;}).join("")}${anyLine.repeat(x.pos.filter(c=>c==="J0").length)}
@@ -580,10 +582,10 @@ function updateStep1(){
 const LEVELS=[100,110,120,130,135,140,145,150,160,200,250];
 function buildGear(){
  $("gear").innerHTML=GROUPS.map(([title,ids])=>`<div class="grp"><h3>${title}</h3>${ids.map(id=>{const s=SID[id];return `<div class="gr" id="r_${id}">
-  <div class="sn">${s.name}${id==="hat"?'<small>Stat lines only</small>':id==="ring4"?'<button type="button" class="linkbtn rm" id="r4rm">Remove</button>':""}<small class="wn" id="w_${id}"></small></div>
+  <div class="sn">${s.name}${id==="hat"?'<small>Stat potentials only</small>':id==="ring4"?'<button type="button" class="linkbtn rm" id="r4rm">Remove</button>':""}<small class="wn" id="w_${id}"></small></div>
   <div class="nm"><select id="i_${id}" aria-label="${s.name} item"></select><input class="cust" id="n_${id}" placeholder="Type the item name" aria-label="${s.name} item name" autocomplete="off" hidden></div>
   <div class="lv"><select id="l_${id}" aria-label="${s.name} level"></select></div>
-  ${[0,1,2].map(i=>`<select class="l${i}" id="p_${id}_${i}" aria-label="${s.name} line ${i+1}"></select>`).join("")}</div>${id==="ring4"?'<button type="button" class="addr4" id="r4add">+ Add Ring 4</button>':""}`}).join("")}</div>`).join("");
+  ${[0,1,2].map(i=>`<select class="l${i}" id="p_${id}_${i}" aria-label="${s.name} potential ${i+1}"></select>`).join("")}</div>${id==="ring4"?'<button type="button" class="addr4" id="r4add">+ Add Ring 4</button>':""}`}).join("")}</div>`).join("");
  $("r4add").addEventListener("click",()=>{S.r4=true;paintR4();changed();$("i_ring4").focus();});
  $("r4rm").addEventListener("click",()=>{S.r4=false;S.gear.ring4=[0,"J0","J0","J0",""];fillSlot(SID.ring4);paintR4();changed();$("r4add").focus();});
  for(const s of SLOTS){
@@ -631,35 +633,36 @@ const isTemplateGear=()=>SLOTS.every(s=>JSON.stringify(S.gear[s.id])===JSON.stri
 function renderResults(){
  if(step!==3) return;
  const P=perValues();
+ $("sortNote").textContent=S.sort==="cheap"?"Cheapest upgrade (fewest cubes) is at the top. Tap a row to see its auto-reroll targets.":"Best value per cube is at the top. Tap a row to see its auto-reroll targets.";
  if(missing().length){$("out").innerHTML='<p class="note">Finish step 1 (scouter values) first.</p>';return;}
  const use=SLOTS.filter(s=>+S.gear[s.id][0]>0&&(s.id!=="ring4"||S.r4)), skip=SLOTS.filter(s=>s.id!=="ring4"&&!(+S.gear[s.id][0]>0));
  const both=S.cube==="both", cubes=both?["bright","glowing"]:[S.cube];
- const res=use.map(s=>{const per=cubes.map(c=>analyze(s,P,c));const w=per.filter(x=>x.best).sort((a,b)=>b.best.roi-a.best.roi)[0]||per[0];return {...w,per};});
- const ok=res.filter(r=>r.best).sort((a,b)=>b.best.roi-a.best.roi), done=res.filter(r=>!r.best);
+ const res=use.map(s=>{const per=cubes.map(c=>analyze(s,P,c));const w=per.filter(x=>pickT(x)).sort((a,b)=>score(pickT(b))-score(pickT(a)))[0]||per[0];return {...w,per};});
+ const ok=res.filter(r=>pickT(r)).sort((a,b)=>score(pickT(b))-score(pickT(a))||pickT(b).roi-pickT(a).roi), done=res.filter(r=>!pickT(r));
  const tail=(done.length?`<p class="maxed">Nothing better to aim for: ${done.map(d=>esc(itemName(d.slot))).join(", ")}.</p>`:"")+
   (skip.length?`<p class="maxed">Skipped (no level set): ${skip.map(s=>esc(s.name)).join(", ")}.</p>`:"");
  if(!ok.length){$("out").innerHTML='<p class="note">Nothing to upgrade yet. Fill in your gear in step 2.</p>'+tail;return;}
- const maxRoi=ok[0].best.roi, top=ok[0], tb=top.best;
- const pick=`<div class="top"><div class="pick"><div class="k">Best value right now${both?` (${CUBE[top.cube]})`:""}</div>
+ const maxRoi=Math.max(...ok.map(r=>pickT(r).roi)), top=ok[0], tb=pickT(top);
+ const pick=`<div class="top"><div class="pick"><div class="k">${S.sort==="cheap"?"Cheapest upgrade right now":"Best value right now"}${both?` (${CUBE[top.cube]})`:""}</div>
   <div class="big">${esc(itemName(top.slot))}</div><div class="ptg">${tHtml(tb.t)}</div>
   <div class="stats"><span><b>1 in ${fmt(1/tb.p)}</b>chance per ${SHORT[top.cube]} cube</span><span><b data-p="${tb.p}"></b>cubes for <span class="qlab"></span></span><span class="g"><b>+${tb.gain.toFixed(3)}%</b>Final Damage</span></div></div></div>`;
- const head=`<div class="rtools"><label>Show cubes for a <select id="qSel" aria-label="Chance to hit">${[25,50,75,99].map(q=>`<option value="${q/100}"${Math.abs(S.q-q/100)<1e-9?" selected":""}>${q}%</option>`).join("")}</select> chance</label>
+ const head=`<div class="rtools"><div class="seg" role="group" aria-label="Sort by"><button type="button" data-sort="best"${S.sort!=="cheap"?' class="on" aria-pressed="true"':' aria-pressed="false"'}>Best FD per cube</button><button type="button" data-sort="cheap"${S.sort==="cheap"?' class="on" aria-pressed="true"':' aria-pressed="false"'}>Fewest cubes</button></div><label>Show cubes for a <select id="qSel" aria-label="Chance to hit">${[25,50,75,99].map(q=>`<option value="${q/100}"${Math.abs(S.q-q/100)<1e-9?" selected":""}>${q}%</option>`).join("")}</select> chance</label>
   <label>Show FD per <input id="perIn" inputmode="numeric" value="${S.per}" aria-label="Number of cubes"> cubes</label></div>
-  <div class="hd"><span>#</span><span>Item and current lines</span><span>Best target</span><span>Chance</span><span><span class="qlab"></span> cubes</span><span>FD gain</span><span>FD per <span class="nlab"></span> cubes</span></div>`;
- const tbl=x=>{const b=x.best;return `<div style="margin-top:${both?10:0}px">${both?`<b style="color:var(--fg)">${CUBE[x.cube]}</b>`:""}
+  <div class="hd"><span>#</span><span>Item and current potentials</span><span>${S.sort==="cheap"?"Cheapest target":"Best target"}</span><span>Chance</span><span><span class="qlab"></span> cubes</span><span>FD gain</span><span>FD per <span class="nlab"></span> cubes</span></div>`;
+ const tbl=x=>{const b=pickT(x);return `<div style="margin-top:${both?10:0}px">${both?`<b style="color:var(--fg)">${CUBE[x.cube]}</b>`:""}
    <div style="overflow-x:auto"><table class="tt"><colgroup><col class="c-t"><col class="c-c"><col class="c-q"><col class="c-q"><col class="c-q"><col class="c-q"><col class="c-g"><col class="c-r"></colgroup>
    <thead><tr><th>Target</th><th class="n">Chance</th><th class="n q">25% cubes</th><th class="n q">50% cubes</th><th class="n q">75% cubes</th><th class="n q">99% cubes</th><th class="n">FD gain</th><th class="n">FD per <span class="nlab"></span></th></tr></thead><tbody>${x.targets.map(t=>`<tr${t===b?' class="best"':''}><td class="tgt">${tHtml(t.t)}</td><td class="n" data-l="Chance">1 in ${fmt(1/t.p)}</td>${[.25,.5,.75,.99].map(q=>`<td class="n q" data-l="${q*100}% cubes">${short(cubesFor(t.p,q))}</td>`).join("")}<td class="n" data-l="FD gain">+${t.gain.toFixed(3)}%</td><td class="n" data-l="FD per cubes" data-r="${t.roi/1000}"></td></tr>`).join("")}</tbody></table></div></div>`;};
  const rows=ok.map((r,i)=>{
-  const b=r.best, now=S.gear[r.slot.id].slice(1,4).map(lineLabel).join(", ");
+  const b=pickT(r), now=S.gear[r.slot.id].slice(1,4).map(lineLabel).join(", ");
   const other=both?r.per.find(x=>x!==r.per.find(y=>y.cube===r.cube)):null;
-  const tag=both?`<small>${SHORT[r.cube]} is better${other&&other.best?`, ${SHORT[other.cube]}: 1 in ${fmt(1/other.best.p)}`:""}</small>`:"";
+  const tag=both?`<small>${SHORT[r.cube]} is better${other&&pickT(other)?`, ${SHORT[other.cube]}: 1 in ${fmt(1/pickT(other).p)}`:""}</small>`:"";
   const pHtml=`<div class="presets" data-slot="${r.slot.id}" data-cube="${r.cube}"></div>`;
   return `<details class="it"${i===0?" open":""}><summary><span class="rk">${i+1}</span>
    <span class="sl"><b>${esc(itemName(r.slot))}</b> <span class="meta">Lv. ${r.lvl}${S.gear[r.slot.id][4]?` ${esc(r.slot.name)}`:""}</span><small>${(()=>{const pr=new Set(pools(r.slot.kind,"bright",r.lvl)[0].map(e=>e.c+e.v));return S.gear[r.slot.id].slice(1,4).map(c=>c==="J0"?`<span class="cl"><i class="O">-</i>${esc(lineLabel(c))}</span>`:`<span class="cl"><i class="${pr.has(c)?"L":"U"}">${pr.has(c)?"L":"U"}</i>${esc(lineLabel(c))}</span>`).join("");})()}</small></span>
    <span class="tg">${tHtml(b.t)}${tag}</span>
    <span class="num ch">1 in ${fmt(1/b.p)}</span><span class="num c50" data-p="${b.p}"></span><span class="num gn">+${b.gain.toFixed(3)}%</span>
    <span class="bar"><i style="width:${Math.max(3,b.roi/maxRoi*70).toFixed(1)}%"></i><span data-r="${b.roi/1000}"></span></span></summary>
-   <div class="dt">${pHtml}${(both?r.per.filter(x=>x.best):[r]).map(tbl).join("")}</div></details>`;
+   <div class="dt">${pHtml}${(both?r.per.filter(x=>pickT(x)):[r]).map(tbl).join("")}</div></details>`;
  }).join("");
  $("out").innerHTML=pick+head+`<div class="list">${rows}</div>`+tail;
  for(const d of $("out").querySelectorAll("details.it[open]")) fillPresets(d);
@@ -692,6 +695,7 @@ function valid(st){
  }
  if(!["bright","glowing","both"].includes(st.cube)) st.cube="bright";
  if(![.25,.5,.75,.99].includes(+st.q)) st.q=.5; else st.q=+st.q;
+ if(st.sort!=="cheap") st.sort="best";
  st.per=Math.min(Math.max(parseInt(st.per)||1000,1),1e9);
  st.r4=!!st.r4||+st.gear.ring4[0]>0;
  const ST=["STR","DEX","INT","LUK"]; if(!ST.includes(st.ms)) st.ms="INT"; if(!ST.includes(st.ss)) st.ss="LUK";
@@ -735,6 +739,7 @@ function fromHash(){
 fromHash(); addEventListener("hashchange",fromHash);
 const root=document.documentElement;
 try{const t=localStorage.getItem("cubeRoi.theme"); if(t) root.dataset.theme=t;}catch(e){}
+$("out").addEventListener("click",e=>{const b=e.target.closest("[data-sort]");if(!b)return;S.sort=b.dataset.sort;save();renderResults();});
 $("out").addEventListener("change",e=>{
  if(e.target.id==="qSel"){ S.q=+e.target.value; save(); paintNums(); }
  if(e.target.id==="perIn"){ e.target.value=fmt(S.per).replace(/,/g,""); }
@@ -751,8 +756,8 @@ $("out").addEventListener("click",e=>{
  const prime=new Set(pools(s.kind,"bright",+S.gear[s.id][0]||0)[0].map(x=>x.c+x.v));
  $("cfTitle").textContent=`Update ${itemName(s)}?`;
  const blanks=codes.filter(c=>c==="J0").length;
- $("cfLines").innerHTML=showOrder(codes.filter(c=>c!=="J0")).map(c=>`<span><i class="${prime.has(c)?"L":"U"}">${prime.has(c)?"L":"U"}</i>${esc(lineLabel(c))}</span>`).join("")+`<span class="muted"><i class="O">-</i>Other line</span>`.repeat(blanks);
- $("cfNote").textContent=blanks?"\"Not selected\" lines are saved as Other line. Rolled something good there? Change it in step 2.":"";
+ $("cfLines").innerHTML=showOrder(codes.filter(c=>c!=="J0")).map(c=>`<span><i class="${prime.has(c)?"L":"U"}">${prime.has(c)?"L":"U"}</i>${esc(lineLabel(c))}</span>`).join("")+`<span class="muted"><i class="O">-</i>Other potential</span>`.repeat(blanks);
+ $("cfNote").textContent=blanks?"\"Not selected\" potentials are saved as Other potential. Rolled something good there? Change it in step 2.":"";
  cf.hidden=false; document.body.style.overflow="hidden"; $("cfYes").focus();
 });
 $("cfNo").addEventListener("click",closeCf);
