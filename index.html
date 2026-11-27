@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cube ROI Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 3l11 6v14l-11 6-11-6V9z' fill='none' stroke='%23ff8a4c' stroke-width='3' stroke-linejoin='round'/%3E%3Cpath d='M5 9l11 6 11-6M16 15v14' fill='none' stroke='%23ff8a4c' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+/* VOICE: a game tool for friends, calm and exact, numbers first. Same family as the Farming Timer.
+   IDEA: an in-game potential window: slate panels, orange accent on what to do next.
+   PICTURE: the live ROI ranking with orange bars, the top pick card on top with a coloured edge.
+   COLOUR and TYPE: Farming Timer palette (slate, orange accent, green for gains), Space Grotesk titles, Inter text.
+   LAYOUT: header row, results panel, scouter panel, gear grid; one column on phones. */
+:root{--bg:#121722;--surface:#1b2230;--sunk:#141a26;--raise:#232b3b;--fg:#e8ecf4;--muted:#98a3b6;--line:#2e384b;
+ --accent:#ff8a4c;--on-accent:#1a1208;--good:#4cc38a;--warn:#e0b050;
+ --display:"Space Grotesk","Segoe UI",system-ui,sans-serif;--body:"Inter","Segoe UI",system-ui,sans-serif;color-scheme:dark}
+:root[data-theme="light"]{--bg:#eef1f6;--surface:#ffffff;--sunk:#e3e8f0;--raise:#f4f6fa;--fg:#1a2233;--muted:#5b6679;--line:#cfd6e2;
+ --accent:#d9541e;--on-accent:#ffffff;--good:#1f8a4c;--warn:#a96a12;color-scheme:light}
+*{box-sizing:border-box;min-width:0}
+button{touch-action:manipulation;cursor:pointer}
+html,body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 var(--body);overflow-x:clip}
+button,input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:20px 18px 60px}
+header{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+h1{font-family:var(--display);font-size:24px;font-weight:700;margin:0;letter-spacing:-.01em;display:flex;align-items:center;gap:10px}
+h1 svg{width:26px;height:26px;flex:none}
+h2{font-family:var(--display);font-size:15px;font-weight:700;margin:0;letter-spacing:.02em;color:var(--muted);text-transform:uppercase}
+h3{font-family:var(--display);font-size:16px;font-weight:700;margin:0}
+.spacer{flex:1}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
+.panel+.panel{margin-top:14px}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;background:var(--sunk);border:1px solid var(--line);border-radius:8px;padding:7px 12px;min-height:38px;font-weight:600;transition:transform .08s,background .15s,border-color .15s}
+.btn:hover{border-color:var(--muted)}.btn:active{transform:scale(.97)}
+.btn.ghost{background:transparent}.btn.accent{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn.icon{padding:7px;width:38px}
+.btn svg{width:18px;height:18px;flex:none}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select,input,textarea{background:var(--sunk);border:1px solid var(--line);border-radius:8px;padding:7px 10px;min-height:38px;width:100%;font-size:16px;outline:none}
+select:focus,input:focus,textarea:focus{border-color:var(--accent)}
+textarea{min-height:80px}
+a{color:var(--accent)}
+.muted{color:var(--muted)}
+.note{color:var(--muted);font-size:13px;margin:10px 0 0}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin:0 0 14px;padding:0;list-style:none}
+.steps li{background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px;color:var(--muted)}
+.steps b{color:var(--fg)}
+#codebox{display:none;margin:0 0 14px}#codebox.on{display:block}
+#msg{color:var(--good);font-size:13px;min-height:18px}
+.top{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:12px;margin:12px 0 16px}
+.pick{background:var(--sunk);border:1px solid var(--accent);border-radius:10px;padding:14px 16px 14px 20px;position:relative;overflow:hidden;box-shadow:0 0 18px color-mix(in oklab,var(--accent) 22%,transparent)}
+.pick::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--accent)}
+.pick .k{color:var(--accent);font-weight:600;font-size:13px}
+.pick .big{font:700 clamp(24px,3.4vw,34px)/1.1 var(--display);letter-spacing:-.02em;margin:4px 0 10px}
+.pick .stats{display:flex;flex-wrap:wrap;gap:6px 22px;color:var(--muted);font-size:13px}
+.pick .stats b{color:var(--fg);font:700 20px var(--display);display:block;white-space:nowrap;font-variant-numeric:tabular-nums}
+.pick .stats .g b{color:var(--good)}
+.why{background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:14px;color:var(--muted)}
+.why ul{margin:6px 0 0;padding-left:18px}.why li{margin:3px 0}
+.list{display:grid;gap:6px}
+.hd,.list summary{display:grid;grid-template-columns:30px minmax(0,1.5fr) minmax(0,1.1fr) 104px 84px 80px minmax(110px,1fr);gap:10px;align-items:center}
+.hd{font-size:12px;color:var(--muted);padding:0 12px 2px}
+.hd span:nth-child(n+4){text-align:right}.hd span:last-child{text-align:left}
+details.it{background:var(--sunk);border:1px solid var(--line);border-radius:10px}
+details.it[open]{border-color:var(--accent)}
+.list summary{list-style:none;cursor:pointer;padding:9px 12px;min-height:44px}
+.list summary::-webkit-details-marker{display:none}
+.rk{font:700 17px var(--display);color:var(--muted)}
+.it:first-child .rk{color:var(--accent)}
+.sl b{display:block}.sl small{color:var(--muted);font-size:12px;display:block;line-height:1.35}
+.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.gn{color:var(--good)}
+.bar{display:flex;align-items:center;gap:8px;font-variant-numeric:tabular-nums;white-space:nowrap;font-size:13px}
+.bar i{display:block;height:10px;border-radius:5px;background:var(--accent);flex:none}
+.dt{padding:2px 12px 12px;font-size:13px;color:var(--muted)}
+.dt table{width:100%;border-collapse:collapse;margin-top:8px;color:var(--fg)}
+.dt th{font-weight:500;color:var(--muted);text-align:left;font-size:12px}
+.dt th,.dt td{padding:6px 8px;border-bottom:1px solid var(--line)}
+.dt .n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.dt tr.best td{color:var(--accent);font-weight:600}
+.maxed{color:var(--muted);font-size:13px;margin-top:12px}
+.panelgrid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:14px;margin-top:12px}
+table.sc{width:100%;border-collapse:collapse}
+.sc th,.sc td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left}
+.sc th{font-size:12px;color:var(--muted);font-weight:500}
+.sc td:first-child{font-weight:600}
+.amt{max-width:84px}.fdw{display:flex;align-items:center;gap:6px;max-width:140px}.fdw span{color:var(--muted)}
+.per{background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.per table{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+.per td{padding:5px 0;border-bottom:1px solid var(--line)}.per td.n{text-align:right;font-variant-numeric:tabular-nums}
+.gear{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-top:12px}
+.card{background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;gap:7px}
+.card .h{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.card .h label{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)}
+.card .h input{width:74px}
+select.J{color:var(--muted)}
+.warn{color:var(--warn);font-size:12px}.warn:empty{display:none}
+.ctl{display:flex;align-items:center;gap:8px}.ctl select{width:auto}
+footer{color:var(--muted);font-size:13px;margin-top:14px}
+@media(max-width:900px){.top,.panelgrid{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:760px){
+ .hd{display:none}
+ .list summary{grid-template-columns:28px minmax(0,1fr) auto;grid-template-areas:"r s s" "r t t" "r c g" "r b b";row-gap:4px}
+ .list summary .rk{grid-area:r;align-self:start}.list summary .sl{grid-area:s}.list summary .tg{grid-area:t}
+ .list summary .ch{grid-area:c;text-align:left}.list summary .gn{grid-area:g}.list summary .c50{display:none}.list summary .bar{grid-area:b}
+ .sc .hide{display:none}
+}
+@media(max-width:600px){.steps{grid-template-columns:1fr 1fr;gap:6px}.steps li{font-size:12px;padding:8px 10px}header .btn{padding:7px 10px}}
+@media(prefers-reduced-motion:no-preference){.bar i{transition:width .4s ease}}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <header>
+  <h1><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3l11 6v14l-11 6-11-6V9z" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linejoin="round"/><path d="M5 9l11 6 11-6M16 15v14" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linejoin="round"/></svg>Cube ROI Calculator</h1>
+  <div class="ctl"><select id="cube" aria-label="Cube"><option value="bright">Bright Cube</option><option value="glowing">Glowing Cube</option></select></div>
+  <button class="btn ghost" id="bCopy" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>Copy link</button>
+  <button class="btn ghost" id="bPaste" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Load code</button>
+  <span class="spacer"></span>
+  <button class="btn ghost" id="bTemplate" type="button">Example gear</button>
+  <button class="btn ghost" id="bClear" type="button">Clear all</button>
+  <button class="btn icon ghost" id="themeBtn" type="button" aria-label="Switch theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></button>
+ </header>
+ <div id="codebox" class="panel"><label for="codeIn" class="muted">Paste a share link or code from a friend:</label><textarea id="codeIn" spellcheck="false" style="margin-top:6px"></textarea><div class="row" style="margin-top:8px"><button class="btn accent" id="bLoadCode" type="button">Load</button><span id="msg2" class="muted"></span></div></div>
+ <div id="msg" role="status"></div>
+ <ol class="steps">
+  <li><b>1. Maple Scouter:</b> open Stat Efficiency, then Detail Eff.</li>
+  <li><b>2. Scouter values:</b> type the amount and the Final Damage % for each row.</li>
+  <li><b>3. Gear:</b> set each item's level and its 3 potential lines.</li>
+  <li><b>4. Results:</b> cube the item at the top of the list first.</li>
+ </ol>
+
+ <section class="panel" id="results"><h2>Where to cube next</h2><div id="out"></div></section>
+
+ <section class="panel" id="scouter"><h2>Your Maple Scouter values</h2>
+  <div class="panelgrid">
+   <div style="overflow-x:auto"><table class="sc"><thead><tr><th>Stat</th><th>Amount</th><th>Final Damage</th><th class="hide">Default</th></tr></thead><tbody id="scBody"></tbody></table></div>
+   <div class="per"><h3>What 1 point is worth</h3><div class="note" style="margin-top:2px">Final Damage per 1% (or per 1 flat point)</div><table id="perT"></table></div>
+  </div>
+  <p class="note">Leave All Stat % blank if your scouter doesn't show it; it will use Stat % + Secondary Stat %. Damage % lines count the same as Boss. IED uses the 380% defense row.</p>
+ </section>
+
+ <section class="panel" id="gearS"><h2>Your gear</h2>
+  <p class="note">All items count as Legendary. Ring 4 (continuous ring) and Pocket are left out because they aren't cubed.</p>
+  <div class="gear" id="gear"></div>
+ </section>
+
+ <footer>How it works: every possible 3-line result is checked with its real chance. "FD gain" is the smallest gain you get when you hit the target. "FD per 1k cubes" = FD gain × chance × 1,000, so a longer bar means more Final Damage per cube. Bright Cube uses Black Cube odds and Glowing Cube uses Red Cube odds, from Nexon's published rates (data via <a href="https://brendonmay.github.io/cubingCalculator/">brendonmay's cubing calculator</a>). Lv 160+ items get +1% on Stat, All Stats and ATT lines.</footer>
+</div>
+<script>
+{
+const RATES = {"ring":{"bright":[[["S",12,10.2564],["s",12,10.2564],["A",9,7.6923],["xr",20,7.6923],["J",0,64.1025]],[["S",9,10],["s",9,10],["A",6,8],["S",12,2.0513],["s",12,2.0513],["A",9,1.5385],["xr",20,1.5385],["J",0,64.8207]],[["S",9,11.875],["s",9,11.875],["A",6,9.5],["S",12,0.5128],["s",12,0.5128],["A",9,0.3846],["xr",20,0.3846],["J",0,64.955]]],"glowing":[[["S",12,10.2564],["s",12,10.2564],["A",9,7.6923],["xr",20,7.6923],["J",0,64.1025]],[["S",9,11.25],["s",9,11.25],["A",6,9],["S",12,1.0256],["s",12,1.0256],["A",9,0.7692],["xr",20,0.7692],["J",0,64.91]],[["S",9,12.375],["s",9,12.375],["A",6,9.9],["S",12,0.1026],["s",12,0.1026],["A",9,0.0769],["xr",20,0.0769],["J",0,64.9911]]]},"belt":{"bright":[[["S",12,12.1212],["s",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,48.4848]],[["S",9,8.3333],["s",9,8.3333],["A",6,6.6667],["xi",0,16.9698],["S",12,2.4242],["s",12,2.4242],["A",9,1.8182],["J",0,53.0301]],[["S",9,9.8958],["s",9,9.8958],["A",6,7.9167],["xi",0,16.7424],["S",12,0.6061],["s",12,0.6061],["A",9,0.4545],["J",0,53.8827]]],"glowing":[[["S",12,12.1212],["s",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,48.4848]],[["S",9,9.375],["s",9,9.375],["A",6,7.5],["xi",0,16.8182],["S",12,1.2121],["s",12,1.2121],["A",9,0.9091],["J",0,53.5984]],[["S",9,10.3125],["s",9,10.3125],["A",6,8.25],["xi",0,16.6818],["S",12,0.1212],["s",12,0.1212],["A",9,0.0909],["J",0,54.1098]]]},"weapon":{"bright":[[["S",12,9.7561],["s",12,9.7561],["T",12,4.878],["D",12,4.878],["A",9,7.3171],["I",35,4.878],["I",40,4.878],["B",35,9.7561],["B",40,4.878],["J",0,39.0242]],[["S",9,9.3023],["s",9,9.3023],["T",9,5.5814],["D",9,5.5814],["A",6,7.4419],["I",30,5.5814],["B",30,5.5814],["S",12,1.9512],["s",12,1.9512],["T",12,0.9756],["D",12,0.9756],["A",9,1.4634],["I",35,0.9756],["I",40,0.9756],["B",35,1.9512],["B",40,0.9756],["J",0,39.4327]],[["S",9,11.0465],["s",9,11.0465],["T",9,6.6279],["D",9,6.6279],["A",6,8.8372],["I",30,6.6279],["B",30,6.6279],["S",12,0.4878],["s",12,0.4878],["T",12,0.2439],["D",12,0.2439],["A",9,0.3659],["I",35,0.2439],["I",40,0.2439],["B",35,0.4878],["B",40,0.2439],["J",0,39.5093]]],"glowing":[[["S",12,9.7561],["s",12,9.7561],["T",12,4.878],["D",12,4.878],["A",9,7.3171],["I",35,4.878],["I",40,4.878],["B",35,9.7561],["B",40,4.878],["J",0,39.0242]],[["S",9,10.4651],["s",9,10.4651],["T",9,6.2791],["D",9,6.2791],["A",6,8.3721],["I",30,6.2791],["B",30,6.2791],["S",12,0.9756],["s",12,0.9756],["T",12,0.4878],["D",12,0.4878],["A",9,0.7317],["I",35,0.4878],["I",40,0.4878],["B",35,0.9756],["B",40,0.4878],["J",0,39.4838]],[["S",9,11.5116],["s",9,11.5116],["T",9,6.907],["D",9,6.907],["A",6,9.2093],["I",30,6.907],["B",30,6.907],["S",12,0.0976],["s",12,0.0976],["T",12,0.0488],["D",12,0.0488],["A",9,0.0732],["I",35,0.0488],["I",40,0.0488],["B",35,0.0976],["B",40,0.0488],["J",0,39.5299]]]},"secondary":{"bright":[[["S",12,8.5106],["s",12,8.5106],["T",12,4.2553],["D",12,4.2553],["A",9,6.383],["I",35,4.2553],["I",40,4.2553],["xi",0,12.766],["B",35,8.5106],["B",40,4.2553],["J",0,34.0424]],[["S",9,7.8431],["s",9,7.8431],["T",9,4.7059],["D",9,4.7059],["A",6,6.2745],["I",30,4.7059],["xi",0,15.1022],["B",30,4.7059],["S",12,1.7021],["s",12,1.7021],["T",12,0.8511],["D",12,0.8511],["A",9,1.2766],["I",35,0.8511],["I",40,0.8511],["B",35,1.7021],["B",40,0.8511],["J",0,33.4752]],[["S",9,9.3137],["s",9,9.3137],["T",9,5.5882],["D",9,5.5882],["A",6,7.451],["I",30,5.5882],["xi",0,15.5402],["B",30,5.5882],["S",12,0.4255],["s",12,0.4255],["T",12,0.2128],["D",12,0.2128],["A",9,0.3191],["I",35,0.2128],["I",40,0.2128],["B",35,0.4255],["B",40,0.2128],["J",0,33.3688]]],"glowing":[[["S",12,8.5106],["s",12,8.5106],["T",12,4.2553],["D",12,4.2553],["A",9,6.383],["I",35,4.2553],["I",40,4.2553],["xi",0,12.766],["B",35,8.5106],["B",40,4.2553],["J",0,34.0424]],[["S",9,8.8235],["s",9,8.8235],["T",9,5.2941],["D",9,5.2941],["A",6,7.0588],["I",30,5.2941],["xi",0,15.3942],["B",30,5.2941],["S",12,0.8511],["s",12,0.8511],["T",12,0.4255],["D",12,0.4255],["A",9,0.6383],["I",35,0.4255],["I",40,0.4255],["B",35,0.8511],["B",40,0.4255],["J",0,33.4041]],[["S",9,9.7059],["s",9,9.7059],["T",9,5.8235],["D",9,5.8235],["A",6,7.7647],["I",30,5.8235],["xi",0,15.657],["B",30,5.8235],["S",12,0.0851],["s",12,0.0851],["T",12,0.0426],["D",12,0.0426],["A",9,0.0638],["I",35,0.0426],["I",40,0.0426],["B",35,0.0851],["B",40,0.0426],["J",0,33.3406]]]},"emblem":{"bright":[[["S",12,11.4286],["s",12,11.4286],["T",12,5.7143],["D",12,5.7143],["A",9,8.5714],["I",35,5.7143],["I",40,5.7143],["J",0,45.7144]],[["S",9,10],["s",9,10],["T",9,6],["D",9,6],["A",6,8],["I",30,6],["S",12,2.2857],["s",12,2.2857],["T",12,1.1429],["D",12,1.1429],["A",9,1.7143],["I",35,1.1429],["I",40,1.1429],["J",0,43.143]],[["S",9,11.875],["s",9,11.875],["T",9,7.125],["D",9,7.125],["A",6,9.5],["I",30,7.125],["S",12,0.5714],["s",12,0.5714],["T",12,0.2857],["D",12,0.2857],["A",9,0.4286],["I",35,0.2857],["I",40,0.2857],["J",0,42.6606]]],"glowing":[[["S",12,11.4286],["s",12,11.4286],["T",12,5.7143],["D",12,5.7143],["A",9,8.5714],["I",35,5.7143],["I",40,5.7143],["J",0,45.7144]],[["S",9,11.25],["s",9,11.25],["T",9,6.75],["D",9,6.75],["A",6,9],["I",30,6.75],["S",12,1.1429],["s",12,1.1429],["T",12,0.5714],["D",12,0.5714],["A",9,0.8571],["I",35,0.5714],["I",40,0.5714],["J",0,42.8214]],[["S",9,12.375],["s",9,12.375],["T",9,7.425],["D",9,7.425],["A",6,9.9],["I",30,7.425],["S",12,0.1143],["s",12,0.1143],["T",12,0.0571],["D",12,0.0571],["A",9,0.0857],["I",35,0.0571],["I",40,0.0571],["J",0,42.532]]]},"hat":{"bright":[[["S",12,9.7561],["s",12,9.7561],["A",9,7.3171],["xi",0,14.6342],["xd",0,7.3171],["J",0,51.2195]],[["S",9,7.6923],["s",9,7.6923],["A",6,6.1538],["xi",0,15.2344],["xd",0,7.6172],["S",12,1.9512],["s",12,1.9512],["A",9,1.4634],["J",0,50.2438]],[["S",9,9.1346],["s",9,9.1346],["A",6,7.3077],["xi",0,15.3472],["xd",0,7.6736],["S",12,0.4878],["s",12,0.4878],["A",9,0.3659],["J",0,50.0609]]],"glowing":[[["S",12,9.7561],["s",12,9.7561],["A",9,7.3171],["xi",0,14.6342],["xd",0,7.3171],["J",0,51.2195]],[["S",9,8.6538],["s",9,8.6538],["A",6,6.9231],["xi",0,15.3096],["xd",0,7.6548],["S",12,0.9756],["s",12,0.9756],["A",9,0.7317],["J",0,50.1218]],[["S",9,9.5192],["s",9,9.5192],["A",6,7.6154],["xi",0,15.3772],["xd",0,7.6886],["S",12,0.0976],["s",12,0.0976],["A",9,0.0732],["J",0,50.0124]]]},"top":{"bright":[[["S",12,10.2564],["s",12,10.2564],["A",9,7.6923],["xi",0,15.3846],["xt",3,7.6923],["xv",0,7.6923],["J",0,41.0256]],[["S",9,6.4516],["s",9,6.4516],["A",6,5.1613],["xi",0,13.3996],["xt",2,5.1613],["xv",0,6.6998],["S",12,2.0513],["s",12,2.0513],["A",9,1.5385],["xt",3,1.5385],["J",0,49.4954]],[["S",9,7.6613],["s",9,7.6613],["A",6,6.129],["xi",0,13.0272],["xt",2,6.129],["xv",0,6.5136],["S",12,0.5128],["s",12,0.5128],["A",9,0.3846],["xt",3,0.3846],["J",0,51.0833]]],"glowing":[[["S",12,10.2564],["s",12,10.2564],["A",9,7.6923],["xi",0,15.3846],["xt",3,7.6923],["xv",0,7.6923],["J",0,41.0256]],[["S",9,7.2581],["s",9,7.2581],["A",6,5.8065],["xi",0,13.1514],["xt",2,5.8065],["xv",0,6.5757],["S",12,1.0256],["s",12,1.0256],["A",9,0.7692],["xt",3,0.7692],["J",0,50.5542]],[["S",9,7.9839],["s",9,7.9839],["A",6,6.3871],["xi",0,12.928],["xt",2,6.3871],["xv",0,6.464],["S",12,0.1026],["s",12,0.1026],["A",9,0.0769],["xt",3,0.0769],["J",0,51.5071]]]},"bottom":{"bright":[[["S",12,12.1212],["s",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,48.4848]],[["S",9,7.6923],["s",9,7.6923],["A",6,6.1538],["xi",0,15.944],["xd",0,6.1538],["S",12,2.4242],["s",12,2.4242],["A",9,1.8182],["J",0,49.6968]],[["S",9,9.1346],["s",9,9.1346],["A",6,7.3077],["xi",0,15.5244],["xd",0,7.3077],["S",12,0.6061],["s",12,0.6061],["A",9,0.4545],["J",0,49.9243]]],"glowing":[[["S",12,12.1212],["s",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,48.4848]],[["S",9,8.6538],["s",9,8.6538],["A",6,6.9231],["xi",0,15.6644],["xd",0,6.9231],["S",12,1.2121],["s",12,1.2121],["A",9,0.9091],["J",0,49.8483]],[["S",9,9.5192],["s",9,9.5192],["A",6,7.6154],["xi",0,15.4126],["xd",0,7.6154],["S",12,0.1212],["s",12,0.1212],["A",9,0.0909],["J",0,49.9848]]]},"shoulder":{"bright":[[["S",12,12.1212],["s",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,48.4848]],[["S",9,8.3333],["s",9,8.3333],["A",6,6.6667],["xi",0,16.9698],["S",12,2.4242],["s",12,2.4242],["A",9,1.8182],["J",0,53.0301]],[["S",9,9.8958],["s",9,9.8958],["A",6,7.9167],["xi",0,16.7424],["S",12,0.6061],["s",12,0.6061],["A",9,0.4545],["J",0,53.8827]]],"glowing":[[["S",12,12.1212],["s",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,48.4848]],[["S",9,9.375],["s",9,9.375],["A",6,7.5],["xi",0,16.8182],["S",12,1.2121],["s",12,1.2121],["A",9,0.9091],["J",0,53.5984]],[["S",9,10.3125],["s",9,10.3125],["A",6,8.25],["xi",0,16.6818],["S",12,0.1212],["s",12,0.1212],["A",9,0.0909],["J",0,54.1098]]]},"cape":{"bright":[[["S",12,12.1212],["s",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,48.4848]],[["S",9,8.3333],["s",9,8.3333],["A",6,6.6667],["xi",0,16.9698],["S",12,2.4242],["s",12,2.4242],["A",9,1.8182],["J",0,53.0301]],[["S",9,9.8958],["s",9,9.8958],["A",6,7.9167],["xi",0,16.7424],["S",12,0.6061],["s",12,0.6061],["A",9,0.4545],["J",0,53.8827]]],"glowing":[[["S",12,12.1212],["s",12,12.1212],["A",9,9.0909],["xi",0,18.1818],["J",0,48.4848]],[["S",9,9.375],["s",9,9.375],["A",6,7.5],["xi",0,16.8182],["S",12,1.2121],["s",12,1.2121],["A",9,0.9091],["J",0,53.5984]],[["S",9,10.3125],["s",9,10.3125],["A",6,8.25],["xi",0,16.6818],["S",12,0.1212],["s",12,0.1212],["A",9,0.0909],["J",0,54.1098]]]},"gloves":{"bright":[[["S",12,10],["s",12,10],["C",8,10],["A",9,7.5],["xi",0,15.0],["xd",0,7.5],["J",0,40]],[["S",9,7.1429],["s",9,7.1429],["A",6,5.7143],["F",32,1.4286],["f",32,1.4286],["xi",0,14.4286],["xd",0,7.2143],["S",12,2],["s",12,2],["C",8,2],["A",9,1.5],["J",0,48.0001]],[["S",9,8.4821],["s",9,8.4821],["A",6,6.7857],["F",32,1.6964],["f",32,1.6964],["xi",0,14.3214],["xd",0,7.1607],["S",12,0.5],["s",12,0.5],["C",8,0.5],["A",9,0.375],["J",0,49.4999]]],"glowing":[[["S",12,10],["s",12,10],["C",8,10],["A",9,7.5],["xi",0,15.0],["xd",0,7.5],["J",0,40]],[["S",9,8.0357],["s",9,8.0357],["A",6,6.4286],["F",32,1.6071],["f",32,1.6071],["xi",0,14.3572],["xd",0,7.1786],["S",12,1],["s",12,1],["C",8,1],["A",9,0.75],["J",0,49.0]],[["S",9,8.8393],["s",9,8.8393],["A",6,7.0714],["F",32,1.7679],["f",32,1.7679],["xi",0,14.2928],["xd",0,7.1464],["S",12,0.1],["s",12,0.1],["C",8,0.1],["A",9,0.075],["J",0,49.9]]]},"shoes":{"bright":[[["S",12,11.1111],["s",12,11.1111],["A",9,8.3333],["xi",0,16.6666],["xd",0,8.3333],["J",0,44.4444]],[["S",9,7.6923],["s",9,7.6923],["A",6,6.1538],["xi",0,15.641],["xd",0,7.8205],["S",12,2.2222],["s",12,2.2222],["A",9,1.6667],["J",0,48.8888]],[["S",9,9.1346],["s",9,9.1346],["A",6,7.3077],["xi",0,15.4488],["xd",0,7.7244],["S",12,0.5556],["s",12,0.5556],["A",9,0.4167],["J",0,49.7223]]],"glowing":[[["S",12,11.1111],["s",12,11.1111],["A",9,8.3333],["xi",0,16.6666],["xd",0,8.3333],["J",0,44.4444]],[["S",9,8.6538],["s",9,8.6538],["A",6,6.9231],["xi",0,15.5128],["xd",0,7.7564],["S",12,1.1111],["s",12,1.1111],["A",9,0.8333],["J",0,49.4443]],[["S",9,9.5192],["s",9,9.5192],["A",6,7.6154],["xi",0,15.3974],["xd",0,7.6987],["S",12,0.1111],["s",12,0.1111],["A",9,0.0833],["J",0,49.9444]]]},"heart":{"bright":[[["S",12,14.8148],["s",12,14.8148],["A",9,11.1111],["J",0,59.2592]],[["S",9,10],["s",9,10],["A",6,8],["S",12,2.963],["s",12,2.963],["A",9,2.2222],["J",0,63.852]],[["S",9,11.875],["s",9,11.875],["A",6,9.5],["S",12,0.7407],["s",12,0.7407],["A",9,0.5556],["J",0,64.7128]]],"glowing":[[["S",12,14.8148],["s",12,14.8148],["A",9,11.1111],["J",0,59.2592]],[["S",9,11.25],["s",9,11.25],["A",6,9],["S",12,1.4815],["s",12,1.4815],["A",9,1.1111],["J",0,64.426]],[["S",9,12.375],["s",9,12.375],["A",6,9.9],["S",12,0.1481],["s",12,0.1481],["A",9,0.1111],["J",0,64.9424]]]}};
+const SLOTS = [
+ ["ring1","Ring 1","ring"],["ring2","Ring 2","ring"],["ring3","Ring 3","ring"],
+ ["pend1","Pendant 1","ring"],["pend2","Pendant 2","ring"],["eye","Eye accessory","ring"],
+ ["face","Face accessory","ring"],["earring","Earring","ring"],["belt","Belt","belt"],
+ ["weapon","Weapon","weapon"],["secondary","Secondary","secondary"],["emblem","Emblem","emblem"],
+ ["hat","Hat","hat"],["top","Top","top"],["bottom","Bottom","bottom"],["shoulder","Shoulder","shoulder"],
+ ["cape","Cape","cape"],["gloves","Gloves","gloves"],["shoes","Shoes","shoes"],["heart","Heart","heart"],["badge","Badge","heart"]
+].map(([id,name,kind])=>({id,name,kind}));
+const SCOUT = [
+ ["boss","Boss Damage",40],["att","(M)ATT %",12],["stat","Stat (flat)",30],["statp","Stat %",12],
+ ["allp","All Stat %",9],["crit","Crit Damage",8],["ied","IED (380)",40],["sec","Secondary Stat (flat)",30],["secp","Secondary Stat %",12]
+].map(([id,label,amt])=>({id,label,amt}));
+const TEMPLATE = {cube:"bright",
+ scout:{boss:[40,"3.560"],att:[12,"4.603"],stat:[30,"0.247"],statp:[12,"1.005"],allp:[9,"0.870"],crit:[8,"2.277"],ied:[40,"0.831"],sec:[30,"0.018"],secp:[12,"0.155"]},
+ gear:{ring1:[200,"A10","S10","S13"],ring2:[160,"S13","S10","S10"],ring3:[150,"S12","S12","A6"],
+  pend1:[140,"S12","S9","S9"],pend2:[160,"S13","S10","S10"],eye:[160,"S13","S13","A7"],face:[160,"S13","S10","S10"],
+  earring:[200,"S13","S13","A7"],belt:[200,"S13","S13","S10"],weapon:[250,"T13","B40","T10"],secondary:[200,"B40","T10","T10"],
+  emblem:[200,"T13","T10","T10"],hat:[250,"S13","S10","S13"],top:[250,"S13","S10","S10"],bottom:[250,"S13","S10","S10"],
+  shoulder:[250,"S13","S10","S10"],cape:[250,"S13","S10","S10"],gloves:[250,"C8","C8","A7"],shoes:[250,"S13","S13","S10"],
+  heart:[200,"S13","S13","S10"],badge:[140,"S12","S9","S9"]}};
+const ORDER = "TSACBIDsFf";
+const MAXC = {xd:1,xt:1,I:3,B:3,xr:3,xi:2,xv:2};
+const ADJ = new Set(["S","s","A","T"]);
+const KEY = "cubeRoi.v1";
+const $ = id=>document.getElementById(id);
+const esc = s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = n=>Math.round(n).toLocaleString("en-US");
+let S;
+
+function lineLabel(code){
+ const c=code.replace(/[0-9.]+$/,""), v=code.slice(c.length);
+ return ({S:`Stat +${v}%`,s:`Secondary Stat +${v}%`,A:`All Stats +${v}%`,T:`ATT +${v}%`,B:`Boss +${v}%`,I:`IED +${v}%`,
+  C:`Crit Damage +${v}%`,D:`Damage +${v}%`,F:`Stat +${v}`,f:`Secondary Stat +${v}`})[c]||"Other line";
+}
+const parse = code=>{const c=code.replace(/[0-9.]+$/,"");return [c,+code.slice(c.length)||0]};
+
+const poolCache = {};
+function pools(kind,cube,lvl){
+ const hi = lvl>=160, k=kind+cube+hi;
+ if(!poolCache[k]) poolCache[k]=RATES[kind][cube].map(L=>L.map(([c,v,r])=>({c,v:(hi&&ADJ.has(c))?v+1:v,r})));
+ return poolCache[k];
+}
+function options(kind,lvl,i){
+ const seen=new Map();
+ for(const cube of ["bright","glowing"]) for(const e of pools(kind,cube,lvl)[i]){
+  if(e.c==="J"||e.c[0]==="x") continue;
+  seen.set(e.c+e.v,e);
+ }
+ const arr=[...seen.values()].sort((a,b)=>ORDER.indexOf(a.c)-ORDER.indexOf(b.c)||b.v-a.v).map(e=>e.c+e.v);
+ arr.push("J0");
+ return arr;
+}
+
+function perValues(){
+ const g=id=>{const s=S.scout[id];const a=+s[0], f=parseFloat(s[1]);return (a>0&&isFinite(f))?f/a:null};
+ const P={boss:g("boss")||0,att:g("att")||0,stat:g("stat")||0,statp:g("statp")||0,crit:g("crit")||0,sec:g("sec")||0,secp:g("secp")||0};
+ P.allp = g("allp") ?? (P.statp+P.secp);
+ const a=(+S.scout.ied[0])/100, f=parseFloat(S.scout.ied[1])/100, pdr=3.8;
+ let r=0; if(a>0&&f>0){r=f/((1+f)*pdr-(1-a)*pdr); if(!(r>0&&pdr*r<1)) r=0;}
+ P.iedR=r; P.ied=v=>r?((1-pdr*r*(1-v/100))/(1-pdr*r)-1)*100:0;
+ P.iedNow = r?(1-r)*100:null;
+ return P;
+}
+function lineFd(c,v,P){
+ switch(c){case "S":return v*P.statp;case "s":return v*P.secp;case "A":return v*P.allp;case "T":return v*P.att;
+  case "B":case "D":return v*P.boss;case "C":return v*P.crit;case "I":return P.ied(v);case "F":return v*P.stat;case "f":return v*P.sec;}
+ return 0;
+}
+function adjRate(e,prev,pool){
+ if(!prev.length) return e.r;
+ const cnt={};for(const p of prev) if(MAXC[p.c]) cnt[p.c]=(cnt[p.c]||0)+1;
+ const rm=[];
+ for(const c in cnt){ if(cnt[c]>MAXC[c]||(c===e.c&&cnt[c]+1>MAXC[c])) return 0; if(cnt[c]===MAXC[c]) rm.push(c); }
+ if(!rm.length) return e.r;
+ let tot=100; for(const p of pool) if(rm.includes(p.c)) tot-=p.r;
+ return e.r/tot*100;
+}
+function stats(lines,P){
+ let A=0,St=0,K=0,B=0,fd=0;
+ for(const [c,v] of lines){fd+=lineFd(c,v,P); if(c==="T")A+=v; else if(c==="S"||c==="A")St+=v; else if(c==="C")K++; else if(c==="B")B+=v;}
+ return {A,S:St,K,B,fd};
+}
+function outcomes(kind,cube,lvl,P){
+ const [L1,L2,L3]=pools(kind,cube,lvl), m=new Map();
+ for(const a of L1) for(const b of L2){
+  const pb=adjRate(b,[a],L2); if(!pb) continue;
+  for(const c of L3){
+   const pc=adjRate(c,[a,b],L3); if(!pc) continue;
+   const p=a.r/100*pb/100*pc/100, s=stats([[a.c,a.v],[b.c,b.v],[c.c,c.v]],P);
+   const k=`${s.A}|${s.S}|${s.K}|${s.B}|${s.fd.toFixed(5)}`;
+   const o=m.get(k); if(o) o.p+=p; else m.set(k,{...s,p});
+  }
+ }
+ return [...m.values()];
+}
+const cubesFor=(p,q)=>p>0?Math.ceil(Math.log(1-q)/Math.log(1-p)):Infinity;
+function tLabel(t){
+ const parts=[];
+ if(t.K) parts.push(t.K===3?"3 Crit Damage lines":`${t.K}+ Crit Damage lines`);
+ if(t.A) parts.push(`ATT ${t.A}%+`);
+ if(t.S) parts.push(`Stat ${t.S}%+`);
+ if(t.B) parts.push(`Boss ${t.B}%+`);
+ return parts.join(" and ");
+}
+function analyze(slot,P){
+ const g=S.gear[slot.id], lvl=+g[0]||0;
+ const cur=stats(g.slice(1).map(parse),P);
+ const outs=outcomes(slot.kind,S.cube,lvl,P);
+ let pb=0,eg=0;
+ for(const o of outs) if(o.fd>cur.fd+1e-6){pb+=o.p;eg+=o.p*(o.fd-cur.fd);}
+ const wse=["weapon","secondary","emblem"].includes(slot.kind);
+ const sets = wse?[["A"],["A","B"]]:slot.kind==="gloves"?[["S"],["K"],["K","S"]]:[["S"]];
+ const th={};for(const d of ["A","S","K","B"]) th[d]=[...new Set(outs.map(o=>o[d]).filter(v=>v>0))].sort((a,b)=>a-b);
+ const cand=[];
+ for(const set of sets){
+  let combos=[{}];
+  for(const d of set) combos=combos.flatMap(c=>th[d].map(v=>({...c,[d]:v})));
+  for(const t of combos){
+   let p=0,mn=Infinity;
+   for(const o of outs){ if(set.every(d=>o[d]>=t[d])){p+=o.p; if(o.fd<mn) mn=o.fd;} }
+   const gain=mn-cur.fd;
+   if(p>0&&gain>1e-4) cand.push({t,p,gain,roi:gain*p*1000});
+  }
+ }
+ const pareto=cand.filter(x=>!cand.some(y=>y!==x&&y.p>=x.p-1e-15&&y.gain>=x.gain-1e-9&&(y.p>x.p+1e-15||y.gain>x.gain+1e-9)));
+ const uniq=[];for(const x of pareto.sort((a,b)=>b.p-a.p)) if(!uniq.some(u=>Math.abs(u.p-x.p)<1e-15&&Math.abs(u.gain-x.gain)<1e-9)) uniq.push(x);
+ const best=uniq.reduce((a,b)=>!a||b.roi>a.roi?b:a,null);
+ return {slot,lvl,cur,pb,eg:eg*1000,targets:uniq.slice(0,8),best};
+}
+
+function render(){
+ const P=perValues();
+ renderPer(P);
+ const filled=SCOUT.filter(s=>s.id!=="allp").some(s=>parseFloat(S.scout[s.id][1])>0);
+ if(!filled){$("out").innerHTML='<p class="note">Type your Maple Scouter values below to see results.</p>';return;}
+ const res=SLOTS.map(s=>analyze(s,P));
+ const ok=res.filter(r=>r.best).sort((a,b)=>b.best.roi-a.best.roi), done=res.filter(r=>!r.best);
+ if(!ok.length){$("out").innerHTML='<p class="note">Nothing left to upgrade with these lines.</p>';return;}
+ const maxRoi=ok[0].best.roi, top=ok[0], tb=top.best;
+ const pick=`<div class="top"><div class="pick"><div class="k">Best value right now</div>
+  <div class="big">${esc(top.slot.name)}: ${esc(tLabel(tb.t))}</div>
+  <div class="stats"><span><b>1 in ${fmt(1/tb.p)}</b>chance per cube</span><span><b>${fmt(cubesFor(tb.p,.5))}</b>cubes for 50%</span><span class="g"><b>+${tb.gain.toFixed(3)}%</b>Final Damage</span></div></div>
+  <div class="why"><b style="color:var(--fg)">How to read this</b><ul>
+  <li>Cube the item at the top first. When you hit its target, it drops down the list.</li>
+  <li>"Cubes for 50%" means half of players hit it within that many cubes.</li>
+  <li>Tap a row to see bigger targets and the chance of any upgrade.</li></ul></div></div>`;
+ const head=`<div class="hd"><span>#</span><span>Item and current lines</span><span>Best target</span><span>Chance</span><span>50% cubes</span><span>FD gain</span><span>FD per 1k cubes</span></div>`;
+ const rows=ok.map((r,i)=>{
+  const b=r.best, now=S.gear[r.slot.id].slice(1).map(lineLabel).join(", ");
+  const dt=r.targets.map(t=>`<tr${t===b?' class="best"':''}><td>${esc(tLabel(t.t))}</td><td class="n">1 in ${fmt(1/t.p)}</td><td class="n">${[.25,.5,.75,.99].map(q=>fmt(cubesFor(t.p,q))).join(" / ")}</td><td class="n">+${t.gain.toFixed(3)}%</td><td class="n">${t.roi.toFixed(3)}</td></tr>`).join("");
+  return `<details class="it"><summary><span class="rk">${i+1}</span>
+   <span class="sl"><b>${esc(r.slot.name)}</b><small>Lv ${r.lvl} · ${esc(now)}</small></span>
+   <span class="tg">${esc(tLabel(b.t))}</span>
+   <span class="num ch">1 in ${fmt(1/b.p)}</span><span class="num c50">${fmt(cubesFor(b.p,.5))}</span><span class="num gn">+${b.gain.toFixed(3)}%</span>
+   <span class="bar"><i style="width:${Math.max(3,b.roi/maxRoi*100*0.7).toFixed(1)}%"></i>${b.roi.toFixed(3)}</span></summary>
+   <div class="dt">Any upgrade at all (by Final Damage): ${(r.pb*100).toFixed(3)}% per cube, about ${fmt(cubesFor(r.pb,.5))} cubes for 50%.
+   <div style="overflow-x:auto"><table><thead><tr><th>Target</th><th class="n">Chance</th><th class="n">Cubes for 25% / 50% / 75% / 99%</th><th class="n">FD gain</th><th class="n">FD per 1k</th></tr></thead><tbody>${dt}</tbody></table></div></div></details>`;
+ }).join("");
+ $("out").innerHTML=pick+head+`<div class="list">${rows}</div>`+(done.length?`<p class="maxed">Nothing better to aim for: ${done.map(d=>esc(d.slot.name)).join(", ")}.</p>`:"");
+}
+function renderPer(P){
+ const rows=[["ATT %",P.att],["Crit Damage %",P.crit],["All Stat %",P.allp],["Boss / Damage %",P.boss],["Stat %",P.statp],["IED % (380)",P.ied(1)],["Secondary Stat %",P.secp],["Stat (flat)",P.stat],["Secondary Stat (flat)",P.sec]];
+ $("perT").innerHTML=rows.map(([l,v])=>`<tr><td>${l}</td><td class="n">${v?v.toFixed(4)+"%":"-"}</td></tr>`).join("")+
+  (P.iedNow!=null?`<tr><td>Your IED is about</td><td class="n">${P.iedNow.toFixed(2)}%</td></tr>`:"");
+}
+
+function buildScout(){
+ $("scBody").innerHTML=SCOUT.map(s=>`<tr><td>${s.label}</td>
+  <td><input class="amt" id="a_${s.id}" inputmode="decimal" aria-label="${s.label} amount"></td>
+  <td><div class="fdw"><input id="f_${s.id}" inputmode="decimal" placeholder="0.000" aria-label="${s.label} final damage"><span>%</span></div></td>
+  <td class="hide" style="color:var(--mute)">${s.amt}</td></tr>`).join("");
+ for(const s of SCOUT){
+  $("a_"+s.id).addEventListener("input",e=>{S.scout[s.id][0]=e.target.value;changed();});
+  const f=$("f_"+s.id);
+  f.addEventListener("input",e=>{S.scout[s.id][1]=e.target.value.replace("%","");changed();});
+  f.addEventListener("change",e=>{const v=parseFloat(e.target.value.replace("%",""));e.target.value=isFinite(v)?v.toFixed(3):"";S.scout[s.id][1]=e.target.value;changed();});
+ }
+}
+function fillScout(){
+ for(const s of SCOUT){ $("a_"+s.id).value=S.scout[s.id][0]; const v=parseFloat(S.scout[s.id][1]); $("f_"+s.id).value=isFinite(v)?v.toFixed(3):""; }
+ $("cube").value=S.cube;
+}
+function buildGear(){
+ $("gear").innerHTML=SLOTS.map(s=>`<div class="card" id="c_${s.id}"><div class="h"><h3>${s.name}</h3>
+  <label>Lv <input id="l_${s.id}" inputmode="numeric" aria-label="${s.name} level"></label></div>
+  ${[0,1,2].map(i=>`<select id="p_${s.id}_${i}" aria-label="${s.name} line ${i+1}"></select>`).join("")}
+  <div class="warn" id="w_${s.id}"></div></div>`).join("");
+ for(const s of SLOTS){
+  $("l_"+s.id).addEventListener("change",e=>{const old=+S.gear[s.id][0]||0,nv=parseInt(e.target.value)||0;S.gear[s.id][0]=nv;
+   for(let i=1;i<4;i++){const [c,v]=parse(S.gear[s.id][i]);if(ADJ.has(c)&&(old>=160)!==(nv>=160)) S.gear[s.id][i]=c+(v+(nv>=160?1:-1));}
+   fillSlot(s);changed();});
+  for(const i of [0,1,2]) $(`p_${s.id}_${i}`).addEventListener("change",e=>{S.gear[s.id][i+1]=e.target.value;e.target.className=e.target.value==="J0"?"J":"";changed();});
+ }
+}
+function fillSlot(s){
+ const g=S.gear[s.id], lvl=+g[0]||0;
+ $("l_"+s.id).value=lvl||"";
+ $("w_"+s.id).textContent=lvl&&lvl<120?"Odds use Lv 120+ data, so results may be off.":"";
+ for(const i of [0,1,2]){
+  const opts=options(s.kind,lvl,i), el=$(`p_${s.id}_${i}`);
+  let v=g[i+1]; if(!opts.includes(v)){const [c]=parse(v);v=opts.find(o=>parse(o)[0]===c)||"J0";g[i+1]=v;}
+  el.innerHTML=opts.map(o=>`<option value="${o}">${lineLabel(o)}</option>`).join("");
+  el.value=v; el.className=v==="J0"?"J":"";
+ }
+}
+const clone=o=>JSON.parse(JSON.stringify(o));
+function fromTemplate(){
+ const t=clone(TEMPLATE);
+ return {cube:t.cube,scout:t.scout,gear:t.gear};
+}
+function blank(){
+ const st={cube:"bright",scout:{},gear:{}};
+ for(const s of SCOUT) st.scout[s.id]=[s.amt,""];
+ for(const s of SLOTS) st.gear[s.id]=[200,"J0","J0","J0"];
+ return st;
+}
+function valid(st){
+ if(!st||!st.scout||!st.gear) return false;
+ const b=blank(); for(const s of SCOUT) if(!Array.isArray(st.scout[s.id])) st.scout[s.id]=b.scout[s.id];
+ for(const s of SLOTS) if(!Array.isArray(st.gear[s.id])||st.gear[s.id].length!==4) st.gear[s.id]=b.gear[s.id];
+ for(const s of SLOTS) st.gear[s.id]=st.gear[s.id].map((x,i)=>i?String(x).replace(/[^A-Za-z0-9.]/g,""):(parseInt(x)||0));
+ if(!["bright","glowing"].includes(st.cube)) st.cube="bright";
+ return true;
+}
+function load(){ try{const st=JSON.parse(localStorage.getItem(KEY)); if(valid(st)) return st;}catch(e){} return fromTemplate(); }
+function save(){ try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} }
+let tm; function changed(){ save(); clearTimeout(tm); tm=setTimeout(render,120); }
+function applyAll(){ fillScout(); for(const s of SLOTS) fillSlot(s); save(); render(); }
+function say(t){ $("msg").textContent=t; setTimeout(()=>{if($("msg").textContent===t)$("msg").textContent="";},4000); }
+
+S=load(); buildScout(); buildGear(); applyAll();
+$("cube").addEventListener("change",e=>{S.cube=e.target.value;changed();});
+$("bTemplate").addEventListener("click",()=>{S=fromTemplate();applyAll();say("Example gear loaded.");});
+$("bClear").addEventListener("click",()=>{S=blank();applyAll();say("Cleared. Fill in your own values.");});
+const enc=st=>btoa(unescape(encodeURIComponent(JSON.stringify(st)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+const dec=t=>{t=t.trim();const m=t.match(/#g=([A-Za-z0-9_\-+\/=]+)/);if(m)t=m[1];t=t.replace(/-/g,"+").replace(/_/g,"/");while(t.length%4)t+="=";return JSON.parse(decodeURIComponent(escape(atob(t))));};
+const shareLink=()=>location.href.split("#")[0]+"#g="+enc(S);
+$("bCopy").addEventListener("click",async()=>{
+ const link=shareLink();
+ try{await navigator.clipboard.writeText(link);say("Link copied. Anyone who opens it sees your gear and values.");}
+ catch(e){$("codebox").classList.add("on");$("codeIn").value=link;$("codeIn").select();say("Copy the link in the box.");}
+});
+$("bPaste").addEventListener("click",()=>{$("codebox").classList.toggle("on");$("codeIn").value="";$("codeIn").focus();});
+$("bLoadCode").addEventListener("click",()=>{
+ try{const st=dec($("codeIn").value); if(!valid(st)) throw 0; S=st; applyAll(); $("codebox").classList.remove("on"); say("Gear loaded.");}
+ catch(e){$("msg2").textContent="That didn't work. Check you copied all of it.";}
+});
+function fromHash(){
+ if(!location.hash.startsWith("#g=")) return;
+ try{const st=dec(location.hash); if(valid(st)){S=st; applyAll(); say("Loaded gear from the link. Your changes save in this browser.");}}catch(e){}
+ try{history.replaceState(null,"",location.href.split("#")[0]);}catch(e){}
+}
+fromHash(); addEventListener("hashchange",fromHash);
+const root=document.documentElement;
+try{const t=localStorage.getItem("cubeRoi.theme"); if(t) root.dataset.theme=t;}catch(e){}
+$("themeBtn").addEventListener("click",()=>{const t=root.dataset.theme==="light"?"dark":"light";root.dataset.theme=t;try{localStorage.setItem("cubeRoi.theme",t);}catch(e){}});
+}
+</script>
+</body>
+</html>
