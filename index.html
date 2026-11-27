@@ -71,6 +71,12 @@ a{color:var(--accent)}
 .linkbtn{background:none;border:0;padding:4px 2px;font-size:14px;font-weight:600;color:var(--link);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 .linkbtn:hover{text-decoration-thickness:2px}
 /* auto-reroll presets */
+.try{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:2px 0 10px}
+.tryh b{color:var(--fg);display:block;font-size:14px}.tryh span{font-size:12px}
+.tryrow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto auto;gap:8px;align-items:center;margin-top:8px}
+.tryrow select{font-size:14px;color:var(--fg)}.tryrow select.J{color:var(--muted)}
+.trydiff{font-weight:700;font-size:15px;white-space:nowrap;min-width:150px;text-align:right;color:var(--muted)}.trydiff.up{color:var(--good)}.trydiff.down{color:#ff6b6f}
+@media(max-width:900px){.tryrow{grid-template-columns:minmax(0,1fr) auto}.tryrow select{grid-column:1/-1}.trydiff{text-align:left;min-width:0;white-space:normal;font-size:14px}}
 .presets{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:2px 0 10px}
 .ph b{color:var(--fg);display:block;font-size:14px}.ph span{font-size:12px}
 .pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-top:8px}
@@ -106,6 +112,18 @@ table.sc{width:100%;border-collapse:collapse}
 .sc td:first-child{font-weight:600}
 .sc td small{display:block;font-weight:400;color:var(--muted);font-size:12px}
 .req{color:var(--accent)}
+.pbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 12px}
+.pbar label{display:flex;align-items:center;gap:8px;font-weight:600}.pbar select{width:auto;min-width:220px}
+#profDel.sure{color:#ff6b6f;border-color:#ff6b6f}
+#charName{width:190px}#clsSel{width:auto}
+.rkrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin:-2px 0 12px}
+.rkl{font-weight:600}.rkl small{color:var(--muted);font-weight:400}
+.rkmsg{font-size:14px;color:var(--muted)}.rkmsg.bad{color:#ff6b6f}
+.rkcard[hidden]{display:none}.rkcard{display:flex;align-items:center;gap:12px;background:var(--sunk);border:1px solid var(--line);border-radius:12px;padding:6px 14px 6px 6px;margin:0 0 14px;width:fit-content;max-width:100%}
+.rkcard img{width:88px;height:88px;object-fit:contain;flex:none}
+.rkcard div{display:flex;flex-direction:column;gap:2px;font-size:14px;color:var(--muted)}.rkcard b{font-size:17px;color:var(--fg)}
+.rkcard .linkbtn{align-self:flex-start;padding:2px 0;font-size:13px;color:var(--muted)}.rkcard .linkbtn:hover{color:#ff6b6f}
+#pAva img{width:44px;height:44px;object-fit:contain;display:block;margin:-6px -2px -6px 0}
 .pick2{display:flex;align-items:center;gap:8px;font-weight:600}.pick2 select{width:auto}
 .amt{max-width:84px}.fdw{display:flex;align-items:center;gap:6px;max-width:140px}.fdw span{color:var(--muted)}
 .fdw input.miss{border-color:color-mix(in oklab,var(--accent) 55%,var(--line))}
@@ -118,7 +136,9 @@ table.sc{width:100%;border-collapse:collapse}
 .ghd{font-size:12px;color:var(--muted);padding:0 11px 4px}.ghd span:nth-child(n+2){padding-left:9px}
 .gr{background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-bottom:6px}
 .gr .sn{font-weight:600}.gr .sn small{display:block;font-weight:400;font-size:12px;color:var(--muted);line-height:1.3}
-.gr .nm{display:grid;gap:6px}
+.gr .nm{display:flex;gap:8px;align-items:center;min-width:0}.gr .nmf{flex:1;min-width:0;display:grid;gap:6px}
+.gic{display:flex;flex:none}.ic.sm{width:40px;height:40px;border-radius:9px}.ic.sm img{max-width:32px;max-height:32px;transform:none}
+.ghd span:nth-child(2){padding-left:57px}
 .gr select{font-size:15px;padding:7px 26px 7px 8px;background-position:right 8px center;text-overflow:ellipsis}
 select.J{color:var(--muted)}
 .gr.empty{border-style:dashed}
@@ -151,6 +171,12 @@ details.it[open]{border-color:var(--accent)}
 .rk{font:700 17px var(--display);color:var(--muted)}
 .it:first-child .rk{color:var(--accent)}
 .tg small{display:block;color:var(--muted);font-size:12px;line-height:1.35}
+.sl{display:flex;gap:12px;align-items:center}.slt{min-width:0}
+.ic{flex:none;width:52px;height:52px;border-radius:12px;background:var(--surface);border:1px solid var(--line);display:flex;align-items:center;justify-content:center}
+.ic img{max-width:40px;max-height:40px;transform:scale(1.15)}
+.ic.big{width:72px;height:72px;border-radius:14px}.ic.big img{max-width:56px;max-height:56px;transform:scale(1.4)}
+.ic.none{background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 4l10 5.5v13L16 28 6 22.5v-13z M6 9.5l10 5.5 10-5.5M16 15v13' fill='none' stroke='%2398a3b6' stroke-opacity='.35' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") center/55% no-repeat}
+.pbody{display:flex;gap:16px;align-items:center}
 .sl .meta{color:var(--muted);font-size:13px}.sl small{color:var(--muted);font-size:13px;display:block;line-height:1.4;margin-top:2px}.sl small span{display:block}
 .sl .cl{display:flex!important;align-items:center;gap:6px;margin:1px 0}.sl .cl i{font:700 9px var(--body);font-style:normal;width:14px;height:14px;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;color:#10200b;flex:none}
 i.O{background:var(--line);color:var(--muted)!important}
@@ -220,6 +246,9 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
  <div id="codebox" class="panel"><label for="codeIn" class="muted">Paste a share link from a friend:</label><textarea id="codeIn" spellcheck="false" style="margin-top:6px"></textarea><div class="row" style="margin-top:8px"><button class="btn accent" id="bLoadCode" type="button">Load</button><span id="msg2" class="muted"></span></div></div>
  <div id="msg" role="status"></div>
 
+ <div class="pbar"><span id="pAva"></span><label>Character <select id="profSel" aria-label="Character"></select></label>
+  <button class="btn ghost" id="profNew" type="button">+ New character</button>
+  <button class="btn ghost" id="profDel" type="button">Delete</button></div>
  <nav class="tabs" aria-label="Steps">
   <button class="tab" type="button" data-go="1"><span class="n">1</span><span>Scouter values<small>Efficiency Boss Cut tab, after Result</small></span></button>
   <button class="tab" type="button" data-go="2"><span class="n">2</span><span>Your gear<small>Your items, item level, and potentials</small></span></button>
@@ -228,10 +257,19 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
 
  <section class="panel step" id="step1">
   <div class="stephead"><div><h2>Step 1: Input your scouter values</h2><p>In Maple Scouter, click <b>Result</b>, then open the <b>Efficiency Boss Cut</b> tab. Under <b>Stat Efficiency</b>, click <b>Detail Eff.</b> and copy the amount and Final Damage % of each row into the boxes.</p></div></div>
-  <div class="row" style="margin-bottom:12px;gap:16px">
+  <div class="row" style="margin-bottom:12px;gap:10px 16px">
+   <label class="pick2">Name <input id="charName" placeholder="Character name" maxlength="30" autocomplete="off"></label>
+   <label class="pick2">Class <select id="clsSel"><option value="">Pick class (optional)</option></select></label>
    <label class="pick2">Main stat <select id="msSel"><option>STR</option><option>DEX</option><option>INT</option><option>LUK</option></select></label>
    <label class="pick2">Secondary stat <select id="ssSel"><option>STR</option><option>DEX</option><option>INT</option><option>LUK</option></select></label>
   </div>
+  <div class="rkrow">
+   <span class="rkl">Show your character from the rankings <small>(optional)</small></span>
+   <div class="seg" role="group" aria-label="Region"><button type="button" data-reg="na">NA</button><button type="button" data-reg="eu">EU</button></div>
+   <button class="btn ghost" id="rkFind" type="button">Find</button>
+   <span class="rkmsg" id="rkMsg" role="status"></span>
+  </div>
+  <div class="rkcard" id="rkCard" hidden></div>
   <div class="s1">
    <div>
     <div style="overflow-x:auto"><table class="sc"><thead><tr><th>Stat</th><th>Amount</th><th>Final Damage</th><th class="n">Per 1 point</th></tr></thead><tbody id="scBody"></tbody></table></div>
@@ -306,6 +344,96 @@ const SLOTS = [
  ["hat","Hat","hat","hat"],["top","Top","top","top"],["bottom","Bottom","bottom","bottom"],["shoulder","Shoulder","shoulder","shoulder"],
  ["cape","Cape","cape","cape"],["gloves","Gloves","gloves","gloves"],["shoes","Shoes","shoes","shoes"],["heart","Heart","heart","heart"],["badge","Badge","heart","badge"]
 ].map(([id,name,kind,list])=>({id,name,kind,list}));
+const ICONS={"Endless Terror":["Endless_Terror"],"Dawn Guardian Angel Ring":["Dawn_Guardian_Angel_Ring","Guardian_Angel_Ring"],"Guardian Angel Ring":["Guardian_Angel_Ring"],
+ "Superior Gollux Ring":["Superior_Gollux_Ring"],"Meister Ring":["Meister_Ring"],"Reinforced Gollux Ring":["Reinforced_Gollux_Ring"],"Kanna's Treasure":["Kanna%27s_Treasure"],"Solid Gollux Ring":["Solid_Gollux_Ring"],
+ "Source of Suffering":["Source_of_Suffering"],"Superior Gollux Pendant":["Superior_Engraved_Gollux_Pendant"],"Daybreak Pendant":["Daybreak_Pendant"],"Dominator Pendant":["Dominator_Pendant"],
+ "Reinforced Gollux Pendant":["Reinforced_Engraved_Gollux_Pendant"],"Chaos Horntail Necklace":["Chaos_Horntail_Necklace"],"Mechanator Pendant":["Mechanator_Pendant"],
+ "Magic Eyepatch":["Magic_Eyepatch"],"Papulatus Mark":["Papulatus_Mark"],"Black Bean Mark":["Black_Bean_Mark"],"Berserked":["Berserked"],"Twilight Mark":["Twilight_Mark"],"Condensed Power Crystal":["Condensed_Power_Crystal"],
+ "Commanding Force Earring":["Commanding_Force_Earring"],"Estella Earrings":["Estella_Earrings"],"Superior Gollux Earrings":["Superior_Gollux_Earrings"],"Meister Earrings":["Meister_Earrings","Meister_Earring"],
+ "Reinforced Gollux Earrings":["Reinforced_Gollux_Earrings"],"Dreamy Belt":["Dreamy_Belt"],"Superior Gollux Belt":["Superior_Engraved_Gollux_Belt"],
+ "Total Control":["Total_Control"],"Plasma Heart":["Plasma_Heart"],"Fairy Heart":["Fairy_Heart"],"Ghost Ship Exorcist":["Ghost_Ship_Exorcist"],"Sengoku Hakase":["Sengoku_Hakase_Badge"]};
+const ICON_BASE="https://media.maplestorywiki.net/yetidb/Eqp_";
+const JOBSET={Warrior:["Knight","Helm","Knight",["Royal_Warrior_Helm","Eagle_Eye_Warrior_Armor","Trixter_Warrior_Pants"]],
+ Magician:["Mage","Crown","Mage",["Royal_Dunwitch_Hat","Eagle_Eye_Dunwitch_Robe","Trixter_Dunwitch_Pants"]],
+ Bowman:["Archer","Hood","Archer",["Royal_Ranger_Beret","Eagle_Eye_Ranger_Cowl","Trixter_Ranger_Pants"]],
+ Thief:["Bandit","Hat","Thief",["Royal_Assassin_Hood","Eagle_Eye_Assassin_Shirt","Trixter_Assassin_Pants"]],
+ Pirate:["Pirate","Fedora","Pirate",["Royal_Pirate_Hat","Eagle_Eye_Pirate_Coat","Trixter_Pirate_Pants"]]};
+const jobGroup=()=>(CLS[S&&S.cls]||{}).g||({STR:"Warrior",DEX:"Bowman",INT:"Magician",LUK:"Thief"})[MS()];
+const fileName=n=>n.replace(/ /g,"_").replace(/'/g,"%27").replace(/\(/g,"%28").replace(/\)/g,"%29");
+function iconFiles(n){
+ if(!n) return null; if(ICONS[n]) return ICONS[n];
+ if(/ Emblem( \(|$)/.test(n)&&n!=="Class Emblem") return [fileName(n)];
+ if(/^(Destiny|Genesis|Astra|Eternal) /.test(n)&&!/^Eternal (Hat|Top|Bottom)$/.test(n)) return [fileName(n)];
+ const g=jobGroup(), J=JOBSET[g]; if(!J) return null; let m;
+ if(n==="Mitra's Rage") return ["Mitra%27s_Rage_"+g];
+ if(m=n.match(/^Eternal (Hat|Top|Bottom)$/)) return [fileName(ETERNAL[g][["Hat","Top","Bottom"].indexOf(m[1])])];
+ if(m=n.match(/^CRA (Hat|Top|Bottom)$/)) return [J[3][["Hat","Top","Bottom"].indexOf(m[1])]];
+ if(m=n.match(/^Arcane (Hat|Shoulder|Cape|Gloves|Shoes)$/)) return [`Arcane_Umbra_${J[2]}_${m[1]}`];
+ if(m=n.match(/^Absolab (Hat|Shoulder|Cape|Gloves|Shoes)$/)) return [`AbsoLab_${J[0]}_${m[1]==="Hat"?J[1]:m[1]}`];
+ return null;
+}
+function paintGic(id){ const el=$("g_"+id), nm=S.gear[id][4]||"", key=nm+"|"+(iconFiles(nm)||[""])[0]; if(el.dataset.n===key&&el.firstChild) return; el.dataset.n=key; el.innerHTML=iconHtml(nm,0,1); }
+function iconHtml(name,big,sm){
+ const f=iconFiles(name); const cls=`ic${big?" big":""}${sm?" sm":""}`;
+ if(!f) return `<span class="${cls} none" aria-hidden="true"></span>`;
+ return `<span class="${cls}" aria-hidden="true"><img src="${ICON_BASE}${f[0]}.png" data-next="${f.slice(1).map(x=>ICON_BASE+x+".png").join("|")}" alt="" loading="lazy" referrerpolicy="no-referrer"></span>`;
+}
+// if an icon fails, try the next file name, then show the empty box
+document.addEventListener("error",e=>{const im=e.target; if(!(im instanceof HTMLImageElement)||!im.closest(".ic")) return;
+ const n=(im.dataset.next||"").split("|").filter(Boolean); if(n.length){im.dataset.next=n.slice(1).join("|");im.src=n[0];} else {im.parentElement.classList.add("none");im.remove();}},true);
+const W=t=>["Destiny "+t,"Genesis "+t];
+const CLASSES=[
+ ["Warrior",[["Hero",[W("Two-handed Sword"),W("Two-handed Axe"),W("Saber"),W("Axe")],["Astra Medallion","Astra Sacred Aegis"]],["Paladin",[W("Two-handed Hammer"),W("Two-handed Sword"),W("Hammer"),W("Saber")],["Astra Rosary","Astra Sacred Aegis"]],
+  ["Dark Knight",[W("Spear"),W("Polearm")],["Astra Chain"]],["Dawn Warrior",[W("Two-handed Sword"),W("Saber")],["Astra Topaz","Astra Topaz Aegis"]],["Mihile",[W("Saber")],["Astra Soul Shield"]],
+  ["Aran",[W("Polearm")],["Astra White Tiger Pendulum"]],["Blaster",[W("Ellaha")],["Astra Charges"]],["Kaiser",[W("Two-handed Sword")],["Astra Nova Essence"]],["Adele",[W("Bladecaster")],["Astra Bladebinder"]],
+  ["Zero",[W("Lazuli")],["Astra Hourglass"]],["Demon Slayer",[W("Hammer"),W("Axe")],["Astra Force Shield"]],["Demon Avenger",[W("Desperado")],["Astra Force Shield"]],["Hayato",[W("Katana")],["Astra Kodachi"]],
+  ["Ren",[W("Sword")],["Astra Imugi Gem"]],["Erel Light",[W("Gram")],["Astra Keir"]]]],
+ ["Magician",[["Arch Mage (Fire, Poison)",[W("Staff"),W("Wand")],["Astra Arcane Shield"]],["Arch Mage (Ice, Lightning)",[W("Staff"),W("Wand")],["Astra Arcane Shield"]],["Bishop",[W("Staff"),W("Wand")],["Astra Arcane Shield"]],
+  ["Blaze Wizard",[W("Staff"),W("Wand")],["Astra Ruby Shield"]],["Evan",[W("Wand"),W("Staff")],["Astra Honor Shield"]],["Luminous",[W("Shining Rod")],["Astra Orb"]],["Battle Mage",[W("Staff")],["Astra Umbral Shield"]],
+  ["Kanna",[W("Spirit Walker Fan")],["Astra Talisman"]],["Kinesis",[W("Psy-limiter")],["Astra King Chess Piece"]],["Illium",[W("Lucent Gauntlet")],["Astra Lucent Wings"]],["Lara",[W("Wand")],["Astra Four-Jade Ornament"]],
+  ["Lynn",[W("Memorial Staff")],["Astra Leaf Shield"]],["Sia Astelle",[W("Celestial Light")],["Astra Compass"]],["Lethe",[W("Dominium")],["Astra Quill"]]]],
+ ["Bowman",[["Bowmaster",[W("Bow")],["Astra Feather"]],["Marksman",[W("Crossbow")],["Astra Bullseye"]],["Pathfinder",[W("Ancient Bow")],["Astra Relic"]],["Wind Archer",[W("Bow")],["Astra Emerald"]],
+  ["Mercedes",[W("Dual Bowguns")],["Astra Magic Arrows"]],["Wild Hunter",[W("Crossbow")],["Astra Wild Tusk"]],["Kain",[W("Whispershot")],["Astra Weapon Belt"]]]],
+ ["Thief",[["Night Lord",[W("Guards")],["Astra Charm"]],["Shadower",[W("Dagger")],["Astra Bane Shield"]],["Dual Blade",[W("Dagger")],["Astra Katara"]],["Night Walker",[W("Guards")],["Astra Obsidian"]],
+  ["Phantom",[W("Cane")],["Astra Carte"]],["Cadena",[W("Chain")],["Astra Transmitter"]],["Khali",[["Destiny Chakram","Genesis Eclipse"]],["Astra Hex Seeker"]],["Hoyoung",[W("Ritual Fan")],["Astra Diamond Fan Tassel"]],
+  ["Xenon",[W("Energy Chain")],["Astra Deca Core Controller"]]]],
+ ["Pirate",[["Buccaneer",[W("Claw")],["Astra Wrist Band"]],["Corsair",[W("Pistol")],["Astra Raven Eye"]],["Cannoneer",[["Destiny Blast Cannon","Genesis Siege Gun"]],["Astra Incendiary"]],
+  ["Thunder Breaker",[W("Claw")],["Astra Sapphire"]],["Shade",[W("Claw")],["Astra Fox Marble"]],["Mechanic",[W("Pistol")],["Astra Magnum"]],["Angelic Buster",[W("Soul Shooter")],["Astra Soul Ring"]],
+  ["Ark",[W("Claw")],["Astra Path"]],["Mo Xuan",[W("Martial Brace")],["Astra Brace Band"]]]]];
+const ETERNAL={Warrior:["Eternal Knight Helm","Eternal Knight Armor","Eternal Knight Pants"],Magician:["Eternal Mage Hat","Eternal Mage Robe","Eternal Mage Pants"],
+ Bowman:["Eternal Archer Hat","Eternal Archer Hood","Eternal Archer Pants"],Thief:["Eternal Thief Bandana","Eternal Thief Shirt","Eternal Thief Pants"],Pirate:["Eternal Pirate Hat","Eternal Pirate Coat","Eternal Pirate Pants"]};
+const CLS={}; for(const [g,list] of CLASSES) for(const [n,w,a] of list) CLS[n]={g,w,a};
+const EMB={}; for(const [e,cs] of [["Gold Maple Leaf Emblem",["Hero","Paladin","Dark Knight","Arch Mage (Fire, Poison)","Arch Mage (Ice, Lightning)","Bishop","Bowmaster","Marksman","Pathfinder","Night Lord","Shadower","Dual Blade","Buccaneer","Corsair","Cannoneer"]],
+ ["Gold Cygnus Emblem",["Dawn Warrior","Blaze Wizard","Wind Archer","Night Walker","Thunder Breaker","Mihile"]],["Gold Demon Emblem",["Demon Slayer","Demon Avenger"]],
+ ["Gold Resistance Emblem",["Battle Mage","Wild Hunter","Mechanic","Blaster"]],["Gold Crescent Emblem",["Hayato"]],["Gold Blossom Emblem",["Kanna"]],["Dragon Emblem",["Kaiser"]],["Angel Emblem",["Angelic Buster"]],
+ ["Gold Hitman Emblem",["Kain"]],["Gold Agent Emblem",["Cadena"]],["Eternal Time Emblem",["Zero"]],["Gold Kinesis Emblem",["Kinesis"]],["Gold Knight's Emblem",["Adele"]],["Gold Crystal Emblem",["Illium"]],
+ ["Gold Chaser Emblem",["Khali"]],["Gold Abyssal Emblem",["Ark"]],["Gold Sword Emblem",["Ren"]],["Gold Earthseer Emblem",["Lara"]],["Gold Three Paths Emblem",["Hoyoung"]],["Gold Forest Emblem",["Lynn"]],
+ ["Gold Xuanshan School Emblem",["Mo Xuan"]],["Gold Guardian Emblem",["Sia Astelle"]],
+ ...["Aran","Evan","Mercedes","Phantom","Shade","Luminous"].map(c=>[`Gold Heroes Emblem (${c})`,[c]])]) for(const c of cs) EMB[c]=e;
+const DEXP=["Corsair","Mechanic","Angelic Buster"];
+function clsStats(n){ const C=CLS[n]; if(!C||n==="Xenon"||n==="Demon Avenger") return null;
+ if(C.g==="Pirate") return DEXP.includes(n)?["DEX","STR"]:["STR","DEX"];
+ return {Warrior:["STR","DEX"],Magician:["INT","LUK"],Bowman:["DEX","STR"],Thief:["LUK","DEX"]}[C.g]; }
+function itemList(s){
+ const C=CLS[S&&S.cls];
+ if(C){ const E=ETERNAL[C.g];
+  if(s.list==="weapon") return [...C.w.map(w=>[w[0],250]),...C.w.map(w=>[w[1],200])];
+  if(s.list==="secondary") return C.a.map(a=>[a,200]);
+  if(s.list==="hat") return [[E[0],250],...ITEMS.hat.slice(1)];
+  if(s.list==="top") return [[E[1],250],...ITEMS.top.slice(1)];
+  if(s.list==="bottom") return [[E[2],250],...ITEMS.bottom.slice(1)];
+  if(s.list==="emblem") return [ITEMS.emblem[0],[EMB[S.cls]||"Class Emblem",100]];
+ }
+ return ITEMS[s.list]||[];
+}
+function setClass(nc){
+ const oldL={}; for(const id of ["weapon","secondary","emblem","hat","top","bottom"]) oldL[id]=itemList(SID[id]);
+ S.cls=nc;
+ for(const id in oldL){ const g=S.gear[id], nl=itemList(SID[id]), i=oldL[id].findIndex(([n])=>n===g[4]); if(i<0||!nl.length) continue;
+  if(id==="weapon"){ const gen=/^Genesis/.test(g[4])||(oldL[id][i][1]===200); const pick=nl.find(([,l])=>gen?l===200:l===250)||nl[0]; g[4]=pick[0]; }
+  else g[4]=nl[Math.min(i,nl.length-1)][0];
+ }
+}
 const SID = Object.fromEntries(SLOTS.map(s=>[s.id,s]));
 const ITEMS = {
  ring:[["Endless Terror",200],["Dawn Guardian Angel Ring",160],["Guardian Angel Ring",160],["Superior Gollux Ring",150],["Meister Ring",140],["Reinforced Gollux Ring",140],["Kanna's Treasure",140],["Solid Gollux Ring",130]],
@@ -313,10 +441,10 @@ const ITEMS = {
  eye:[["Magic Eyepatch",160],["Papulatus Mark",145],["Black Bean Mark",135]],
  face:[["Berserked",160],["Twilight Mark",140],["Condensed Power Crystal",110]],
  earring:[["Commanding Force Earring",200],["Estella Earrings",160],["Superior Gollux Earrings",150],["Meister Earrings",140],["Reinforced Gollux Earrings",140]],
- belt:[["Dreamy Belt",200],["Superior Gollux Belt",150],["Level 140 Belt",140]],
+ belt:[["Dreamy Belt",200],["Superior Gollux Belt",150]],
  weapon:[["Destiny Weapon",250],["Genesis Weapon",200]],
  secondary:[["Astra Secondary",200]],
- emblem:[["Seren Emblem",200],["Class Emblem",100]],
+ emblem:[["Mitra's Rage",200],["Class Emblem",100]],
  hat:[["Eternal Hat",250],["Arcane Hat",200],["Absolab Hat",160],["CRA Hat",150]],
  top:[["Eternal Top",250],["CRA Top",150]],
  bottom:[["Eternal Bottom",250],["CRA Bottom",150]],
@@ -325,18 +453,18 @@ const ITEMS = {
  gloves:[["Eternal Gloves",250],["Arcane Gloves",200],["Absolab Gloves",160]],
  shoes:[["Eternal Shoes",250],["Arcane Shoes",200],["Absolab Shoes",160]],
  heart:[["Total Control",200],["Plasma Heart",130],["Fairy Heart",100]],
- badge:[["Ghost Ship Exorcist",150],["Sengoku Hakase",null]]
+ badge:[["Ghost Ship Exorcist",150],["Sengoku Hakase",160]]
 };
 const SCOUT = [
  ["boss","Boss Damage",40,1],["att","{A} %",12,1],["crit","Crit Damage",8,1],["ied","IED (380)",40,1,"",1],
  ["statp","{M} %",12,1],["secp","{S} %",12,1],["allp","All Stat %",9,1]
 ].map(([id,label,amt,req,hint,star])=>({id,label,amt,req,hint,star}));
-const TEMPLATE = {cube:"bright",ms:"INT",ss:"LUK",
+const TEMPLATE = {cube:"bright",ms:"INT",ss:"LUK",cls:"Kanna",name:"",
  scout:{boss:[40,"3.560"],att:[12,"4.603"],statp:[12,"1.005"],allp:[9,"0.870"],crit:[8,"2.277"],ied:[40,"0.831"],secp:[12,"0.155"]},
  gear:{ring4:[0,"J0","J0","J0",""],ring1:[200,"A10","S10","S13","Endless Terror"],ring2:[160,"S13","S10","S10","Dawn Guardian Angel Ring"],ring3:[150,"S12","S12","A6","Superior Gollux Ring"],
   pend1:[140,"S12","S9","S9","Daybreak Pendant"],pend2:[160,"S13","S10","S10","Source of Suffering"],eye:[160,"S13","S13","A7","Magic Eyepatch"],face:[160,"S13","S10","S10","Berserked"],
-  earring:[200,"S13","S13","A7","Commanding Force Earring"],belt:[200,"S13","S13","S10","Dreamy Belt"],weapon:[250,"T13","B40","T10","Destiny Weapon"],secondary:[200,"B40","T10","T10","Astra Secondary"],
-  emblem:[200,"T13","T10","T10","Seren Emblem"],hat:[250,"S13","S10","S13","Eternal Hat"],top:[250,"S13","S10","S10","Eternal Top"],bottom:[250,"S13","S10","S10","Eternal Bottom"],
+  earring:[200,"S13","S13","A7","Commanding Force Earring"],belt:[200,"S13","S13","S10","Dreamy Belt"],weapon:[250,"T13","B40","T10","Destiny Spirit Walker Fan"],secondary:[200,"B40","T10","T10","Astra Talisman"],
+  emblem:[200,"T13","T10","T10","Mitra's Rage"],hat:[250,"S13","S10","S13","Eternal Mage Hat"],top:[250,"S13","S10","S10","Eternal Mage Robe"],bottom:[250,"S13","S10","S10","Eternal Mage Pants"],
   shoulder:[250,"S13","S10","S10","Eternal Shoulder"],cape:[250,"S13","S10","S10","Eternal Cape"],gloves:[250,"C8","C8","A7","Eternal Gloves"],shoes:[250,"S13","S13","S10","Eternal Shoes"],
   heart:[200,"S13","S13","S10","Total Control"],badge:[150,"S12","S9","S9","Ghost Ship Exorcist"]}};
 const ORDER = "TSACBIDsFf";
@@ -358,9 +486,11 @@ const parse = code=>{const c=code.replace(/[0-9.]+$/,"");return [c,+code.slice(c
 const optLvl = lvl=>lvl||200;
 
 const poolCache = {};
+const WSE=new Set(["weapon","secondary","emblem"]);
+const boss250=(kind,lvl)=>WSE.has(kind)&&lvl>=250;   // Lv 250 WSE: Boss 45/40 (prime) and 35 instead of 40/35 and 30
 function pools(kind,cube,lvl){
- const hi = lvl>=160, k=kind+cube+hi;
- if(!poolCache[k]) poolCache[k]=RATES[kind][cube].map(L=>L.map(([c,v,r])=>({c,v:(hi&&ADJ.has(c))?v+1:v,r})));
+ const hi = lvl>=160, b5=boss250(kind,lvl), k=kind+cube+hi+b5;
+ if(!poolCache[k]) poolCache[k]=RATES[kind][cube].map(L=>L.map(([c,v,r])=>({c,v:(hi&&ADJ.has(c))?v+1:(b5&&c==="B")?v+5:v,r})));
  return poolCache[k];
 }
 function options(kind,lvl,i){
@@ -537,7 +667,23 @@ function paintNums(root){
  for(const e of root.querySelectorAll(".nlab")) e.textContent=fmt(S.per);
  for(const e of root.querySelectorAll('td[data-l="FD per cubes"]')) e.dataset.lab=`FD / ${fmt(S.per)}`;
 }
+function tryHtml(slot){
+ const g=S.gear[slot.id], lvl=optLvl(+g[0]||0);
+ return `<div class="tryh"><b>Try other potentials</b><span>See how much FD you'd gain or lose. Rolled it? Save it as your potentials.</span></div>
+ <div class="tryrow">${[0,1,2].map(i=>`<select data-i="${i}" aria-label="Try potential ${i+1}">${options(slot.kind,lvl,i).map(o=>`<option value="${o}"${o===g[i+1]?" selected":""}>${esc(lineLabel(o))}</option>`).join("")}</select>`).join("")}
+ <span class="trydiff" aria-live="polite"></span><button type="button" class="btn accent trysave" disabled>Save as my potentials</button></div>`;
+}
+function paintTry(box){
+ const id=box.dataset.slot, now=S.gear[id].slice(1,4), pick=[...box.querySelectorAll("select")].map(x=>x.value), P=perValues();
+ const d=stats(pick.map(parse),P).fd-stats(now.map(parse),P).fd, same=pick.every((c,i)=>c===now[i]), el=box.querySelector(".trydiff");
+ el.className="trydiff"+(d>1e-6?" up":d<-1e-6?" down":"");
+ el.textContent=Math.abs(d)<=1e-6?(same?"Your current potentials":"Same FD as now"):`${d>0?"+":"−"}${Math.abs(d).toFixed(3)}% FD`;
+ box.querySelector(".trysave").disabled=same;
+ for(const x of box.querySelectorAll("select")) x.classList.toggle("J",x.value==="J0");
+}
+let keepOpen=null;
 function fillPresets(d){
+ const tb=d.querySelector(".try"); if(tb&&!tb.dataset.done){ tb.dataset.done="1"; tb.innerHTML=tryHtml(SID[tb.dataset.slot]); paintTry(tb); }
  const el=d.querySelector(".presets"); if(!el||el.dataset.done) return;
  el.dataset.done="1"; const h=presetHtml(SID[el.dataset.slot],el.dataset.cube,perValues());
  if(h){ el.innerHTML=h; paintNums(el); } else el.remove();
@@ -583,7 +729,7 @@ const LEVELS=[100,110,120,130,135,140,145,150,160,200,250];
 function buildGear(){
  $("gear").innerHTML=GROUPS.map(([title,ids])=>`<div class="grp"><h3>${title}</h3>${ids.map(id=>{const s=SID[id];return `<div class="gr" id="r_${id}">
   <div class="sn">${s.name}${id==="hat"?'<small>Stat potentials only</small>':id==="ring4"?'<button type="button" class="linkbtn rm" id="r4rm">Remove</button>':""}<small class="wn" id="w_${id}"></small></div>
-  <div class="nm"><select id="i_${id}" aria-label="${s.name} item"></select><input class="cust" id="n_${id}" placeholder="Type the item name" aria-label="${s.name} item name" autocomplete="off" hidden></div>
+  <div class="nm"><span class="gic" id="g_${id}"></span><div class="nmf"><select id="i_${id}" aria-label="${s.name} item"></select><input class="cust" id="n_${id}" placeholder="Type the item name" aria-label="${s.name} item name" autocomplete="off" hidden></div></div>
   <div class="lv"><select id="l_${id}" aria-label="${s.name} level"></select></div>
   ${[0,1,2].map(i=>`<select class="l${i}" id="p_${id}_${i}" aria-label="${s.name} potential ${i+1}"></select>`).join("")}</div>${id==="ring4"?'<button type="button" class="addr4" id="r4add">+ Add Ring 4</button>':""}`}).join("")}</div>`).join("");
  $("r4add").addEventListener("click",()=>{S.r4=true;paintR4();changed();$("i_ring4").focus();});
@@ -592,11 +738,11 @@ function buildGear(){
   const sel=$("i_"+s.id), n=$("n_"+s.id);
   sel.addEventListener("change",()=>{
    const g=S.gear[s.id], v=sel.value;
-   if(v==="__c"){ n.hidden=false; n.focus(); g[4]=n.value.trim(); }
-   else{ n.hidden=true; g[4]=v; const hit=(ITEMS[s.list]||[]).find(([nm])=>nm===v); if(hit&&hit[1]) setLevel(s,hit[1]); else fillSlot(s); }
+   if(v==="__c"){ n.hidden=false; n.focus(); g[4]=n.value.trim(); paintGic(s.id); }
+   else{ n.hidden=true; g[4]=v; const hit=itemList(s).find(([nm])=>nm===v); if(hit&&hit[1]) setLevel(s,hit[1]); else fillSlot(s); }
    changed();
   });
-  n.addEventListener("input",()=>{S.gear[s.id][4]=n.value.trim().slice(0,60);changed();});
+  n.addEventListener("input",()=>{S.gear[s.id][4]=n.value.trim().slice(0,60);paintGic(s.id);changed();});
   $("l_"+s.id).addEventListener("change",e=>{setLevel(s,parseInt(e.target.value)||0);changed();});
   for(const i of [0,1,2]) $(`p_${s.id}_${i}`).addEventListener("change",e=>{S.gear[s.id][i+1]=e.target.value;e.target.classList.toggle("J",e.target.value==="J0");changed();});
  }
@@ -605,15 +751,16 @@ function paintR4(){ $("r_ring4").hidden=!S.r4; $("r4add").hidden=!!S.r4; }
 function setLevel(s,nv){
  const g=S.gear[s.id], old=optLvl(+g[0]||0);
  g[0]=nv;
- for(let i=1;i<4;i++){const [c,v]=parse(g[i]);if(ADJ.has(c)&&(old>=160)!==(optLvl(nv)>=160)) g[i]=c+(v+(optLvl(nv)>=160?1:-1));}
+ for(let i=1;i<4;i++){const [c,v]=parse(g[i]);if(ADJ.has(c)&&(old>=160)!==(optLvl(nv)>=160)) g[i]=c+(v+(optLvl(nv)>=160?1:-1));
+  if(c==="B"&&boss250(s.kind,old)!==boss250(s.kind,optLvl(nv))) g[i]=c+(v+(boss250(s.kind,optLvl(nv))?5:-5));}
  fillSlot(s);
 }
 function fillSlot(s){
- const g=S.gear[s.id], lvl=+g[0]||0, list=ITEMS[s.list]||[], name=g[4]||"";
+ const g=S.gear[s.id], lvl=+g[0]||0, list=itemList(s), name=g[4]||"";
  const known=list.some(([nm])=>nm===name), custom=!!name&&!known;
  const sel=$("i_"+s.id);
  sel.innerHTML=`<option value="">${esc(s.name)}: pick an item</option>`+list.map(([nm,l])=>`<option value="${esc(nm)}">${esc(nm)}${l?` (Lv ${l})`:""}</option>`).join("")+`<option value="__c">Custom Item</option>`;
- sel.value=custom?"__c":name; sel.classList.toggle("J",!name);
+ sel.value=custom?"__c":name; sel.classList.toggle("J",!name); paintGic(s.id);
  const n=$("n_"+s.id); n.hidden=!custom&&sel.value!=="__c"; if(custom) n.value=name; else if(sel.value!=="__c") n.value="";
  const lv=$("l_"+s.id), levels=[...new Set([...LEVELS,...(lvl?[lvl]:[])])].sort((a,b)=>a-b);
  lv.innerHTML=`<option value="0">Level</option>`+levels.map(l=>`<option value="${l}">Level ${l}</option>`).join("");
@@ -644,8 +791,8 @@ function renderResults(){
  if(!ok.length){$("out").innerHTML='<p class="note">Nothing to upgrade yet. Fill in your gear in step 2.</p>'+tail;return;}
  const maxRoi=Math.max(...ok.map(r=>pickT(r).roi)), top=ok[0], tb=pickT(top);
  const pick=`<div class="top"><div class="pick"><div class="k">${S.sort==="cheap"?"Cheapest upgrade right now":"Best value right now"}${both?` (${CUBE[top.cube]})`:""}</div>
-  <div class="big">${esc(itemName(top.slot))}</div><div class="ptg">${tHtml(tb.t)}</div>
-  <div class="stats"><span><b>1 in ${fmt(1/tb.p)}</b>chance per ${SHORT[top.cube]} cube</span><span><b data-p="${tb.p}"></b>cubes for <span class="qlab"></span></span><span class="g"><b>+${tb.gain.toFixed(3)}%</b>Final Damage</span></div></div></div>`;
+  <div class="pbody">${iconHtml(S.gear[top.slot.id][4],1)}<div><div class="big">${esc(itemName(top.slot))}</div><div class="ptg">${tHtml(tb.t)}</div>
+  <div class="stats"><span><b>1 in ${fmt(1/tb.p)}</b>chance per ${SHORT[top.cube]} cube</span><span><b data-p="${tb.p}"></b>cubes for <span class="qlab"></span></span><span class="g"><b>+${tb.gain.toFixed(3)}%</b>Final Damage</span></div></div></div></div></div>`;
  const head=`<div class="rtools"><div class="seg" role="group" aria-label="Sort by"><button type="button" data-sort="best"${S.sort!=="cheap"?' class="on" aria-pressed="true"':' aria-pressed="false"'}>Best FD per cube</button><button type="button" data-sort="cheap"${S.sort==="cheap"?' class="on" aria-pressed="true"':' aria-pressed="false"'}>Fewest cubes</button></div><label>Show cubes for a <select id="qSel" aria-label="Chance to hit">${[25,50,75,99].map(q=>`<option value="${q/100}"${Math.abs(S.q-q/100)<1e-9?" selected":""}>${q}%</option>`).join("")}</select> chance</label>
   <label>Show FD per <input id="perIn" inputmode="numeric" value="${S.per}" aria-label="Number of cubes"> cubes</label></div>
   <div class="hd"><span>#</span><span>Item and current potentials</span><span>${S.sort==="cheap"?"Cheapest target":"Best target"}</span><span>Chance</span><span><span class="qlab"></span> cubes</span><span>FD gain</span><span>FD per <span class="nlab"></span> cubes</span></div>`;
@@ -656,9 +803,9 @@ function renderResults(){
   const b=pickT(r), now=S.gear[r.slot.id].slice(1,4).map(lineLabel).join(", ");
   const other=both?r.per.find(x=>x!==r.per.find(y=>y.cube===r.cube)):null;
   const tag=both?`<small>${SHORT[r.cube]} is better${other&&pickT(other)?`, ${SHORT[other.cube]}: 1 in ${fmt(1/pickT(other).p)}`:""}</small>`:"";
-  const pHtml=`<div class="presets" data-slot="${r.slot.id}" data-cube="${r.cube}"></div>`;
-  return `<details class="it"${i===0?" open":""}><summary><span class="rk">${i+1}</span>
-   <span class="sl"><b>${esc(itemName(r.slot))}</b> <span class="meta">Lv. ${r.lvl}${S.gear[r.slot.id][4]?` ${esc(r.slot.name)}`:""}</span><small>${(()=>{const pr=new Set(pools(r.slot.kind,"bright",r.lvl)[0].map(e=>e.c+e.v));return S.gear[r.slot.id].slice(1,4).map(c=>c==="J0"?`<span class="cl"><i class="O">-</i>${esc(lineLabel(c))}</span>`:`<span class="cl"><i class="${pr.has(c)?"L":"U"}">${pr.has(c)?"L":"U"}</i>${esc(lineLabel(c))}</span>`).join("");})()}</small></span>
+  const pHtml=`<div class="try" data-slot="${r.slot.id}"></div><div class="presets" data-slot="${r.slot.id}" data-cube="${r.cube}"></div>`;
+  return `<details class="it" data-slot="${r.slot.id}"${i===0||r.slot.id===keepOpen?" open":""}><summary><span class="rk">${i+1}</span>
+   <span class="sl">${iconHtml(S.gear[r.slot.id][4])}<span class="slt"><b>${esc(itemName(r.slot))}</b> <span class="meta">Lv. ${r.lvl}${S.gear[r.slot.id][4]?` ${esc(r.slot.name)}`:""}</span><small>${(()=>{const pr=new Set(pools(r.slot.kind,"bright",r.lvl)[0].map(e=>e.c+e.v));return S.gear[r.slot.id].slice(1,4).map(c=>c==="J0"?`<span class="cl"><i class="O">-</i>${esc(lineLabel(c))}</span>`:`<span class="cl"><i class="${pr.has(c)?"L":"U"}">${pr.has(c)?"L":"U"}</i>${esc(lineLabel(c))}</span>`).join("");})()}</small></span></span>
    <span class="tg">${tHtml(b.t)}${tag}</span>
    <span class="num ch">1 in ${fmt(1/b.p)}</span><span class="num c50" data-p="${b.p}"></span><span class="num gn">+${b.gain.toFixed(3)}%</span>
    <span class="bar"><i style="width:${Math.max(3,b.roi/maxRoi*70).toFixed(1)}%"></i><span data-r="${b.roi/1000}"></span></span></summary>
@@ -667,6 +814,7 @@ function renderResults(){
  $("out").innerHTML=pick+head+`<div class="list">${rows}</div>`+tail;
  for(const d of $("out").querySelectorAll("details.it[open]")) fillPresets(d);
  paintNums();
+ if(keepOpen){ const d=$("out").querySelector(`details.it[data-slot="${keepOpen}"]`); keepOpen=null; if(d) d.scrollIntoView({block:"nearest",behavior:"smooth"}); }
 }
 
 /* ---------- steps, state ---------- */
@@ -679,7 +827,7 @@ function go(n){
  window.scrollTo({top:0,behavior:"smooth"});
 }
 const clone=o=>JSON.parse(JSON.stringify(o));
-function fromTemplate(){ const t=clone(TEMPLATE); return {cube:t.cube,ms:t.ms,ss:t.ss,scout:t.scout,gear:t.gear}; }
+function fromTemplate(){ const t=clone(TEMPLATE); return {cube:t.cube,ms:t.ms,ss:t.ss,cls:t.cls,name:t.name,scout:t.scout,gear:t.gear}; }
 function blankScout(){ const o={}; for(const s of SCOUT) o[s.id]=[s.amt,""]; return o; }
 function blankGear(){ const o={}; for(const s of SLOTS) o[s.id]=[0,"J0","J0","J0",""]; return o; }
 function firstVisit(){ const t=fromTemplate(); t.scout=blankScout(); return t; }
@@ -691,32 +839,111 @@ function valid(st){
   const b=(typeof r[2]==="number"&&isFinite(r[2])&&r[2]>0)?r[2]:baseFrom(s.id,a,f); st.scout[s.id]=[a,f,b]; }
  for(const s of SLOTS){
   let g=st.gear[s.id]; if(!Array.isArray(g)||g.length<4) g=bg[s.id];
-  st.gear[s.id]=[parseInt(g[0])||0,...[1,2,3].map(i=>String(g[i]).replace(/[^A-Za-z0-9.]/g,"")||"J0"),({"Eternal Bot":"Eternal Bottom","CRA Bot":"CRA Bottom","Eternal Glove":"Eternal Gloves","Arcane Glove":"Arcane Gloves","Absolab Glove":"Absolab Gloves"})[g[4]]||String(g[4]||"").slice(0,60)];
+  st.gear[s.id]=[parseInt(g[0])||0,...[1,2,3].map(i=>String(g[i]).replace(/[^A-Za-z0-9.]/g,"")||"J0"),({"Seren Emblem":"Mitra's Rage","Eternal Bot":"Eternal Bottom","CRA Bot":"CRA Bottom","Eternal Glove":"Eternal Gloves","Arcane Glove":"Arcane Gloves","Absolab Glove":"Absolab Gloves"})[g[4]]||String(g[4]||"").slice(0,60)];
  }
  if(!["bright","glowing","both"].includes(st.cube)) st.cube="bright";
  if(![.25,.5,.75,.99].includes(+st.q)) st.q=.5; else st.q=+st.q;
  if(st.sort!=="cheap") st.sort="best";
  st.per=Math.min(Math.max(parseInt(st.per)||1000,1),1e9);
  st.r4=!!st.r4||+st.gear.ring4[0]>0;
+ st.name=String(st.name||"").slice(0,30); if(!CLS[st.cls]) st.cls="";
+ if(st.reg!=="eu") st.reg="na";
+ if(st.gear.emblem&&st.gear.emblem[4]==="Class Emblem"&&EMB[st.cls]) st.gear.emblem[4]=EMB[st.cls];
+ const R=st.rank; if(R&&typeof R==="object"&&/^https:\/\/([a-z0-9-]+\.)*nexon\.(net|com)\//i.test(String(R.img||"")))
+  st.rank={region:R.region==="eu"?"eu":"na",name:String(R.name||"").slice(0,13),level:parseInt(R.level)||0,job:String(R.job||"").slice(0,40),world:String(R.world||"").slice(0,20),img:String(R.img),at:+R.at||0};
+ else delete st.rank;
  const ST=["STR","DEX","INT","LUK"]; if(!ST.includes(st.ms)) st.ms="INT"; if(!ST.includes(st.ss)) st.ss="LUK";
  return true;
 }
-function load(){ try{const st=JSON.parse(localStorage.getItem(KEY)); if(valid(st)) return st;}catch(e){} return null; }
-function save(){ try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} }
+// Character pictures come from Nexon's NA/EU rankings, through the maplewordle Worker (Nexon doesn't let browsers ask it directly).
+const RANK_API="https://maplewordle-account.hanayuki.workers.dev/maple";
+const REGION={na:"North America",eu:"Europe"};
+function jobToClass(j){ const k=x=>String(x||"").toLowerCase().replace(/[^a-z]/g,""), t=k(j);
+ if(t.startsWith("archmage")){ if(/fire|fp/.test(t)) return "Arch Mage (Fire, Poison)"; if(/ice|il/.test(t)) return "Arch Mage (Ice, Lightning)"; }
+ return Object.keys(CLS).find(n=>k(n)===t)||""; }
+async function lookupRank(region,name){
+ let r; try{ r=await fetch(`${RANK_API}?region=${region}&name=${encodeURIComponent(name)}`); }catch(e){ return {bad:"Can't reach the MapleStory rankings right now. Try again in a bit."}; }
+ if(r.status===404) return {bad:`Couldn't find ${name} on the ${region.toUpperCase()} rankings. Check the name and region.`};
+ if(r.status===400) return {bad:"Character names are 2 to 13 letters or numbers."};
+ const d=await r.json().catch(()=>null); if(!r.ok||!d||!d.img) return {bad:"Can't reach the MapleStory rankings right now. Try again in a bit."};
+ return {m:{region,name:d.name,level:d.level,job:d.job,world:d.world||"",img:d.img,at:Date.now()}};
+}
+const rkSay=(t,bad)=>{ const m=$("rkMsg"); m.textContent=t; m.classList.toggle("bad",!!bad); };
+async function findRank(){
+ const ign=(S.name||"").trim();
+ if(!ign) { rkSay("Type your character name in Name first.",1); $("charName").focus(); return; }
+ if(!/^[A-Za-z0-9]{2,13}$/.test(ign)) { rkSay("Character names are 2 to 13 letters or numbers.",1); return; }
+ const b=$("rkFind"); b.disabled=true; rkSay("Searching...");
+ const who=DB.cur, r=await lookupRank(S.reg||"na",ign); b.disabled=false;
+ if(DB.cur!==who) return;
+ if(r.bad){ rkSay(r.bad,1); return; }
+ S.rank=r.m; S.name=r.m.name; $("charName").value=S.name; rkSay("");
+ const c=jobToClass(r.m.job); if(c&&c!==S.cls) applyClass(c); else { renderProfiles(); save(); }
+ paintRank();
+}
+function paintRank(){
+ for(const b of document.querySelectorAll("[data-reg]")){ const on=b.dataset.reg===(S.reg||"na"); b.classList.toggle("on",on); b.setAttribute("aria-pressed",on); }
+ const R=S.rank, card=$("rkCard"); card.hidden=!R;
+ card.innerHTML=R?`<img src="${esc(R.img)}" alt="" referrerpolicy="no-referrer"><div><b>${esc(R.name)}</b><span>Lv. ${R.level} ${esc(R.job)}</span><span>${R.world?esc(R.world):REGION[R.region]}</span><button type="button" class="linkbtn" id="rkRm">Remove picture</button></div>`:"";
+ $("pAva").innerHTML=R?`<img src="${esc(R.img)}" alt="" title="${esc(R.name)}" referrerpolicy="no-referrer">`:"";
+}
+async function refreshRank(){ // outfits and levels change in game: look again at most once a day
+ const R=S.rank, who=DB.cur; if(!R||Date.now()-(R.at||0)<864e5) return;
+ const r=await lookupRank(R.region,R.name); if(r.m&&DB.cur===who&&S.rank&&S.rank.name===R.name){ S.rank=r.m; paintRank(); save(); }
+}
+const PKEY="cubeRoi.v3"; let DB;
+const uid=()=>Math.random().toString(36).slice(2,10);
+function loadDB(){
+ try{ const d=JSON.parse(localStorage.getItem(PKEY));
+  if(d&&Array.isArray(d.list)){ d.list=d.list.filter(p=>p&&p.id&&valid(p.state)); if(d.list.length){ if(!d.list.some(p=>p.id===d.cur)) d.cur=d.list[0].id; return d; } } }catch(e){}
+ let st=null; try{ st=JSON.parse(localStorage.getItem(KEY)); if(!valid(st)) st=null; }catch(e){}
+ const id=uid(); return {cur:id,list:[{id,state:st||firstVisit()}]};
+}
+function save(){ const p=DB.list.find(p=>p.id===DB.cur); if(p) p.state=S; try{localStorage.setItem(PKEY,JSON.stringify(DB));}catch(e){} }
+const profLabel=(p,i)=>`${p.state.name||"Character "+(i+1)}${p.state.cls?` (${p.state.cls})`:""}`;
+function renderProfiles(){
+ $("profSel").innerHTML=DB.list.map((p,i)=>`<option value="${p.id}">${esc(profLabel(p,i))}</option>`).join("");
+ $("profSel").value=DB.cur; $("profDel").disabled=DB.list.length<2;
+}
+function fillChar(){ $("charName").value=S.name||""; $("clsSel").value=S.cls||""; }
+function switchTo(id){ if(DB.cur) save(); DB.cur=id; S=DB.list.find(p=>p.id===id).state; valid(S); applyAll(); renderProfiles(); go(missing().length?1:3); }
+function addProfile(st,msg){ valid(st); const id=uid(); DB.list.push({id,state:st}); switchTo(id); if(msg) say(msg); }
+const sameChar=(a,b)=>JSON.stringify([a.name,a.cls,a.ms,a.ss,a.scout,a.gear])===JSON.stringify([b.name,b.cls,b.ms,b.ss,b.scout,b.gear]);
+function addShared(st,msg){
+ valid(st); const dup=DB.list.find(p=>sameChar(p.state,st)); if(dup){ switchTo(dup.id); say(`${st.name||"That character"} is already here. Switched to it.`); return; }
+ const fresh=DB.list.length===1&&!S.name&&missing().length===SCOUT.length&&isTemplateGear();
+ if(fresh){ DB.list=[]; DB.cur=null; } addProfile(st,msg);
+}
 let tm; function changed(){ save(); updateStep1(); $("exNote").style.display=isTemplateGear()?"":"none"; clearTimeout(tm); tm=setTimeout(renderResults,150); }
-function applyAll(){ fillScout(); for(const s of SLOTS) fillSlot(s); paintR4(); save(); updateStep1(); }
+function applyAll(){ fillChar(); paintRank(); refreshRank(); fillScout(); for(const s of SLOTS) fillSlot(s); paintR4(); save(); updateStep1(); }
 function say(t){ $("msg").textContent=t; setTimeout(()=>{if($("msg").textContent===t)$("msg").textContent="";},4500); }
 
-const saved=load();
-S=saved||firstVisit(); valid(S);
-buildScout(); buildGear(); applyAll();
-go(saved&&!missing().length?3:1);
+DB=loadDB(); S=DB.list.find(p=>p.id===DB.cur).state; valid(S);
+$("clsSel").innerHTML='<option value="">Pick class (optional)</option>'+CLASSES.map(([g,l])=>`<optgroup label="${g}">${l.map(([n])=>`<option>${esc(n)}</option>`).join("")}</optgroup>`).join("");
+buildScout(); buildGear(); applyAll(); renderProfiles();
+go(missing().length?1:3);
+$("profSel").addEventListener("change",e=>switchTo(e.target.value));
+$("profNew").addEventListener("click",()=>{ addProfile({cube:S.cube,ms:"INT",ss:"LUK",cls:"",name:"",reg:S.reg,scout:blankScout(),gear:blankGear(),q:S.q,per:S.per,sort:S.sort},"New character added. Fill in its scouter values."); $("charName").focus(); });
+let delT; $("profDel").addEventListener("click",()=>{
+ const b=$("profDel"); if(DB.list.length<2) return;
+ if(!b.classList.contains("sure")){ b.classList.add("sure"); b.textContent="Click again to delete"; clearTimeout(delT); delT=setTimeout(()=>{b.classList.remove("sure");b.textContent="Delete";},3000); return; }
+ b.classList.remove("sure"); b.textContent="Delete";
+ const i=DB.list.findIndex(p=>p.id===DB.cur), gone=profLabel(DB.list[i],i); DB.list.splice(i,1); DB.cur=DB.list[Math.max(0,i-1)].id;
+ S=DB.list.find(p=>p.id===DB.cur).state; valid(S); applyAll(); renderProfiles(); go(missing().length?1:3); say(`Deleted ${gone}.`);
+});
+$("charName").addEventListener("input",e=>{ S.name=e.target.value.slice(0,30); save(); renderProfiles(); renderResults(); });
+function applyClass(nc){ setClass(nc); $("clsSel").value=S.cls||""; const st=clsStats(S.cls); if(st){ [S.ms,S.ss]=st; $("msSel").value=S.ms; $("ssSel").value=S.ss; }
+ for(const s of SLOTS) fillSlot(s); renderProfiles(); changed(); }
+$("clsSel").addEventListener("change",e=>applyClass(e.target.value));
+for(const b of document.querySelectorAll("[data-reg]")) b.addEventListener("click",()=>{ S.reg=b.dataset.reg; paintRank(); save(); });
+$("rkFind").addEventListener("click",findRank);
+$("rkCard").addEventListener("click",e=>{ if(e.target.closest("#rkRm")){ delete S.rank; paintRank(); save(); rkSay(""); } });
 
 for(const [id,k] of [["msSel","ms"],["ssSel","ss"]]) $(id).addEventListener("change",e=>{S[k]=e.target.value;for(const s of SLOTS) fillSlot(s);changed();});
 for(const b of document.querySelectorAll("[data-go]")) b.addEventListener("click",()=>go(+b.dataset.go));
 $("next1").addEventListener("click",()=>go(2));
 for(const b of document.querySelectorAll("[data-cube]")) b.addEventListener("click",()=>{S.cube=b.dataset.cube;paintCube();changed();});
-$("bTemplate").addEventListener("click",()=>{S.gear=clone(TEMPLATE.gear);S.r4=false;applyAll();$("exNote").style.display="";say("Example gear loaded.");});
+$("bTemplate").addEventListener("click",()=>{S.gear=clone(TEMPLATE.gear);S.r4=false;if(!S.cls){S.cls="Kanna";fillChar();}applyAll();$("exNote").style.display="";say("Example gear loaded.");});
 $("bReset").addEventListener("click",()=>{S.gear=blankGear();S.r4=false;applyAll();$("exNote").style.display="none";say("Gear cleared. Pick your items and lines.");});
 
 const enc=st=>btoa(unescape(encodeURIComponent(JSON.stringify(st)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
@@ -728,12 +955,12 @@ $("bCopy").addEventListener("click",async()=>{
 });
 $("bPaste").addEventListener("click",()=>{$("codebox").classList.toggle("on");$("codeIn").value="";$("msg2").textContent="";$("codeIn").focus();});
 $("bLoadCode").addEventListener("click",()=>{
- try{const st=dec($("codeIn").value); if(!valid(st)) throw 0; S=st; applyAll(); $("codebox").classList.remove("on"); go(3); say("Gear loaded.");}
+ try{const st=dec($("codeIn").value); if(!valid(st)) throw 0; $("codebox").classList.remove("on"); addShared(st,`Added ${st.name||"the shared character"} as a new character.`);}
  catch(e){$("msg2").textContent="That didn't work. Check you copied all of it.";}
 });
 function fromHash(){
  if(!location.hash.startsWith("#g=")) return;
- try{const st=dec(location.hash); if(valid(st)){S=st; applyAll(); go(3); say("Loaded gear from the link. Your changes save in this browser.");}}catch(e){}
+ try{const st=dec(location.hash); if(valid(st)){ if(!st.name) st.name="Shared character"; addShared(st,`Added ${st.name} from the link. Switch characters at the top.`);} }catch(e){}
  try{history.replaceState(null,"",location.href.split("#")[0]);}catch(e){}
 }
 fromHash(); addEventListener("hashchange",fromHash);
@@ -743,6 +970,12 @@ $("out").addEventListener("click",e=>{const b=e.target.closest("[data-sort]");if
 $("out").addEventListener("change",e=>{
  if(e.target.id==="qSel"){ S.q=+e.target.value; save(); paintNums(); }
  if(e.target.id==="perIn"){ e.target.value=fmt(S.per).replace(/,/g,""); }
+});
+$("out").addEventListener("change",e=>{ const box=e.target.closest(".try"); if(box) paintTry(box); });
+$("out").addEventListener("click",e=>{
+ const b=e.target.closest(".trysave"); if(!b) return; const box=b.closest(".try"), s=SID[box.dataset.slot];
+ const codes=[...box.querySelectorAll("select")].map(x=>x.value); for(let i=0;i<3;i++) S.gear[s.id][i+1]=codes[i];
+ fillSlot(s); save(); keepOpen=s.id; renderResults(); say(`${itemName(s)} updated.`);
 });
 $("out").addEventListener("input",e=>{
  if(e.target.id==="perIn"){ const n=parseInt(e.target.value.replace(/[^0-9]/g,"")); if(n>0){ S.per=Math.min(n,1e9); save(); paintNums(); } }
@@ -757,7 +990,7 @@ $("out").addEventListener("click",e=>{
  $("cfTitle").textContent=`Update ${itemName(s)}?`;
  const blanks=codes.filter(c=>c==="J0").length;
  $("cfLines").innerHTML=showOrder(codes.filter(c=>c!=="J0")).map(c=>`<span><i class="${prime.has(c)?"L":"U"}">${prime.has(c)?"L":"U"}</i>${esc(lineLabel(c))}</span>`).join("")+`<span class="muted"><i class="O">-</i>Other potential</span>`.repeat(blanks);
- $("cfNote").textContent=blanks?"\"Not selected\" potentials are saved as Other potential. Rolled something good there? Change it in step 2.":"";
+ $("cfNote").textContent=blanks?"\"Not selected\" potentials are saved as Other potential. Rolled something good there? Set it in Try other potentials.":"";
  cf.hidden=false; document.body.style.overflow="hidden"; $("cfYes").focus();
 });
 $("cfNo").addEventListener("click",closeCf);
@@ -766,7 +999,7 @@ addEventListener("keydown",e=>{if(e.key==="Escape"&&!cf.hidden) closeCf();});
 $("cfYes").addEventListener("click",()=>{
  if(!cfPick) return; const {s,codes}=cfPick;
  for(let i=0;i<3;i++) S.gear[s.id][i+1]=codes[i];
- fillSlot(s); save(); closeCf(); renderResults(); say(`${itemName(s)} updated.`);
+ fillSlot(s); save(); closeCf(); keepOpen=s.id; renderResults(); say(`${itemName(s)} updated.`);
 });
 const wm=$("whereModal");
 const closeWhere=()=>{wm.hidden=true;document.body.style.overflow="";$("whereBtn").focus();};
