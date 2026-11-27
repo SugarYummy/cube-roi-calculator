@@ -134,6 +134,7 @@ table.sc{width:100%;border-collapse:collapse}
 .cdi label{display:flex;align-items:center;gap:7px;font-weight:600;white-space:nowrap;cursor:pointer;min-width:52px}.cdi input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent);margin:0}
 .cdi input.cdv{flex:1;min-width:0;padding:6px 8px;font-size:15px}.cdi input.cdv.off{opacity:.45}
 @media(max-width:600px){.cdgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.rtools label[hidden]{display:none}
 .combo{position:relative;display:block}.combo input{width:250px;padding-right:28px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%2398a3b6' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:12px 8px}
 .combo ul{position:absolute;z-index:30;left:0;top:calc(100% + 4px);min-width:100%;width:max-content;max-width:min(320px,90vw);max-height:340px;overflow:auto;margin:0;padding:4px;list-style:none;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.35);font-weight:400}
 .combo li{padding:7px 10px;border-radius:7px;cursor:pointer;white-space:nowrap}
@@ -344,6 +345,7 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
 
  <footer>
   <div><b>FD gain</b> = how much Final Damage you gain.</div>
+  <div><b>FD per X cubes</b> = average FD you gain for every X cubes you use. Higher is better.</div>
   <div><b>Cubes per 1% FD</b> = the average price of 1% Final Damage, in cubes. Lower is better. It's a price to compare items, so the item doesn't need to give a full 1%: +0.5% at 1 in 400 costs 800 cubes per 1% FD.</div>
   <div><b>Cube rates</b> from <a href="https://brendonmay.github.io/cubingCalculator/">brendonmay's cubing calculator</a>.</div>
  </footer>
@@ -799,15 +801,19 @@ function presetHtml(slot,cube,P){
    <span class="pn">${k+1}${k===0?' <em>Recommended</em>':""}</span>
    ${showOrder(x.pos.filter(c=>c!=="J0")).map(c=>{const L=ps.prime.has(c);return `<span class="pl"><i class="${L?"L":"U"}">${L?"L":"U"}</i>${esc(lineLabel(c))}</span>`;}).join("")}${anyLine.repeat(x.pos.filter(c=>c==="J0").length)}
    <span class="pm">1 in ${fmt(1/x.p)} · <b>+${x.gain.toFixed(3)}%</b></span></button>`).join("")}</div>
-  <div class="note" style="margin-top:6px">With ${ps.picked.length>1?`all ${ps.picked.length}`:"this"}: 1 in ${fmt(1/ps.up)} per cube, about <span data-p="${ps.up}"></span> cubes for <span class="qlab"></span>, <span data-r="${ps.roi/1000}"></span> cubes per 1% FD.</div>`;
+  <div class="note" style="margin-top:6px">With ${ps.picked.length>1?`all ${ps.picked.length}`:"this"}: 1 in ${fmt(1/ps.up)} per cube, about <span data-p="${ps.up}"></span> cubes for <span class="qlab"></span>, <span data-r="${ps.roi/1000}"></span> <span class="mnote"></span>.</div>`;
 }
 const fdFmt=v=>v>=100?v.toFixed(0):v>=1?v.toFixed(2):v>=0.001?v.toFixed(3):v>0?v.toPrecision(2):"0";
 function paintNums(root){
  root=root||$("out");
  for(const e of root.querySelectorAll("[data-p]")) e.textContent=fmt(cubesFor(+e.dataset.p,S.q));
- for(const e of root.querySelectorAll("[data-r]")){ const r=+e.dataset.r; e.textContent=r>0?short(Math.max(1,Math.round(1/r))):"–"; }
+ const cost=S.metric==="cost";   // FD per N cubes, or the flipped view: cubes per 1% FD (a price)
+ for(const e of root.querySelectorAll("[data-r]")){ const r=+e.dataset.r; e.textContent=cost?(r>0?short(Math.max(1,Math.round(1/r))):"–"):fdFmt(r*S.per); }
+ for(const e of root.querySelectorAll(".mlab")) e.textContent=cost?"Cubes per 1% FD":`FD per ${fmt(S.per)} cubes`;
+ for(const e of root.querySelectorAll(".mlabs")) e.textContent=cost?"Cubes per 1% FD":`FD per ${fmt(S.per)}`;
+ for(const e of root.querySelectorAll(".mnote")) e.textContent=cost?"cubes per 1% FD":`FD per ${fmt(S.per)} cubes`;
  for(const e of root.querySelectorAll(".qlab")) e.textContent=`${Math.round(S.q*100)}%`;
- for(const e of root.querySelectorAll('td[data-l="FD per cubes"]')) e.dataset.lab="Per 1% FD";
+ for(const e of root.querySelectorAll('td[data-l="FD per cubes"]')) e.dataset.lab=cost?"Per 1% FD":`FD / ${fmt(S.per)}`;
 }
 function tryHtml(slot){
  const g=S.gear[slot.id], lvl=optLvl(+g[0]||0);
@@ -942,11 +948,12 @@ function renderResults(){
  const pick=`<div class="top"><div class="pick"><div class="k">${S.sort==="cheap"?"Cheapest upgrade right now":"Best value right now"}${both?` (${CUBE[top.cube]})`:""}</div>
   <div class="pbody">${iconHtml(S.gear[top.slot.id][4],1)}<div><div class="big">${esc(itemName(top.slot))}</div><div class="ptg">${tHtml(tb.t)}</div>
   <div class="stats"><span><b>1 in ${fmt(1/tb.p)}</b>chance per ${SHORT[top.cube]} cube</span><span><b data-p="${tb.p}"></b>cubes for <span class="qlab"></span></span><span class="g"><b>+${tb.gain.toFixed(3)}%</b>Final Damage</span></div></div></div></div></div>`;
- const head=`<div class="rtools"><div class="seg" role="group" aria-label="Sort by"><button type="button" data-sort="best"${S.sort!=="cheap"?' class="on" aria-pressed="true"':' aria-pressed="false"'}>Best FD per cube</button><button type="button" data-sort="cheap"${S.sort==="cheap"?' class="on" aria-pressed="true"':' aria-pressed="false"'}>Fewest cubes</button></div><label>Show cubes for a <select id="qSel" aria-label="Chance to hit">${[25,50,75,99].map(q=>`<option value="${q/100}"${Math.abs(S.q-q/100)<1e-9?" selected":""}>${q}%</option>`).join("")}</select> chance</label></div>
-  <div class="hd"><span>#</span><span>Item and current potentials</span><span>${S.sort==="cheap"?"Cheapest target":"Best target"}</span><span>Chance</span><span><span class="qlab"></span> cubes</span><span>FD gain</span><span>Cubes per 1% FD</span></div>`;
+ const head=`<div class="rtools"><div class="seg" role="group" aria-label="Sort by"><button type="button" data-sort="best"${S.sort!=="cheap"?' class="on" aria-pressed="true"':' aria-pressed="false"'}>Best FD per cube</button><button type="button" data-sort="cheap"${S.sort==="cheap"?' class="on" aria-pressed="true"':' aria-pressed="false"'}>Fewest cubes</button></div><label>Show cubes for a <select id="qSel" aria-label="Chance to hit">${[25,50,75,99].map(q=>`<option value="${q/100}"${Math.abs(S.q-q/100)<1e-9?" selected":""}>${q}%</option>`).join("")}</select> chance</label><div class="seg" role="group" aria-label="Show">${[["fd","FD per cubes"],["cost","Cubes per 1% FD"]].map(([k,t])=>`<button type="button" data-metric="${k}"${S.metric===k?' class="on" aria-pressed="true"':' aria-pressed="false"'}>${t}</button>`).join("")}</div>
+  <label${S.metric==="cost"?" hidden":""}>Show FD per <input id="perIn" inputmode="numeric" value="${S.per}" aria-label="Number of cubes"> cubes</label></div>
+  <div class="hd"><span>#</span><span>Item and current potentials</span><span>${S.sort==="cheap"?"Cheapest target":"Best target"}</span><span>Chance</span><span><span class="qlab"></span> cubes</span><span>FD gain</span><span class="mlab"></span></div>`;
  const tbl=x=>{const b=pickT(x);return `<div style="margin-top:${both?10:0}px">${both?`<b style="color:var(--fg)">${CUBE[x.cube]}</b>`:""}
    <div style="overflow-x:auto"><table class="tt"><colgroup><col class="c-t"><col class="c-c"><col class="c-q"><col class="c-q"><col class="c-q"><col class="c-q"><col class="c-g"><col class="c-r"></colgroup>
-   <thead><tr><th>Target</th><th class="n">Chance</th><th class="n q">25% cubes</th><th class="n q">50% cubes</th><th class="n q">75% cubes</th><th class="n q">99% cubes</th><th class="n">FD gain</th><th class="n">Cubes per 1% FD</th></tr></thead><tbody>${x.targets.map(t=>`<tr${t===b?' class="best"':''}><td class="tgt">${tHtml(t.t)}</td><td class="n" data-l="Chance">1 in ${fmt(1/t.p)}</td>${[.25,.5,.75,.99].map(q=>`<td class="n q" data-l="${q*100}% cubes">${short(cubesFor(t.p,q))}</td>`).join("")}<td class="n" data-l="FD gain">+${t.gain.toFixed(3)}%</td><td class="n" data-l="FD per cubes" data-r="${t.roi/1000}"></td></tr>`).join("")}</tbody></table></div></div>`;};
+   <thead><tr><th>Target</th><th class="n">Chance</th><th class="n q">25% cubes</th><th class="n q">50% cubes</th><th class="n q">75% cubes</th><th class="n q">99% cubes</th><th class="n">FD gain</th><th class="n mlabs"></th></tr></thead><tbody>${x.targets.map(t=>`<tr${t===b?' class="best"':''}><td class="tgt">${tHtml(t.t)}</td><td class="n" data-l="Chance">1 in ${fmt(1/t.p)}</td>${[.25,.5,.75,.99].map(q=>`<td class="n q" data-l="${q*100}% cubes">${short(cubesFor(t.p,q))}</td>`).join("")}<td class="n" data-l="FD gain">+${t.gain.toFixed(3)}%</td><td class="n" data-l="FD per cubes" data-r="${t.roi/1000}"></td></tr>`).join("")}</tbody></table></div></div>`;};
  const rows=ok.map((r,i)=>{
   const b=pickT(r), now=S.gear[r.slot.id].slice(1,4).map(lineLabel).join(", ");
   const other=both?r.per.find(x=>x!==r.per.find(y=>y.cube===r.cube)):null;
@@ -992,6 +999,7 @@ function valid(st){
  if(!["bright","glowing","both"].includes(st.cube)) st.cube="bright";
  if(![.25,.5,.75,.99].includes(+st.q)) st.q=.5; else st.q=+st.q;
  if(st.sort!=="cheap") st.sort="best";
+ if(st.metric!=="cost") st.metric="fd";
  st.per=Math.min(Math.max(parseInt(st.per)||1000,1),1e9);
  st.r4=!!st.r4||+st.gear.ring4[0]>0;
  st.name=String(st.name||"").slice(0,30); if(!CLS[st.cls]) st.cls="";
@@ -1076,7 +1084,7 @@ DB=loadDB(); S=DB.list.find(p=>p.id===DB.cur).state; valid(S);
 buildScout(); buildGear(); applyAll(); renderProfiles();
 go(missing().length?1:3);
 $("profSel").addEventListener("change",e=>switchTo(e.target.value));
-$("profNew").addEventListener("click",()=>{ addProfile({cube:S.cube,ms:"INT",ss:"LUK",cls:"",name:"",reg:S.reg,scout:blankScout(),gear:blankGear(),q:S.q,per:S.per,sort:S.sort},"New character added. Fill in its scouter values."); $("charName").focus(); });
+$("profNew").addEventListener("click",()=>{ addProfile({cube:S.cube,ms:"INT",ss:"LUK",cls:"",name:"",reg:S.reg,scout:blankScout(),gear:blankGear(),q:S.q,per:S.per,sort:S.sort,metric:S.metric},"New character added. Fill in its scouter values."); $("charName").focus(); });
 let delT; $("profDel").addEventListener("click",()=>{
  const b=$("profDel"); if(DB.list.length<2) return;
  if(!b.classList.contains("sure")){ b.classList.add("sure"); b.textContent="Click again to delete"; clearTimeout(delT); delT=setTimeout(()=>{b.classList.remove("sure");b.textContent="Delete";},3000); return; }
@@ -1145,6 +1153,7 @@ fromHash(); addEventListener("hashchange",fromHash);
 const root=document.documentElement;
 try{const t=localStorage.getItem("cubeRoi.theme"); if(t) root.dataset.theme=t;}catch(e){}
 $("out").addEventListener("click",e=>{const b=e.target.closest("[data-sort]");if(!b)return;S.sort=b.dataset.sort;save();renderResults();});
+$("out").addEventListener("click",e=>{const b=e.target.closest("[data-metric]");if(!b)return;S.metric=b.dataset.metric;save();renderResults();});
 $("out").addEventListener("change",e=>{
  if(e.target.id==="qSel"){ S.q=+e.target.value; save(); paintNums(); }
  if(e.target.id==="perIn"){ e.target.value=fmt(S.per).replace(/,/g,""); }
