@@ -369,9 +369,11 @@ const ICONS={"Endless Terror":["Endless_Terror"],"Dawn Guardian Angel Ring":["Da
  "Source of Suffering":["Source_of_Suffering"],"Superior Gollux Pendant":["Superior_Engraved_Gollux_Pendant"],"Daybreak Pendant":["Daybreak_Pendant"],"Dominator Pendant":["Dominator_Pendant"],
  "Reinforced Gollux Pendant":["Reinforced_Engraved_Gollux_Pendant"],"Chaos Horntail Necklace":["Chaos_Horntail_Necklace"],"Mechanator Pendant":["Mechanator_Pendant"],
  "Magic Eyepatch":["Magic_Eyepatch"],"Papulatus Mark":["Papulatus_Mark"],"Black Bean Mark":["Black_Bean_Mark"],"Berserked":["Berserked"],"Twilight Mark":["Twilight_Mark"],"Condensed Power Crystal":["Condensed_Power_Crystal"],
- "Commanding Force Earring":["Commanding_Force_Earring"],"Estella Earrings":["Estella_Earrings"],"Superior Gollux Earrings":["Superior_Gollux_Earrings"],"Meister Earrings":["Meister_Earrings","Meister_Earring"],
+ "Commanding Force Earring":["Commanding_Force_Earring"],"Estella Earrings":["Estella_Earrings"],"Superior Gollux Earrings":["Superior_Gollux_Earrings"],"Meister Earring":["Meister_Earring"],
  "Reinforced Gollux Earrings":["Reinforced_Gollux_Earrings"],"Dreamy Belt":["Dreamy_Belt"],"Superior Gollux Belt":["Superior_Engraved_Gollux_Belt"],
  "Total Control":["Total_Control"],"Plasma Heart":["Plasma_Heart"],"Fairy Heart":["Fairy_Heart"],"Ghost Ship Exorcist":["Ghost_Ship_Exorcist"],"Sengoku Hakase":["Sengoku_Hakase_Badge"]};
+// Brilliant Boss Set (Lv 250)
+for(const n of ["Whisper of the Source","Blissful Nightmare","Oath of Death","Sanguinary Spirit","Original Sin of Pride"]) ICONS[n]=[n.replace(/ /g,"_")];
 const ICON_BASE="https://media.maplestorywiki.net/yetidb/Eqp_";
 // armor names per job, as the wiki writes them: [Eternal word, Arcane Umbra word, AbsoLab word, AbsoLab hat, CRA hat/top/bottom]
 const ARM={Warrior:["Knight","Knight","Knight","AbsoLab Knight Helm",["Royal Warrior Helm","Eagle Eye Warrior Armor","Trixter Warrior Pants"]],
@@ -527,11 +529,11 @@ function setClass(nc){
 }
 const SID = Object.fromEntries(SLOTS.map(s=>[s.id,s]));
 const ITEMS = {
- ring:[["Endless Terror",200],["Dawn Guardian Angel Ring",160],["Guardian Angel Ring",160],["Superior Gollux Ring",150],["Meister Ring",140],["Reinforced Gollux Ring",140],["Kanna's Treasure",140],["Solid Gollux Ring",130]],
- pendant:[["Source of Suffering",160],["Superior Gollux Pendant",150],["Daybreak Pendant",140],["Dominator Pendant",140],["Reinforced Gollux Pendant",140],["Chaos Horntail Necklace",120],["Mechanator Pendant",120]],
- eye:[["Magic Eyepatch",160],["Papulatus Mark",145],["Black Bean Mark",135]],
- face:[["Berserked",160],["Twilight Mark",140],["Condensed Power Crystal",110]],
- earring:[["Commanding Force Earring",200],["Estella Earrings",160],["Superior Gollux Earrings",150],["Meister Earrings",140],["Reinforced Gollux Earrings",140]],
+ ring:[["Whisper of the Source",250],["Blissful Nightmare",250],["Endless Terror",200],["Dawn Guardian Angel Ring",160],["Guardian Angel Ring",160],["Superior Gollux Ring",150],["Meister Ring",140],["Reinforced Gollux Ring",140],["Kanna's Treasure",140],["Solid Gollux Ring",130]],
+ pendant:[["Oath of Death",250],["Source of Suffering",160],["Superior Gollux Pendant",150],["Daybreak Pendant",140],["Dominator Pendant",140],["Reinforced Gollux Pendant",140],["Chaos Horntail Necklace",120],["Mechanator Pendant",120]],
+ eye:[["Sanguinary Spirit",250],["Magic Eyepatch",160],["Papulatus Mark",145],["Black Bean Mark",135]],
+ face:[["Original Sin of Pride",250],["Berserked",160],["Twilight Mark",140],["Condensed Power Crystal",110]],
+ earring:[["Commanding Force Earring",200],["Estella Earrings",160],["Superior Gollux Earrings",150],["Meister Earring",140],["Reinforced Gollux Earrings",140]],
  belt:[["Dreamy Belt",200],["Superior Gollux Belt",150]],
  weapon:[["Destiny Weapon",250],["Genesis Weapon",200]],
  secondary:[["Astra Secondary",200,"astra"],["Deimos Shield",130,"shield"],["Princess No Secondary",140,"pno"],["Class Secondary",100,"lv100"],["Frozen Secondary",100,"frozen"]],
@@ -947,7 +949,7 @@ function valid(st){
   const b=(typeof r[2]==="number"&&isFinite(r[2])&&r[2]>0)?r[2]:baseFrom(s.id,a,f); st.scout[s.id]=[a,f,b]; }
  for(const s of SLOTS){
   let g=st.gear[s.id]; if(!Array.isArray(g)||g.length<4) g=bg[s.id];
-  st.gear[s.id]=[parseInt(g[0])||0,...[1,2,3].map(i=>String(g[i]).replace(/[^A-Za-z0-9.]/g,"")||"J0"),({"Seren Emblem":"Mitra's Rage","Eternal Bot":"Eternal Bottom","CRA Bot":"CRA Bottom","Eternal Glove":"Eternal Gloves","Arcane Glove":"Arcane Gloves","Absolab Glove":"Absolab Gloves"})[g[4]]||String(g[4]||"").slice(0,60)];
+  st.gear[s.id]=[parseInt(g[0])||0,...[1,2,3].map(i=>String(g[i]).replace(/[^A-Za-z0-9.]/g,"")||"J0"),({"Seren Emblem":"Mitra's Rage","Meister Earrings":"Meister Earring","Eternal Bot":"Eternal Bottom","CRA Bot":"CRA Bottom","Eternal Glove":"Eternal Gloves","Arcane Glove":"Arcane Gloves","Absolab Glove":"Absolab Gloves"})[g[4]]||String(g[4]||"").slice(0,60)];
  }
  if(!["bright","glowing","both"].includes(st.cube)) st.cube="bright";
  if(![.25,.5,.75,.99].includes(+st.q)) st.q=.5; else st.q=+st.q;
