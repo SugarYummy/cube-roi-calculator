@@ -595,7 +595,7 @@ const TEMPLATE = {cube:"bright",ms:"INT",ss:"LUK",cls:"Kanna",name:"",
   emblem:[200,"T13","T10","T10","Mitra's Rage"],hat:[250,"S13","S10","S13","Eternal Mage Hat"],top:[250,"S13","S10","S10","Eternal Mage Robe"],bottom:[250,"S13","S10","S10","Eternal Mage Pants"],
   shoulder:[250,"S13","S10","S10","Eternal Mage Shoulder"],cape:[250,"S13","S10","S10","Eternal Mage Cape"],gloves:[250,"C8","C8","A7","Eternal Mage Gloves"],shoes:[250,"S13","S13","S10","Eternal Mage Shoes"],
   heart:[200,"S13","S13","S10","Total Control"],badge:[150,"S12","S9","S9","Ghost Ship Exorcist"]}};
-const ORDER = "TSAQCBIDsFf";
+const ORDER = "TQSACBIDsFf";
 const MAXC = {xd:1,xt:1,I:3,B:3,xr:3,xi:2,xv:2};
 const ADJ = new Set(["S","s","A","T"]);
 const KEY = "cubeRoi.v2";
@@ -704,9 +704,9 @@ function tParts(t){
  const parts=[];
  if(t.K) parts.push(`${t.K*8}%+ Crit Damage`);
  if(t.A) parts.push(`${t.A}%+ ${ATTN()}`);
+ if(t.Q) parts.push(`Cooldown -${t.Q}s+`);
  if(t.S) parts.push(`${t.S}%+ ${MSN()}`);
  if(t.B) parts.push(`${t.B}%+ Boss Damage`);
- if(t.Q) parts.push(`Cooldown -${t.Q}s+`);
  return parts;
 }
 const tHtml=t=>tParts(t).map(x=>`<span class="tl">${esc(x)}</span>`).join("");
@@ -738,8 +738,9 @@ function analyze(slot,P,cube){
 const itemName = s=>S.gear[s.id][4]||s.name;
 const pickT=r=>r&&(S.sort==="cheap"?r.cheap:r.best);
 const score=t=>S.sort==="cheap"?t.p:t.roi;
-const PRI={T:0,C:1,B:2,D:3,I:4,S:5,A:6,Q:6.5,s:7,F:8,f:9};
-const showOrder=codes=>[...codes].sort((a,b)=>{const[ca,va]=parse(a),[cb,vb]=parse(b);return (PRI[ca]??9)-(PRI[cb]??9)||vb-va;});
+const PRI={T:0,C:1,B:2,D:3,I:4,Q:4.5,S:5,A:6,s:7,F:8,f:9};
+// Legendary lines first, then Unique; inside each: cooldown, then stats, highest first
+const showOrder=(codes,prime)=>[...codes].sort((a,b)=>{const[ca,va]=parse(a),[cb,vb]=parse(b);return (prime?(prime.has(b)-prime.has(a)):0)||(PRI[ca]??9)-(PRI[cb]??9)||vb-va;});
 const USEFUL=new Set(["S","s","A","T","B","I","C","D","F","f","Q"]);
 /* in-game target counts totals per stat, in any order: 13/10/10 Magic ATT = Magic ATT 33%+,
    13 ATT/Boss 30/10 ATT = ATT 23%+ and Boss 30%+. All Stats also counts toward INT (or LUK) */
@@ -799,7 +800,7 @@ function presetHtml(slot,cube,P){
   ${["weapon","secondary","emblem"].includes(slot.kind)?`<div class="cpwarn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.5"/></svg><span><b>Turn OFF Stop Upon Combat Power Increase!</b> ${slot.kind==="emblem"?"Damage raises Combat Power way more than it's worth":"Boss and Damage raise Combat Power way more than they're worth"}, so it will stop on bad potentials.</span></div>`:""}
   <div class="pgrid">${ps.picked.map((x,k)=>`<button type="button" class="preset" data-slot="${slot.id}" data-codes="${x.pos.join(",")}">
    <span class="pn">${k+1}${k===0?' <em>Recommended</em>':""}</span>
-   ${showOrder(x.pos.filter(c=>c!=="J0")).map(c=>{const L=ps.prime.has(c);return `<span class="pl"><i class="${L?"L":"U"}">${L?"L":"U"}</i>${esc(lineLabel(c))}</span>`;}).join("")}${anyLine.repeat(x.pos.filter(c=>c==="J0").length)}
+   ${showOrder(x.pos.filter(c=>c!=="J0"),ps.prime).map(c=>{const L=ps.prime.has(c);return `<span class="pl"><i class="${L?"L":"U"}">${L?"L":"U"}</i>${esc(lineLabel(c))}</span>`;}).join("")}${anyLine.repeat(x.pos.filter(c=>c==="J0").length)}
    <span class="pm">1 in ${fmt(1/x.p)} · <b>+${x.gain.toFixed(3)}%</b></span></button>`).join("")}</div>
   <div class="note" style="margin-top:6px">With ${ps.picked.length>1?`all ${ps.picked.length}`:"this"}: 1 in ${fmt(1/ps.up)} per cube, about <span data-p="${ps.up}"></span> cubes for <span class="qlab"></span>, <span data-r="${ps.roi/1000}"></span> <span class="mnote"></span>.</div>`;
 }
@@ -1176,7 +1177,7 @@ $("out").addEventListener("click",e=>{
  const prime=new Set(pools(s.kind,"bright",+S.gear[s.id][0]||0)[0].map(x=>x.c+x.v));
  $("cfTitle").textContent=`Update ${itemName(s)}?`;
  const blanks=codes.filter(c=>c==="J0").length;
- $("cfLines").innerHTML=showOrder(codes.filter(c=>c!=="J0")).map(c=>`<span><i class="${prime.has(c)?"L":"U"}">${prime.has(c)?"L":"U"}</i>${esc(lineLabel(c))}</span>`).join("")+`<span class="muted"><i class="O">-</i>Other potential</span>`.repeat(blanks);
+ $("cfLines").innerHTML=showOrder(codes.filter(c=>c!=="J0"),prime).map(c=>`<span><i class="${prime.has(c)?"L":"U"}">${prime.has(c)?"L":"U"}</i>${esc(lineLabel(c))}</span>`).join("")+`<span class="muted"><i class="O">-</i>Other potential</span>`.repeat(blanks);
  $("cfNote").textContent=blanks?"\"Not selected\" potentials are saved as Other potential. Rolled something good there? Set it in Try other potentials.":"";
  cf.hidden=false; document.body.style.overflow="hidden"; $("cfYes").focus();
 });
