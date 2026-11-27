@@ -68,7 +68,7 @@ a{color:var(--accent)}
 /* auto-reroll presets */
 .presets{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:2px 0 10px}
 .ph b{color:var(--fg);display:block;font-size:14px}.ph span{font-size:12px}
-.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-top:8px}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-top:8px}
 .preset{display:grid;gap:4px;text-align:left;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:8px 10px;color:var(--fg);font-size:13px}
 .preset:hover{border-color:var(--accent)}
 .preset .pn{font:700 12px var(--display);color:var(--muted)}.preset .pn em{font-style:normal;color:var(--accent);margin-left:4px}
@@ -78,6 +78,9 @@ i.L{background:#8bd448}i.U{background:#f2b632}
 .preset .pm{color:var(--muted);font-size:12px}.preset .pm b{color:var(--good);font-weight:600}
 .cflines{display:grid;gap:6px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
 .cflines span{display:flex;align-items:center;gap:8px}
+.cpwarn{display:flex;gap:10px;align-items:flex-start;margin-top:8px;padding:10px 12px;border-radius:8px;background:color-mix(in oklab,#e0484d 16%,var(--sunk));border:1px solid color-mix(in oklab,#e0484d 60%,var(--line));color:var(--fg);font-size:14px}
+.cpwarn svg{width:20px;height:20px;flex:none;color:#ff6b6f;margin-top:1px}.cpwarn b{color:#ff8a8d}
+:root[data-theme="light"] .cpwarn b{color:#c62828}:root[data-theme="light"] .cpwarn svg{color:#c62828}
 /* popup */
 .modal{position:fixed;inset:0;z-index:50;background:rgba(5,8,14,.72);display:flex;align-items:center;justify-content:center;padding:16px}
 .modal[hidden]{display:none}
@@ -113,11 +116,12 @@ select.J{color:var(--muted)}
 .gr.empty{border-style:dashed}
 .gr .sn small.wn{color:var(--warn)}.gr .sn small.wn:empty{display:none}
 /* step 3 results */
-.top{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:12px;margin:0 0 16px}
+.top{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin:0 0 16px}
 .pick{background:var(--sunk);border:1px solid var(--accent);border-radius:10px;padding:14px 16px 14px 20px;position:relative;overflow:hidden;box-shadow:0 0 18px color-mix(in oklab,var(--accent) 22%,transparent)}
 .pick::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--accent)}
 .pick .k{color:var(--accent);font-weight:600;font-size:13px}
-.pick .big{font:700 clamp(24px,3.4vw,34px)/1.1 var(--display);letter-spacing:-.02em;margin:4px 0 10px}
+.pick .big{font:700 clamp(24px,3.4vw,34px)/1.1 var(--display);letter-spacing:-.02em;margin:4px 0 4px}
+.pick .ptg{font:600 17px/1.4 var(--display);margin-bottom:10px}.tl{display:block}
 .pick .stats{display:flex;flex-wrap:wrap;gap:6px 22px;color:var(--muted);font-size:13px}
 .pick .stats b{color:var(--fg);font:700 20px var(--display);display:block;white-space:nowrap;font-variant-numeric:tabular-nums}
 .pick .stats .g b{color:var(--good)}
@@ -145,6 +149,11 @@ details.it[open]{border-color:var(--accent)}
 .dt th,.dt td{padding:6px 8px;border-bottom:1px solid var(--line)}
 .dt .n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
 .dt tr.best td{color:var(--accent);font-weight:600}
+.ttcap{font-size:12px;color:var(--muted);margin-top:10px}
+.dt table.tt{width:auto;table-layout:fixed;margin-top:4px}
+.tt col.c-t{width:220px}.tt col.c-c{width:130px}.tt col.c-q{width:76px}.tt col.c-g{width:96px}.tt col.c-r{width:90px}
+.tt th.q{color:var(--muted)}.tt td.q{color:var(--muted)}.tt tr.best td.q{color:var(--accent)}
+.tt td,.tt th{vertical-align:middle}
 .maxed{color:var(--muted);font-size:13px;margin-top:12px}
 .seg{display:flex;gap:2px;padding:2px;border:1px solid var(--line);border-radius:9px;background:var(--sunk)}
 .seg button{border:0;background:transparent;border-radius:7px;padding:6px 12px;min-height:34px;font-weight:600;font-size:14px;color:var(--muted)}
@@ -162,6 +171,12 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
  .hd{display:none}
  .list summary{grid-template-columns:28px minmax(0,1fr) auto;grid-template-areas:"r s s" "r t t" "r c g" "r b b";row-gap:4px}
  .list summary .rk{grid-area:r;align-self:start}.list summary .sl{grid-area:s}.list summary .tg{grid-area:t;margin-top:6px;padding-top:6px;border-top:1px solid var(--line)}
+ .tt thead,.tt colgroup,.ttcap{display:none}.dt table.tt,.tt tbody{display:block;width:100%}
+ .tt tr{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px 8px;padding:10px 0;border-bottom:1px solid var(--line)}
+ .tt td{border:0;padding:0;text-align:left!important;background:none!important}
+ .tt td.tgt{grid-column:1/-1;font-weight:600}
+ .tt td[data-l]::before{content:attr(data-l);display:block;font-size:11px;color:var(--muted);font-weight:400}
+ .tt td[data-l="Chance"]{grid-column:span 2;order:1}.tt td[data-l="FD gain"]{order:2}.tt td[data-l="FD per 1k"]{order:3}.tt td.q{order:4}
  .list summary .ch{grid-area:c;text-align:left}.list summary .gn{grid-area:g}.list summary .c50{display:none}.list summary .bar{grid-area:b}
 }
 @media(max-width:600px){
@@ -213,7 +228,7 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
 
  <section class="panel step" id="step2">
   <div class="stephead"><div><h2>Step 2: Input your gear</h2><p>Pick each item and its 3 lines.</p></div>
-   <div class="row"><button class="btn" id="bReset" type="button">Reset (clear gear)</button><button class="btn ghost" id="bTemplate" type="button">Load example</button></div></div>
+   <div class="row"><button class="btn" id="bReset" type="button">Reset (clear gear)</button><button class="btn ghost" id="bTemplate" type="button">Load example</button><button class="btn accent" type="button" data-go="3">See results →</button></div></div>
   <div class="callout" id="exNote"><b>This is an example (Moeko's gear).</b> Click <b>Reset</b> to clear it, then fill in your own.</div>
   <div class="callout warn"><ul>
    <li><b>Hat:</b> only Stat hats are calculated. Cooldown (CD) hat lines aren't counted.</li>
@@ -226,7 +241,7 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
  </section>
 
  <section class="panel step" id="step3">
-  <div class="stephead"><div><h2>What to cube next</h2><p>Best value per cube at the top. Tap a row for bigger targets. <b id="cubeNote"></b></p></div></div>
+  <div class="stephead"><div><h2>What to cube next</h2><p>Best value per cube at the top. Tap a row for its auto-reroll targets. <b id="cubeNote"></b></p></div></div>
   <div id="out"></div>
   <p class="note">This tool might have mistakes. Use it at your own risk.</p>
   <div class="foot"><button class="btn" type="button" data-go="2">← Edit gear</button><button class="btn" type="button" data-go="1">Edit scouter values</button></div>
@@ -388,15 +403,17 @@ function outcomes(kind,cube,lvl,P){
  }
  return [...m.values()];
 }
+const short=n=>n>=1e6?(n/1e6).toFixed(n>=1e7?0:1)+"M":n>=1e4?Math.round(n/1e3)+"k":fmt(n);
 const cubesFor=(p,q)=>p>0?Math.ceil(Math.log(1-q)/Math.log(1-p)):Infinity;
-function tLabel(t){
+function tParts(t){
  const parts=[];
- if(t.K) parts.push(t.K===3?"3 Crit Damage lines":`${t.K}+ Crit Damage lines`);
- if(t.A) parts.push(`${ATTN()} ${t.A}%+`);
- if(t.S) parts.push(`${MS()} ${t.S}%+`);
- if(t.B) parts.push(`Boss ${t.B}%+`);
- return parts.join(" and ");
+ if(t.K) parts.push(`${t.K*8}%+ Crit Damage`);
+ if(t.A) parts.push(`${t.A}%+ ${ATTN()}`);
+ if(t.S) parts.push(`${t.S}%+ ${MS()}`);
+ if(t.B) parts.push(`${t.B}%+ Boss Damage`);
+ return parts;
 }
+const tHtml=t=>tParts(t).map(x=>`<span class="tl">${esc(x)}</span>`).join("");
 function analyze(slot,P,cube){
  const g=S.gear[slot.id], lvl=+g[0]||0;
  const cur=stats(g.slice(1,4).map(parse),P);
@@ -423,6 +440,8 @@ function analyze(slot,P,cube){
  return {slot,lvl,cube,pb,targets:uniq.slice(0,8),best};
 }
 const itemName = s=>S.gear[s.id][4]||s.name;
+const PRI={T:0,C:1,B:2,D:3,I:4,S:5,A:6,s:7,F:8,f:9};
+const showOrder=codes=>[...codes].sort((a,b)=>{const[ca,va]=parse(a),[cb,vb]=parse(b);return (PRI[ca]??9)-(PRI[cb]??9)||vb-va;});
 const USEFUL=new Set(["S","s","A","T","B","I","C","D","F","f"]);
 /* in-game target counts totals per stat, in any order: 13/10/10 Magic ATT = Magic ATT 33%+,
    13 ATT/Boss 30/10 ATT = ATT 23%+ and Boss 30%+. All Stats also counts toward INT (or LUK) */
@@ -464,10 +483,11 @@ function presets(slot,cube,P){
 }
 function presetHtml(slot,cube,P){
  const ps=presets(slot,cube,P); if(!ps) return "";
- return `<div class="ph"><b>Auto-reroll targets</b><span>Put these in the Target presets. When you hit one, tap it to update your gear.${["weapon","secondary","emblem"].includes(slot.kind)?" Don't use Stop Upon Combat Power Increase here: Boss raises Combat Power more than it's worth.":" Stop Upon Combat Power Increase also works here."}</span></div>
+ return `<div class="ph"><b>Auto-reroll targets</b><span>Put these in the Target presets. When you hit one, tap it to update your gear.${["weapon","secondary","emblem"].includes(slot.kind)?"":" Stop Upon Combat Power Increase also works here."}</span></div>
+  ${["weapon","secondary","emblem"].includes(slot.kind)?`<div class="cpwarn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.5"/></svg><span><b>Turn OFF Stop Upon Combat Power Increase!</b> On WSE, Boss raises Combat Power way more than it's worth, so it will stop on bad lines.</span></div>`:""}
   <div class="pgrid">${ps.picked.map((x,k)=>`<button type="button" class="preset" data-slot="${slot.id}" data-codes="${x.codes.join(",")}">
    <span class="pn">${k+1}${k===0?' <em>Recommended</em>':""}</span>
-   ${x.codes.map(c=>{const L=ps.prime.has(c);return `<span class="pl"><i class="${L?"L":"U"}">${L?"L":"U"}</i>${esc(lineLabel(c))}</span>`;}).join("")}
+   ${showOrder(x.codes).map(c=>{const L=ps.prime.has(c);return `<span class="pl"><i class="${L?"L":"U"}">${L?"L":"U"}</i>${esc(lineLabel(c))}</span>`;}).join("")}
    <span class="pm">1 in ${fmt(1/x.p)} · <b>+${x.gain.toFixed(3)}%</b></span></button>`).join("")}</div>
   <div class="note" style="margin-top:6px">With ${ps.picked.length>1?`all ${ps.picked.length}`:"this"}: 1 in ${fmt(1/ps.up)} per cube, about ${fmt(cubesFor(ps.up,.5))} cubes for 50%, ${ps.roi.toFixed(3)} FD per 1k cubes.</div>`;
 }
@@ -574,14 +594,12 @@ function renderResults(){
  if(!ok.length){$("out").innerHTML='<p class="note">Nothing to upgrade yet. Fill in your gear in step 2.</p>'+tail;return;}
  const maxRoi=ok[0].best.roi, top=ok[0], tb=top.best;
  const pick=`<div class="top"><div class="pick"><div class="k">Best value right now${both?` (${CUBE[top.cube]})`:""}</div>
-  <div class="big">${esc(itemName(top.slot))}: ${esc(tLabel(tb.t))}</div>
-  <div class="stats"><span><b>1 in ${fmt(1/tb.p)}</b>chance per ${SHORT[top.cube]} cube</span><span><b>${fmt(cubesFor(tb.p,.5))}</b>cubes for 50%</span><span class="g"><b>+${tb.gain.toFixed(3)}%</b>Final Damage</span></div></div>
-  <div class="why"><b style="color:var(--fg)">How to read this</b><ul>
-  <li>Cube the item at the top first. When you hit its target, update your gear and it drops down the list.</li>
-  <li>Tap a row to see bigger targets and the chance of any upgrade.</li><li>${esc(MS())} targets count All Stats lines too, like the cubing calculator does.</li></ul></div></div>`;
+  <div class="big">${esc(itemName(top.slot))}</div><div class="ptg">${tHtml(tb.t)}</div>
+  <div class="stats"><span><b>1 in ${fmt(1/tb.p)}</b>chance per ${SHORT[top.cube]} cube</span><span><b>${fmt(cubesFor(tb.p,.5))}</b>cubes for 50%</span><span class="g"><b>+${tb.gain.toFixed(3)}%</b>Final Damage</span></div></div></div>`;
  const head=`<div class="hd"><span>#</span><span>Item and current lines</span><span>Best target</span><span>Chance</span><span>50% cubes</span><span>FD gain</span><span>FD per 1k cubes</span></div>`;
- const tbl=x=>{const b=x.best;return `<div style="margin-top:${both?10:0}px">${both?`<b style="color:var(--fg)">${CUBE[x.cube]}</b><br>`:""}Any upgrade at all (by Final Damage): ${(x.pb*100).toFixed(3)}% per cube, about ${fmt(cubesFor(x.pb,.5))} cubes for 50%.
-   <div style="overflow-x:auto"><table><thead><tr><th>Target</th><th class="n">Chance</th><th class="n">Cubes for 25% / 50% / 75% / 99%</th><th class="n">FD gain</th><th class="n">FD per 1k</th></tr></thead><tbody>${x.targets.map(t=>`<tr${t===b?' class="best"':''}><td>${esc(tLabel(t.t))}</td><td class="n">1 in ${fmt(1/t.p)}</td><td class="n">${[.25,.5,.75,.99].map(q=>fmt(cubesFor(t.p,q))).join(" / ")}</td><td class="n">+${t.gain.toFixed(3)}%</td><td class="n">${t.roi.toFixed(3)}</td></tr>`).join("")}</tbody></table></div></div>`;};
+ const tbl=x=>{const b=x.best;return `<div style="margin-top:${both?10:0}px">${both?`<b style="color:var(--fg)">${CUBE[x.cube]}</b>`:""}
+   <div style="overflow-x:auto"><div class="ttcap">Cubes columns = cubes needed for a 25%, 50%, 75% or 99% chance to hit.</div><table class="tt"><colgroup><col class="c-t"><col class="c-c"><col class="c-q"><col class="c-q"><col class="c-q"><col class="c-q"><col class="c-g"><col class="c-r"></colgroup>
+   <thead><tr><th>Target</th><th class="n">Chance</th><th class="n q">25%</th><th class="n q">50%</th><th class="n q">75%</th><th class="n q">99%</th><th class="n">FD gain</th><th class="n">FD per 1k</th></tr></thead><tbody>${x.targets.map(t=>`<tr${t===b?' class="best"':''}><td class="tgt">${tHtml(t.t)}</td><td class="n" data-l="Chance">1 in ${fmt(1/t.p)}</td>${[.25,.5,.75,.99].map(q=>`<td class="n q" data-l="Cubes for ${q*100}%">${short(cubesFor(t.p,q))}</td>`).join("")}<td class="n" data-l="FD gain">+${t.gain.toFixed(3)}%</td><td class="n" data-l="FD per 1k">${t.roi.toFixed(3)}</td></tr>`).join("")}</tbody></table></div></div>`;};
  const rows=ok.map((r,i)=>{
   const b=r.best, now=S.gear[r.slot.id].slice(1,4).map(lineLabel).join(", ");
   const other=both?r.per.find(x=>x!==r.per.find(y=>y.cube===r.cube)):null;
@@ -589,7 +607,7 @@ function renderResults(){
   const pHtml=`<div class="presets" data-slot="${r.slot.id}" data-cube="${r.cube}"></div>`;
   return `<details class="it"${i===0?" open":""}><summary><span class="rk">${i+1}</span>
    <span class="sl"><b>${esc(itemName(r.slot))}</b> <span class="meta">Lv. ${r.lvl}${S.gear[r.slot.id][4]?` ${esc(r.slot.name)}`:""}</span><small>${S.gear[r.slot.id].slice(1,4).map(c=>`<span>${esc(lineLabel(c))}</span>`).join("")}</small></span>
-   <span class="tg">${esc(tLabel(b.t))}${tag}</span>
+   <span class="tg">${tHtml(b.t)}${tag}</span>
    <span class="num ch">1 in ${fmt(1/b.p)}</span><span class="num c50">${fmt(cubesFor(b.p,.5))}</span><span class="num gn">+${b.gain.toFixed(3)}%</span>
    <span class="bar"><i style="width:${Math.max(3,b.roi/maxRoi*70).toFixed(1)}%"></i>${b.roi.toFixed(3)}</span></summary>
    <div class="dt">${pHtml}${(both?r.per.filter(x=>x.best):[r]).map(tbl).join("")}</div></details>`;
@@ -672,7 +690,7 @@ $("out").addEventListener("click",e=>{
  const s=SID[b.dataset.slot], codes=b.dataset.codes.split(","); cfPick={s,codes};
  const prime=new Set(pools(s.kind,"bright",+S.gear[s.id][0]||0)[0].map(x=>x.c+x.v));
  $("cfTitle").textContent=`Update ${itemName(s)}?`;
- $("cfLines").innerHTML=codes.map(c=>`<span><i class="${prime.has(c)?"L":"U"}">${prime.has(c)?"L":"U"}</i>${esc(lineLabel(c))}</span>`).join("");
+ $("cfLines").innerHTML=showOrder(codes).map(c=>`<span><i class="${prime.has(c)?"L":"U"}">${prime.has(c)?"L":"U"}</i>${esc(lineLabel(c))}</span>`).join("");
  cf.hidden=false; document.body.style.overflow="hidden"; $("cfYes").focus();
 });
 $("cfNo").addEventListener("click",closeCf);
