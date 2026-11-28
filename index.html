@@ -198,7 +198,15 @@ select:disabled{opacity:.55;cursor:not-allowed}
 .list{display:grid;gap:6px}
 .babar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;margin:0 0 14px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--sunk)}
 .babar .batxt>b{display:block;font:600 15px var(--display)}.babar .batxt .linkbtn{font-size:13px;margin-left:4px}
-.gvbox{width:min(1100px,100%)}.gvbody{flex:1;min-height:0;overflow:auto;padding-right:2px}
+.gvbox{width:min(1180px,100%)}
+.gvgrid2{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.gvgrid2 .gvc{grid-column:var(--c);grid-row:var(--r);padding:8px 10px}.gvgrid2 .gvh b{font-size:13.5px}.gvgrid2 .gl{font-size:13px;line-height:19px}
+.gvc.empty{background:none;border-style:dashed;opacity:.55}.gvc.empty .gvh{margin:0}
+.gvsum{grid-column:3;grid-row:1/3;display:flex;flex-direction:column;justify-content:space-between;align-items:center;text-align:center;gap:6px;border-radius:10px;border:1px solid var(--line);background:var(--sunk);padding:12px}
+.gvtop b{display:block;font:600 15px var(--display)}.gvsum small{display:block;color:var(--muted);font-size:12px}
+.gvava{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}.gvava img{image-rendering:pixelated;max-width:100%}
+.gvbot strong{display:block;font:700 22px var(--display);font-variant-numeric:tabular-nums;line-height:1.2}
+@media(max-width:900px){.gvgrid2{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}.gvgrid2 .gvc,.gvsum{grid-column:auto;grid-row:auto}.gvc.empty{display:none}}.gvbody{flex:1;min-height:0;overflow:auto;padding-right:2px}
 .gvbody section+section{margin-top:14px}.gvbody h3{font:600 12px var(--body);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:0 0 8px 2px}
 .gvgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px}
 .gvc{background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:9px 11px}
@@ -1161,17 +1169,30 @@ function paintSaves(){
 }
 // read-only overview of one save
 let gvId=null;
+const GV_POS={ring1:[1,1],ring2:[1,2],ring3:[1,3],ring4:[1,4],belt:[1,5],face:[2,1],eye:[2,2],earring:[2,3],pend1:[2,4],pend2:[2,5],
+ weapon:[3,3],secondary:[3,4],emblem:[3,5],hat:[4,1],top:[4,2],bottom:[4,3],shoulder:[4,4],cape:[5,1],gloves:[5,2],shoes:[5,3],heart:[5,4],badge:[5,5]};
 function gearView(id){
  const now=id==="now", x=now?{n:"Current gear",at:"",cp:S.share.ca,gear:S.gear}:saveById(id); if(!x) return; gvId=id; const G=x.gear;
  const groups=BA_GROUPS.map(([title,ids])=>[title,ids.filter(i=>+G[i][0]>0&&!(i==="secondary"&&zeroMirror()))]).filter(([,ids])=>ids.length);
  $("gvTitle").textContent=saveName(x);
- $("gvSub").textContent=[x.n&&!now?`Saved ${baWhen(x.at)}`:"",parseCP(x.cp)?`Combat Power ${fmt(parseCP(x.cp))}`:"",`${groups.reduce((n,[,ids])=>n+ids.length,0)} items`].filter(Boolean).join("  ·  ");
- $("gvBody").innerHTML=groups.length?groups.map(([title,ids])=>`<section><h3>${title}</h3><div class="gvgrid">${ids.map(i=>{
-   const s0=SID[i], g=G[i], lvl=+g[0]||0, name=g[4]||s0.name, pr=primeSet(s0.kind,optLvl(lvl));
-   const lines=NOPOT.has(g[4])?'<div class="gl j">No potentials</div>':showOrder(g.slice(1,4),pr).map(code=>{ if(code==="J0") return '<div class="gl j"><i class="t x"></i>Other potential</div>';
-     const [c,v]=parse(code), t=c==="Q"?(v>=2?"L":"U"):pr.has(code)?"L":"U"; return `<div class="gl"><i class="t ${t}">${t}</i>${esc(lineLabel(code))}</div>`; }).join("");
-   return `<div class="gvc"><div class="gvh">${iconHtml(g[4],0,1)}<div><b>${esc(name)}</b><small>Lv. ${lvl}  ·  ${esc(s0.name)}</small></div></div>${lines}</div>`; }).join("")}</div></section>`).join("")
-  :'<p class="muted">This save has no items.</p>';
+ $("gvSub").textContent=now?"What you have in step 2 right now":`Save ${saveNo(x)} of ${S.saves.length}`;
+ // laid out like the in-game Equipment window: accessories left (belt at the bottom), Weapon/Secondary/Emblem in the middle,
+ // armor on the right, heart and badge at the bottom right. On small screens it falls back to a simple list.
+ const card=i=>{ const s0=SID[i], g=G[i], lvl=+g[0]||0, [c,r]=GV_POS[i], has=lvl>0&&!(i==="secondary"&&zeroMirror());
+  if(!has) return `<div class="gvc empty" style="--c:${c};--r:${r}"><div class="gvh"><span class="ic sm none" aria-hidden="true"></span><div><b>${esc(s0.name)}</b><small>Empty</small></div></div></div>`;
+  const name=g[4]||s0.name, pr=primeSet(s0.kind,optLvl(lvl));
+  const lines=NOPOT.has(g[4])?'<div class="gl j">No potentials</div>':showOrder(g.slice(1,4),pr).map(code=>{ if(code==="J0") return '<div class="gl j"><i class="t x"></i>Other potential</div>';
+    const [cc,v]=parse(code), t=cc==="Q"?(v>=2?"L":"U"):pr.has(code)?"L":"U"; return `<div class="gl"><i class="t ${t}">${t}</i>${esc(lineLabel(code))}</div>`; }).join("");
+  return `<div class="gvc" style="--c:${c};--r:${r}"><div class="gvh">${iconHtml(g[4],0,1)}<div><b>${esc(name)}</b><small>Lv. ${lvl}  ·  ${esc(s0.name)}</small></div></div>${lines}</div>`; };
+ const cp=parseCP(x.cp), n=groups.reduce((a,[,ids])=>a+ids.length,0);
+ const R=S.rank, job=S.cls||(R&&R.job)||"";
+ $("gvBody").innerHTML=`<div class="gvgrid2"><div class="gvsum"><div class="gvtop"><b>${esc(S.name||"Your character")}</b>${job||(R&&R.level)?`<small>${R&&R.level?`Lv. ${R.level} `:""}${esc(job)}</small>`:""}</div>
+  ${R&&R.img?`<div class="gvava"><img src="${esc(R.img)}" alt="${esc(R.name)}" referrerpolicy="no-referrer"></div>`:""}
+  <div class="gvbot">${cp?`<small>Combat Power</small><strong>${fmt(cp)}</strong>`:""}<small>${n} item${n===1?"":"s"}${x.n&&!now?`  ·  saved ${esc(baWhen(x.at))}`:""}</small></div></div>${BA_GROUPS.flatMap(([,ids])=>ids).filter(i=>i!=="ring4"||+G.ring4[0]>0||S.r4).map(card).join("")}</div>`;
+ { // character picture at Maple's pixel scale (2x for the small rankings picture, never blurred)
+   const im=$("gvBody").querySelector(".gvava img");
+   if(im){ const fit=()=>{ const k=im.naturalWidth&&im.naturalWidth<=120?2:1; im.style.width=im.naturalWidth*k+"px"; im.style.height=im.naturalHeight*k+"px"; };
+     if(im.complete&&im.naturalWidth) fit(); else im.addEventListener("load",fit); im.addEventListener("error",()=>im.parentElement.remove()); } }
  $("gvLoad").style.display=now?"none":""; $("gvNote").textContent="";
  $("gvModal").hidden=false; document.body.style.overflow="hidden"; $("gvClose").focus();
 }
