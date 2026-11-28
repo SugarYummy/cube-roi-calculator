@@ -206,10 +206,26 @@ select:disabled{opacity:.55;cursor:not-allowed}
 .gvtop b{display:block;font:600 15px var(--display)}.gvsum small{display:block;color:var(--muted);font-size:12px}
 .gvava{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}.gvava img{image-rendering:pixelated;max-width:100%}
 .gvbot strong{display:block;font:700 22px var(--display);font-variant-numeric:tabular-nums;line-height:1.2}
-@media(max-width:900px){.gvgrid2{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}.gvgrid2 .gvc,.gvsum{grid-column:auto;grid-row:auto}.gvc.empty{display:none}}.gvbody{flex:1;min-height:0;overflow:auto;padding-right:2px}
+@media(max-width:900px){.gvgrid2{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}.gvgrid2 .gvc,.gvsum{grid-column:auto;grid-row:auto}.gvc.empty{display:none}}.gvbody{flex:1;min-height:0;overflow:auto;padding:8px;margin:-8px}
 .gvbody section+section{margin-top:14px}.gvbody h3{font:600 12px var(--body);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:0 0 8px 2px}
 .gvgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px}
 .gvc{background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:9px 11px}
+/* triple prime: a shiny border, a light sweep and a few twinkling stars, like the 22+ star effect in game */
+@property --tpa{syntax:"<angle>";inherits:false;initial-value:0deg}
+.gvc.tp{position:relative;border:1.5px solid transparent;background:linear-gradient(var(--sunk),var(--sunk)) padding-box,conic-gradient(from var(--tpa),var(--tp1,#ffd76a),var(--tp2,#ff9ad5),var(--tp3,#9ad8ff),var(--tp4,#b6ffb0),var(--tp1,#ffd76a)) border-box;box-shadow:0 0 18px -4px rgba(255,205,90,.65);animation:tpSpin 5s linear infinite}
+.gvgrid2 .gvc.tp{padding:7.5px 9.5px}
+.gvc.tp::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(115deg,transparent 42%,rgba(255,255,255,.09) 50%,transparent 58%) no-repeat;background-size:260% 100%;background-position:130% 0;animation:tpShine 4.2s ease-in-out infinite}
+.gvc.tp .tps{position:absolute;pointer-events:none;fill:#fff3c4;filter:drop-shadow(0 0 3px #ffcf4d) drop-shadow(0 0 6px rgba(255,207,77,.6));transform:scale(0);animation:tpTw 2.6s ease-in-out infinite}
+:root[data-theme="light"] .gvc.tp{--tp1:#f0b000;--tp2:#ee5fae;--tp3:#3b9df2;--tp4:#34b56f;box-shadow:0 0 16px -4px rgba(240,176,0,.55)}
+:root[data-theme="light"] .gvc.tp .tps{fill:#ffd23f;stroke:#c98a00;stroke-width:.8;filter:drop-shadow(0 0 3px rgba(240,170,0,.8))}
+.gvc.tp .tps.s1{width:16px;height:16px;top:-8px;right:-8px}
+.gvc.tp .tps.s2{width:10px;height:10px;top:3px;left:42px;animation-delay:.9s}
+.gvc.tp .tps.s3{width:12px;height:12px;bottom:-6px;left:-6px;animation-delay:1.7s}
+.gvc.tp .tps.s4{width:8px;height:8px;bottom:9px;right:12px;animation-delay:.45s}
+@keyframes tpSpin{to{--tpa:360deg}}
+@keyframes tpShine{0%,30%{background-position:130% 0}70%,100%{background-position:-30% 0}}
+@keyframes tpTw{0%,100%{transform:scale(0) rotate(0);opacity:0}15%{opacity:1}30%{transform:scale(1) rotate(45deg);opacity:1}50%{transform:scale(0) rotate(90deg);opacity:0}}
+@media(prefers-reduced-motion:reduce){.gvc.tp,.gvc.tp::after{animation:none}.gvc.tp::after{display:none}.gvc.tp .tps{animation:none;transform:scale(.8)}}
 .gvh{display:flex;gap:10px;align-items:center;margin-bottom:7px}.gvh b{display:block;font-size:14px;line-height:1.25}.gvh small{display:block;color:var(--muted);font-size:12px}
 .gl{display:flex;align-items:center;gap:7px;font-size:13.5px;line-height:20px;font-variant-numeric:tabular-nums}.gl.j{color:var(--muted);font-style:italic}
 .gl .t,.gvh .t{flex:none;width:16px;height:16px;border-radius:4px;display:grid;place-items:center;font:800 10.5px/1 var(--body);font-style:normal}
@@ -249,7 +265,7 @@ select:disabled{opacity:.55;cursor:not-allowed}
 .budt th:first-child,.budt td:first-child{width:30px;color:var(--muted)}
 .budt .c-tg{color:var(--muted)}.budt td small{display:block;color:var(--muted);font-size:12px;line-height:1.35}
 .budt tr.ok .c-ch{color:var(--good);font-weight:600}
-.budt .ph,.budt td .phtg{display:none}.budmore{margin-top:6px;font-size:13px}
+.budt .ph,.budt tr.phr{display:none}.budmore{margin-top:6px;font-size:13px}
 .budtip{margin:0 0 10px;padding:8px 12px;border-radius:9px;font-size:13.5px;background:color-mix(in oklab,var(--good) 13%,transparent);border:1px solid color-mix(in oklab,var(--good) 40%,transparent)}
 .budtip .linkbtn{font-size:13.5px;margin-left:4px}.budtip.same{background:none;border-color:var(--line);color:var(--muted)}
 .budcmp{margin-top:14px}.budcmp h4{margin:0 0 8px;font:600 13.5px var(--display);color:var(--fg)}
@@ -262,7 +278,8 @@ button.bc:hover{border-color:color-mix(in oklab,var(--accent) 60%,var(--line))}.
 .bc i{position:absolute;top:10px;right:12px;font-style:normal;font-size:11.5px;font-weight:600;color:var(--good)}.bc.cur i{color:var(--accent)}
 .bc u{position:absolute;bottom:10px;right:12px;font-size:12.5px;color:var(--link)}
 @media (max-width:600px){.bcg{grid-template-columns:repeat(2,1fr)}.bc b{padding-right:0}.bc i{position:static;order:-1;margin-bottom:2px}.bc u{position:static;margin-top:4px}}
-@media (max-width:900px){.budt .c-cu,.budt .c-tg{display:none}.budt td .phtg{display:block}}
+@media (max-width:900px){.budt .c-cu,.budt .c-tg{display:none}.budt tr.phr{display:table-row}.budt tr:not(.phr) td{border-bottom:0;padding-bottom:1px}.budt tr.phr td{padding-top:0}.budt .phtg fieldset.tch{white-space:nowrap;margin-top:4px}}
+@media (max-width:359px){.budt .phtg fieldset.tch{white-space:normal}}
 @media (max-width:600px){.bud{padding:12px}.budt th,.budt td{padding-left:5px;padding-right:5px}.budt th:first-child,.budt td:first-child{width:24px}
  .budt .c-av,.budt .c-fd{display:none}.budt .dk{display:none}.budt .ph{display:inline}}
 .list .rk.bdone{color:var(--good)}
@@ -277,6 +294,14 @@ details.it[open]{border-color:var(--accent)}
 .rk{font:700 17px var(--display);color:var(--muted)}
 .it:first-child .rk{color:var(--accent)}
 .tg small{display:block;color:var(--muted);font-size:12px;line-height:1.35}
+fieldset.tch{width:fit-content;max-width:100%;margin:2px 0 3px;padding:0 10px 6px;border:1px solid var(--line);border-radius:8px;text-align:left}
+fieldset.tch legend{margin-left:-4px;padding:0 4px;font:600 10px/1.2 var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.tmore{color:var(--muted);font-size:.9em}
+.list summary fieldset.tch{pointer-events:none}   /* a click on the box itself should still open the row */
+@media(min-width:901px){.list summary .tg fieldset.tch{margin-inline:auto}}
+.pick .ptg fieldset.tch{font-size:15px;line-height:1.45;padding:1px 10px 6px;margin-top:4px}
+@media(max-width:600px){.pick .ptg fieldset.tch{font-size:13.5px;padding:1px 8px 5px}}
+@media(max-width:380px){.pick .ptg fieldset.tch{font-size:12.5px;padding:1px 7px 5px}}
 .sl{display:flex;gap:12px;align-items:center}.slt{min-width:0}
 .ic{flex:none;width:52px;height:52px;border-radius:12px;background:var(--surface);border:1px solid var(--line);display:flex;align-items:center;justify-content:center}
 .ic img{max-width:40px;max-height:40px;transform:scale(1.15)}
@@ -437,7 +462,7 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
   <ul>
    <li><b>Odds:</b> Bright Cube uses Black Cube odds and Glowing Cube uses Red Cube odds, Legendary only, from <a href="https://brendonmay.github.io/cubingCalculator/">brendonmay's cubing calculator</a>.</li>
    <li><b>Your FD:</b> comes from your own Maple Scouter numbers (Detail Eff.). The FD of each potential is added together, which is great for comparing but not exact. IED uses Boss PDR 380%.</li>
-   <li><b>Ranking:</b> for each item it checks targets like "33%+ Magic ATT" and picks the one with the most FD per cube (or the fewest cubes).</li>
+   <li><b>Ranking:</b> for each item it checks targets like "33%+ Magic ATT" and picks the one with the most FD per cube (or the fewest cubes). All Stats counts toward your stat %. When a target shows a Choices box, hitting any one of those mixes (or more) counts.</li>
    <li><b>Auto-reroll targets:</b> settings for the in-game Target presets. One is only suggested if everything it stops on is an upgrade for you. The game adds up totals, and All Stats counts toward your main stat.</li>
    <li><b>Mesos:</b> Heroic world prices. Bright 22M and Glowing 12M each, plus the meso fee each cube use charges (20 × item level²). The 25% off Cash Shop cube sale turns on by itself on sale days.</li>
    <li><b>Before &amp; After image:</b> in step 2, click <b>Save current gear</b> before you cube (keep as many saves as you like). <b>Make image</b> compares any save with another save or your current gear, ready to copy into Discord.</li>
@@ -750,6 +775,10 @@ const HPM=()=>MS()==="HP", MSN=()=>HPM()?"Max HP":MS();
 const XEN=()=>S&&S.cls==="Xenon", THIRD=()=>["STR","DEX","LUK"].find(x=>x!==MS()&&x!==SS())||"LUK";   // Xenon: the 3rd main stat   // Demon Avenger: Max HP % lines are the main stat
 // line dropdowns: Legendary / Unique groups, and an L or U badge on the closed box
 const primeSet=(kind,lvl)=>new Set(pools(kind,"bright",lvl)[0].map(e=>e.c+e.v));
+const lineTier=(code,pr)=>{ const [cc,v]=parse(code); return cc==="Q"?(v>=2?"L":"U"):pr.has(code)?"L":"U"; };
+// all 3 lines are Legendary (prime) lines
+const tripleP=(s0,g)=>{ const lvl=+g[0]||0; if(!lvl||NOPOT.has(g[4])) return false; const pr=primeSet(s0.kind,optLvl(lvl)); return g.slice(1,4).every(c=>c!=="J0"&&lineTier(c,pr)==="L"); };
+const TPSTAR='<path d="M8 0C8.7 5.3 10.7 7.3 16 8C10.7 8.7 8.7 10.7 8 16C7.3 10.7 5.3 8.7 0 8C5.3 7.3 7.3 5.3 8 0Z"/>';
 function lineOpts(kind,lvl,i,cur){
  const opts=options(kind,lvl,i), pr=primeSet(kind,lvl), o=c=>`<option value="${c}"${c===cur?" selected":""}>${esc(lineLabel(c))}</option>`;
  const L=opts.filter(c=>c!=="J0"&&pr.has(c)), U=opts.filter(c=>c!=="J0"&&!pr.has(c));
@@ -848,12 +877,23 @@ function tParts(t){
  if(t.K) parts.push(`${t.K*8}%+ Crit Damage`);
  if(t.A) parts.push(`${t.A}%+ ${ATTN()}`);
  if(t.Q) parts.push(`Cooldown -${t.Q}s+`);
- if(t.S) parts.push(`${t.S}%+ ${MSN()}`);
- if(t.L) parts.push(`${t.L}%+ All Stats`);
+ // All Stats counts toward the stat % (except Demon Avenger), so a stat total with some All Stats is shown as the ways to get it
+ // more than one way: a {mix} group, drawn as a "Choices" box
+ if(t.S&&t.L&&!HPM()&&t.pairs&&t.pairs.length){
+  const mix=t.pairs.slice(0,4).map(([i,a])=>`${i?`${i}% ${MSN()} + `:""}${a}% All Stats`), more=t.pairs.length>4;
+  parts.push(mix.length>1||more?{mix,more}:mix[0]);
+ } else {
+  if(t.S) parts.push(`${t.S}%+ ${MSN()}`);
+  if(t.L) parts.push(t.S&&!HPM()?`including ${t.L}%+ All Stats`:`${t.L}%+ All Stats`);
+ }
  if(t.B) parts.push(`${t.B}%+ Boss Damage`);
  return parts;
 }
-const tHtml=t=>tParts(t).map(x=>`<span class="tl">${esc(x)}</span>`).join("");
+const tMix=(m,tag="")=>`<fieldset class="tch"><legend>Choices${tag}</legend>${m.mix.map(x=>`<span class="tl">${esc(x)}</span>`).join("")}${m.more?'<span class="tl tmore">Other mixes too</span>':""}</fieldset>`;
+const tHtml=t=>tParts(t).map(x=>typeof x==="string"?`<span class="tl">${esc(x)}</span>`:tMix(x)).join("");
+// one line for the budget table: text parts joined by commas, a Choices box after
+function tLine(t,tag){ const ps=tParts(t), txt=ps.filter(x=>typeof x==="string"), mx=ps.find(x=>typeof x!=="string");
+ return (txt.length?esc(txt.join(", ")+(mx?"":tag)):"")+(mx?tMix(mx,tag):""); }
 function analyze(slot,P,cube,g0){
  P=slotP(slot,P); const g=g0||S.gear[slot.id], lvl=+g[0]||0;
  const cur=stats(g.slice(1,4).map(parse),P);
@@ -871,7 +911,14 @@ function analyze(slot,P,cube,g0){
    let p=0,mn=Infinity;
    for(const o of outs){ if(set.every(d=>o[d]>=t[d])){p+=o.p; if(o.fd<mn) mn=o.fd;} }
    const gain=mn-cur.fd;
-   if(p>0&&gain>1e-4) cand.push({t,p,gain,roi:gain*p*1000});
+   if(p>0&&gain>1e-4){
+    if(t.S&&t.L&&!HPM()){   // stat total with some All Stats: list the ways to get there, like "26% INT + 7% All Stats"
+     const prs=[]; for(const o of outs) if(o.S>=t.S&&o.L>=t.L){ const q=[o.S-o.L,o.L]; if(!prs.some(z=>z[0]===q[0]&&z[1]===q[1])) prs.push(q); }
+     const min=prs.filter(q=>!prs.some(z=>z!==q&&z[0]<=q[0]&&z[1]<=q[1])).sort((a,b)=>a[1]-b[1]);
+     Object.defineProperty(t,"pairs",{value:min});
+    }
+    cand.push({t,p,gain,roi:gain*p*1000});
+   }
   }
  }
  const pareto=cand.filter(x=>!cand.some(y=>y!==x&&y.p>=x.p-1e-15&&y.gain>=x.gain-1e-9&&(y.p>x.p+1e-15||y.gain>x.gain+1e-9)));
@@ -1204,7 +1251,12 @@ async function gvDraw(x,now,noPics){
  for(const i of ids){
   const s0=SID[i], g=G[i], lvl=+g[0]||0, [x0,y0,w,h]=cell(...GV_POS[i]), has=lvl>0&&!(i==="secondary"&&zeroMirror());
   box(x0,y0,w,h,!has);
-  const ix=x0+10, iy=y0+10; c.fillStyle="#141a26"; rr(c,ix,iy,40,40,9); c.fill(); c.strokeStyle="#2a3345"; rr(c,ix+.5,iy+.5,39,39,9); c.stroke();
+  const ix=x0+10, iy=y0+10, tp=has&&tripleP(s0,g);
+  if(tp){ c.save(); const gr=c.createLinearGradient(x0,y0,x0+w,y0+h); [["0","#ffd76a"],[".35","#ff9ad5"],[".7","#9ad8ff"],["1","#b6ffb0"]].forEach(([o,col])=>gr.addColorStop(+o,col));
+   c.shadowColor="rgba(255,205,90,.55)"; c.shadowBlur=12; c.strokeStyle=gr; c.lineWidth=1.6; rr(c,x0+.8,y0+.8,w-1.6,h-1.6,10); c.stroke(); c.restore();
+   const glint=(cx,cy,r)=>{ c.save(); c.shadowColor="#ffcf4d"; c.shadowBlur=7; c.fillStyle="#fff3c4"; c.beginPath();
+    for(let k=0;k<8;k++){ const a=k*Math.PI/4-Math.PI/2, rad=k%2?r*.26:r; c.lineTo(cx+Math.cos(a)*rad,cy+Math.sin(a)*rad); } c.closePath(); c.fill(); c.restore(); };
+   glint(x0+w-1,y0+1,8); glint(ix+37,iy+2,5); glint(x0+1,y0+h-1,6); glint(x0+w-16,y0+h-13,4); } c.fillStyle="#141a26"; rr(c,ix,iy,40,40,9); c.fill(); c.strokeStyle="#2a3345"; rr(c,ix+.5,iy+.5,39,39,9); c.stroke();
   if(!has){ c.globalAlpha=.6; c.fillStyle="#e8ecf4"; c.font="600 13.5px "+BF; c.fillText(s0.name,ix+50,iy+12); c.fillStyle="#98a3b6"; c.font="400 12px "+BF; c.fillText("Empty",ix+50,iy+30); c.globalAlpha=1; continue; }
   const im=icons[i]; if(im){ const sc=Math.min(1,36/Math.max(im.naturalWidth,im.naturalHeight)), iw=im.naturalWidth*sc, ih=im.naturalHeight*sc; c.imageSmoothingEnabled=sc<1; c.drawImage(im,ix+20-iw/2,iy+20-ih/2,iw,ih); c.imageSmoothingEnabled=true; }
   c.font="600 13.5px "+BF; const nl=wrapText(c,g[4]||s0.name,w-70,2), ny=iy+20-(nl.length*16+15)/2;
@@ -1246,7 +1298,8 @@ function gearView(id){
   const name=g[4]||s0.name, pr=primeSet(s0.kind,optLvl(lvl));
   const lines=NOPOT.has(g[4])?'<div class="gl j">No potentials</div>':showOrder(g.slice(1,4),pr).map(code=>{ if(code==="J0") return '<div class="gl j"><i class="t x"></i>Other potential</div>';
     const [cc,v]=parse(code), t=cc==="Q"?(v>=2?"L":"U"):pr.has(code)?"L":"U"; return `<div class="gl"><i class="t ${t}">${t}</i>${esc(lineLabel(code))}</div>`; }).join("");
-  return `<div class="gvc" style="--c:${c};--r:${r}"><div class="gvh">${iconHtml(g[4],0,1)}<div><b>${esc(name)}</b><small>Lv. ${lvl}  ·  ${esc(s0.name)}</small></div></div>${lines}</div>`; };
+  const tp=tripleP(s0,g), stars=tp?[1,2,3,4].map(k=>`<svg class="tps s${k}" viewBox="0 0 16 16" aria-hidden="true">${TPSTAR}</svg>`).join(""):"";
+  return `<div class="gvc${tp?" tp":""}" style="--c:${c};--r:${r}"${tp?' title="Triple prime: all 3 lines are Legendary"':""}><div class="gvh">${iconHtml(g[4],0,1)}<div><b>${esc(name)}</b><small>Lv. ${lvl}  ·  ${esc(s0.name)}</small></div></div>${lines}${stars}</div>`; };
  const cp=parseCP(x.cp), n=groups.reduce((a,[,ids])=>a+ids.length,0);
  const L=lookOf(x,now), job=S.cls||L.job||"";
  $("gvBody").innerHTML=`<div class="gvgrid2"><div class="gvsum"><div class="gvtop"><b>${esc(S.name||"Your character")}</b>${job||L.lv?`<small>${L.lv?`Lv. ${L.lv} `:""}${esc(job)}</small>`:""}</div>
@@ -1582,7 +1635,7 @@ function paintBudget(){
  let cum=0, fdc=0; const tr=[], cut=Math.max(4,sim.med+3);
  for(let i=0;i<rows.length;i++){ cum+=rows[i].avg; fdc+=rows[i].gain; if(i>=3&&sim.fin[i]<.005) break;
   const x=rows[i];
-  tr.push(`<tr${sim.fin[i]>=.5?' class="ok"':""}><td>${i+1}</td><td>${esc(x.name)}<small class="phtg">${esc(x.tg)}</small></td><td class="c-tg">${esc(x.tg)}</td><td class="n c-ch">${pct(sim.fin[i])}</td><td class="n c-cu">${fmt(Math.round(1/x.p))}</td>${mz?`<td class="n c-av">${mesoFmt(x.avg)}</td>`:""}<td class="n c-by">${mz?mesoFmt(cum):fmt(Math.round(cum))}</td><td class="n c-fd">+${x.gain.toFixed(3)}%</td><td class="n c-fd">+${fdc.toFixed(3)}%</td></tr>`); }
+  tr.push(`<tr${sim.fin[i]>=.5?' class="ok"':""}><td>${i+1}</td><td>${esc(x.name)}</td><td class="c-tg">${x.tg}</td><td class="n c-ch">${pct(sim.fin[i])}</td><td class="n c-cu">${fmt(Math.round(1/x.p))}</td>${mz?`<td class="n c-av">${mesoFmt(x.avg)}</td>`:""}<td class="n c-by">${mz?mesoFmt(cum):fmt(Math.round(cum))}</td><td class="n c-fd">+${x.gain.toFixed(3)}%</td><td class="n c-fd">+${fdc.toFixed(3)}%</td></tr><tr class="phr"><td></td><td colspan="9"><small class="phtg">${x.tg}</small></td></tr>`); }
  const more=tr.length-cut;
  const alts=altPlans().map(a=>({...a,sim:a.cube===S.cube&&a.sort===S.sort?sim:budgetSim(a.rows,B)}));
  let tip="", cmp="";
@@ -1614,7 +1667,7 @@ function renderResults(){
  if(!ok.length){$("out").innerHTML='<p class="note">Nothing to upgrade yet. Fill in your gear in step 2.</p>'+tail;return;}
  const maxRoi=Math.max(...ok.map(val)), top=ok[0], tb=pickT(top);
  BUDALT=null; BUDCTX={use,P,have:Object.fromEntries(cubes.map((c,j)=>[c,res.map(r=>r.per[j])]))};
- BUDROWS=ok.map(r=>{ const b=pickT(r), c=unitCost(r.cube,r.lvl); return {name:itemName(r.slot),tg:tParts(b.t).join(", ")+(both?` (${SHORT[r.cube]})`:""),p:b.p,cost:c,avg:c/b.p,gain:b.gain}; });
+ BUDROWS=ok.map(r=>{ const b=pickT(r), c=unitCost(r.cube,r.lvl); return {name:itemName(r.slot),tg:tLine(b.t,both?` (${SHORT[r.cube]})`:""),p:b.p,cost:c,avg:c/b.p,gain:b.gain}; });
  const bud=!budOn?"":`<div class="bud"><div class="budtop"><b>Budget plan</b><label>I have <input id="budIn" inputmode="decimal" autocomplete="off" value="${esc(MESO()?S.bud:S.budC)}" placeholder="${MESO()?"700B":"10000"}" aria-label="Your ${cunit()}"> ${cunit()}</label><button type="button" class="linkbtn budhide" id="budHide">Hide</button><span class="bnote">Cubes each item in list order until it hits the target (tried 4,000 times). Finish chance is how often you finish that item. ${MESO()?"Mesos":"Cubes"} by then and FD by then add up every item until that one. Green numbers in the list are likely done.</span></div><div id="budOut"></div></div>`;
  const pick=`<div class="top"><div class="pick"><div class="k">${S.sort==="cheap"?"Cheapest upgrade right now":"Best value right now"}${both?` (${CUBE[top.cube]})`:""}</div>
   <div class="pbody">${iconHtml(S.gear[top.slot.id][4],1)}<div><div class="big">${esc(itemName(top.slot))}</div><div class="ptg">${tHtml(tb.t)}</div>
