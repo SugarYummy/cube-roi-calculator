@@ -8,7 +8,9 @@ jobs:
   icons:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
       - name: Download icons
         run: |
           python3 - <<'PY'
@@ -451,11 +453,16 @@ jobs:
               time.sleep(0.3)
           open("icons/missing.txt", "w").write("\n".join(missing) + "\n")
           print(saved, "saved,", len(missing), "missing (see icons/missing.txt)")
+          print("\n".join(missing[:10]))
+          with open(os.environ.get("GITHUB_STEP_SUMMARY", os.devnull), "a") as f:
+              f.write(f"**{saved} icons saved, {len(missing)} missing**\n")
           PY
       - name: Save them in the repo
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898732+github-actions[bot]@users.noreply.github.com"
           git add icons
-          git commit -m "Copy item icons from MapleStory Wiki" || echo "Nothing new"
-          git push
+          git commit -m "Copy item icons from MapleStory Wiki" || { echo "Nothing new"; exit 0; }
+          # If you changed the repo while this was running, catch up first, then save
+          for i in 1 2 3; do git pull --rebase && git push && exit 0; sleep 5; done
+          exit 1
