@@ -197,21 +197,31 @@ select:disabled{opacity:.55;cursor:not-allowed}
 .why ul{margin:6px 0 0;padding-left:18px}.why li{margin:3px 0}
 .list{display:grid;gap:6px}
 .babar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;margin:0 0 14px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--sunk)}
-.babar .batxt>b{display:block;font:600 15px var(--display)}
+.babar .batxt>b{display:block;font:600 15px var(--display)}.babar .batxt .linkbtn{font-size:13px;margin-left:4px}
+.gvbox{width:min(1100px,100%)}.gvbody{flex:1;min-height:0;overflow:auto;padding-right:2px}
+.gvbody section+section{margin-top:14px}.gvbody h3{font:600 12px var(--body);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:0 0 8px 2px}
+.gvgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px}
+.gvc{background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:9px 11px}
+.gvh{display:flex;gap:10px;align-items:center;margin-bottom:7px}.gvh b{display:block;font-size:14px;line-height:1.25}.gvh small{display:block;color:var(--muted);font-size:12px}
+.gl{display:flex;align-items:center;gap:7px;font-size:13.5px;line-height:20px;font-variant-numeric:tabular-nums}.gl.j{color:var(--muted);font-style:italic}
+.gl .t,.gvh .t{flex:none;width:16px;height:16px;border-radius:4px;display:grid;place-items:center;font:800 10.5px/1 var(--body);font-style:normal}
+.gl .t.L{background:#6fd36f;color:#0c1a0c}.gl .t.U{background:#f1c33c;color:#1f1700}.gl .t.x{background:var(--line)}
 .balist{flex-basis:100%}.balist[hidden]{display:none}.balist summary{cursor:pointer;color:var(--link);font-size:13.5px;width:max-content}
-.svrow{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) auto auto auto;gap:6px 12px;align-items:center;margin-top:8px}
+.svrow{display:grid;grid-template-columns:minmax(0,340px) 160px auto auto auto auto;justify-content:start;gap:6px 12px;align-items:center;margin-top:8px}
 .svrow input{min-height:34px;padding:5px 9px;font-size:14px}.svd{font-size:12.5px;color:var(--muted);white-space:nowrap}.svrow .linkbtn{font-size:13px;white-space:nowrap}
-@media(max-width:600px){.svrow{grid-template-columns:auto auto 1fr;padding-top:8px;border-top:1px solid var(--line)}.svrow .svn,.svrow .svcp{grid-column:1/-1}.svd{grid-column:1/-1}}.babar .batxt span{font-size:13px;color:var(--muted)}
+@media(max-width:600px){.svrow{grid-template-columns:auto auto auto 1fr;padding-top:8px;border-top:1px solid var(--line)}.svrow .svn,.svrow .svcp{grid-column:1/-1}.svd{grid-column:1/-1}}.babar .batxt span{font-size:13px;color:var(--muted)}
 .bambox{width:min(1100px,100%)}
 .bahead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.bahead h2{font-size:18px}
-.baform{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:flex-end;margin-bottom:12px}
+.baform{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) minmax(0,1.3fr) minmax(0,1fr);grid-template-areas:"t b a c" "m cb ca k";gap:10px 14px;align-items:end;margin-bottom:12px}
+.f-t{grid-area:t}.f-b{grid-area:b}.f-a{grid-area:a}.f-c{grid-area:c}.f-m{grid-area:m}.f-cb{grid-area:cb}.f-ca{grid-area:ca}
+.f-k{grid-area:k;display:flex;flex-direction:column;justify-content:flex-end;gap:2px}
 .baform label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted)}
-.baform input,.baform select{width:170px}.baform #baB,.baform #baA{width:210px}.baform #baT{width:250px}
-.baform label.salechk{flex-direction:row;align-items:center;font-size:13.5px;min-height:38px}.baform .salechk input{width:16px;min-height:0}
+.baform input,.baform select{width:100%}
+.baform label.salechk{flex-direction:row;align-items:center;gap:7px;font-size:13.5px;min-height:24px;width:max-content}.baform .salechk input{width:16px;min-height:0}
 .baprev{flex:1;min-height:120px;overflow:auto;border:1px solid var(--line);border-radius:10px;background:#0d121b;padding:10px}
 .baprev canvas{display:block;width:100%;height:auto;border-radius:8px}
 .bafoot{margin-top:12px;justify-content:flex-end;align-items:center}.bafoot .muted{margin-right:auto;font-size:13px}
-@media (max-width:600px){.baform label{flex:1 1 140px}.baform input,.baform #baT{width:100%}}
+@media (max-width:700px){.baform{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"t t" "b a" "cb ca" "m c" "k k"}}
 .bud{margin:0 0 12px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--sunk)}
 .budtop{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;font-size:14px;color:var(--muted)}
 .budtop>b{color:var(--fg);font:600 15px var(--display)}.budhide{margin-left:auto;font-size:13px}.budtop label{display:flex;align-items:center;gap:6px}.budtop input{width:96px}
@@ -386,9 +396,9 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
  <section class="panel step" id="step2">
   <div class="stephead"><div><h2>Step 2: Input your gear</h2><p>Pick each item and its 3 potential lines.</p></div>
    <div class="row"><button class="btn" id="bReset" type="button">Reset (clear gear)</button><button class="btn ghost" id="bTemplate" type="button">Load example</button><button class="btn accent" type="button" data-go="3">See results →</button></div></div>
-  <div class="babar"><div class="batxt"><b>Before &amp; After image</b><span id="baStat"></span></div>
+  <div class="babar"><div class="batxt"><b>Before &amp; After image</b><span id="baStat"></span> <button type="button" class="linkbtn" id="baViewNow">View current gear</button></div>
    <div class="row"><button class="btn" id="baSave" type="button">Save current gear</button><button class="btn accent" id="baMake" type="button">Make image</button></div>
-   <details class="balist" id="baList" hidden><summary id="baListSum">Your saves</summary><p class="note" style="margin-top:6px">Name a save and add its Combat Power if you like. <b>Load</b> puts that gear back in step 2.</p><div id="baRows"></div></details></div>
+   <details class="balist" id="baList" hidden><summary id="baListSum">Your saves</summary><p class="note" style="margin-top:6px">Name a save and add its Combat Power if you like. <b>View</b> shows all its gear. <b>Load</b> puts that gear back in step 2.</p><div id="baRows"></div></details></div>
   <div class="callout" id="exNote"><b>This is an example (Moeko's gear).</b> Click <b>Reset</b> to clear it, then fill in your own.</div>
   <div class="callout warn"><ul>
    <li><b>Hat:</b> Cooldown lines only count if you turn on <b>Add Cooldown Hat values</b> in step 1.</li>
@@ -460,19 +470,25 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
  <div class="mbox bambox">
   <div class="bahead"><h2 id="baTitle">Before &amp; After image</h2><button class="btn ghost" id="baClose" type="button">Close</button></div>
   <div class="baform">
-   <label>Title<input id="baT" maxlength="40" autocomplete="off"></label>
-   <label>Before<select id="baB"></select></label>
-   <label>After<select id="baA"></select></label>
-   <label>Mesos spent<input id="baM" inputmode="decimal" placeholder="700B" autocomplete="off"></label>
-   <label>Combat Power (Before)<input id="baCB" inputmode="decimal" placeholder="120,000,000" autocomplete="off"></label>
-   <label>Combat Power (After)<input id="baCA" inputmode="decimal" placeholder="125,000,000" autocomplete="off"></label>
-   <label>Cube used<select id="baC"><option value="bright">Bright Cube</option><option value="glowing">Glowing Cube</option></select></label>
-   <label class="salechk"><input type="checkbox" id="baSale"> Bought on sale</label>
-   <label class="salechk"><input type="checkbox" id="baAll"> Show items that didn't change</label>
+   <label class="f-t">Title<input id="baT" maxlength="40" autocomplete="off"></label>
+   <label class="f-b">Before<select id="baB"></select></label>
+   <label class="f-a">After<select id="baA"></select></label>
+   <label class="f-c">Cube used<select id="baC"><option value="bright">Bright Cube</option><option value="glowing">Glowing Cube</option></select></label>
+   <label class="f-m">Mesos spent<input id="baM" inputmode="decimal" placeholder="700B" autocomplete="off"></label>
+   <label class="f-cb">Combat Power (Before)<input id="baCB" inputmode="decimal" placeholder="120,000,000" autocomplete="off"></label>
+   <label class="f-ca">Combat Power (After)<input id="baCA" inputmode="decimal" placeholder="125,000,000" autocomplete="off"></label>
+   <div class="f-k"><label class="salechk"><input type="checkbox" id="baSale"> Bought on sale</label><label class="salechk"><input type="checkbox" id="baAll"> Show items that didn't change</label></div>
   </div>
   <p class="note" id="baNote" style="margin:-4px 0 10px">Type your mesos spent to see your luck. Luck compares it to the average cost of rolling these results (or better). It only counts items that changed, so mesos spent on a pot you kept make you look unluckier.</p>
   <div class="baprev"><canvas id="baCv" aria-label="Before and after image preview"></canvas></div>
   <div class="row bafoot"><span class="muted" id="baMsg" role="status"></span><button class="btn" id="baDl" type="button">Download</button><button class="btn accent" id="baCopy" type="button">Copy image</button></div>
+ </div>
+</div>
+<div class="modal" id="gvModal" role="dialog" aria-modal="true" aria-labelledby="gvTitle" hidden>
+ <div class="mbox gvbox">
+  <div class="bahead"><div><h2 id="gvTitle"></h2><p class="muted" id="gvSub" style="font-size:13px;margin-top:2px"></p></div><button class="btn ghost" id="gvClose" type="button">Close</button></div>
+  <div class="gvbody" id="gvBody"></div>
+  <div class="row bafoot"><span class="muted" id="gvNote"></span><button class="btn" id="gvLoad" type="button">Load this gear</button></div>
  </div>
 </div>
 <div class="modal" id="cfModal" role="dialog" aria-modal="true" aria-labelledby="cfTitle" hidden>
@@ -1121,10 +1137,36 @@ function paintSaves(){
  const box=$("baRows"); if(!box) return;
  box.innerHTML=[...S.saves].reverse().map(x=>`<div class="svrow">
   <input class="svn" data-svn="${esc(x.id)}" value="${esc(x.n)}" placeholder="${esc(baWhen(x.at))}" maxlength="40" aria-label="Save name">
-  <input class="svcp" data-svcp="${esc(x.id)}" value="${esc(x.cp)}" placeholder="Combat Power (optional)" inputmode="decimal" aria-label="Combat Power for this save">
+  <input class="svcp" data-svcp="${esc(x.id)}" value="${esc(cpFmt(x.cp))}" placeholder="Combat Power (optional)" inputmode="decimal" aria-label="Combat Power for this save">
   <span class="svd">Saved ${esc(baWhen(x.at))}</span>
-  <button type="button" class="linkbtn" data-svload="${esc(x.id)}">Load</button><button type="button" class="linkbtn" data-svdel="${esc(x.id)}">Delete</button></div>`).join("");
+  <button type="button" class="linkbtn" data-svview="${esc(x.id)}">View</button><button type="button" class="linkbtn" data-svload="${esc(x.id)}">Load</button><button type="button" class="linkbtn" data-svdel="${esc(x.id)}">Delete</button></div>`).join("");
 }
+// read-only overview of one save
+let gvId=null, gvArm=null;
+function gearView(id){
+ const now=id==="now", x=now?{n:"Current gear",at:"",cp:S.share.ca,gear:S.gear}:saveById(id); if(!x) return; gvId=id; const G=x.gear;
+ const groups=BA_GROUPS.map(([title,ids])=>[title,ids.filter(i=>+G[i][0]>0&&!(i==="secondary"&&zeroMirror()))]).filter(([,ids])=>ids.length);
+ $("gvTitle").textContent=saveName(x);
+ $("gvSub").textContent=[x.n&&!now?`Saved ${baWhen(x.at)}`:"",parseCP(x.cp)?`Combat Power ${fmt(parseCP(x.cp))}`:"",`${groups.reduce((n,[,ids])=>n+ids.length,0)} items`].filter(Boolean).join("  ·  ");
+ $("gvBody").innerHTML=groups.length?groups.map(([title,ids])=>`<section><h3>${title}</h3><div class="gvgrid">${ids.map(i=>{
+   const s0=SID[i], g=G[i], lvl=+g[0]||0, name=g[4]||s0.name, pr=primeSet(s0.kind,optLvl(lvl));
+   const lines=NOPOT.has(g[4])?'<div class="gl j">No potentials</div>':showOrder(g.slice(1,4),pr).map(code=>{ if(code==="J0") return '<div class="gl j"><i class="t x"></i>Other potential</div>';
+     const [c,v]=parse(code), t=c==="Q"?(v>=2?"L":"U"):pr.has(code)?"L":"U"; return `<div class="gl"><i class="t ${t}">${t}</i>${esc(lineLabel(code))}</div>`; }).join("");
+   return `<div class="gvc"><div class="gvh">${iconHtml(g[4],0,1)}<div><b>${esc(name)}</b><small>Lv. ${lvl}  ·  ${esc(s0.name)}</small></div></div>${lines}</div>`; }).join("")}</div></section>`).join("")
+  :'<p class="muted">This save has no items.</p>';
+ $("gvLoad").textContent="Load this gear"; $("gvLoad").style.display=now?"none":""; gvArm=null; $("gvNote").textContent="";
+ $("gvModal").hidden=false; document.body.style.overflow="hidden"; $("gvClose").focus();
+}
+const closeGv=()=>{ $("gvModal").hidden=true; document.body.style.overflow=""; const b=gvId==="now"?$("baViewNow"):document.querySelector(`[data-svview="${gvId}"]`); if(b) b.focus(); };
+$("baViewNow").addEventListener("click",()=>gearView("now"));
+$("gvClose").addEventListener("click",closeGv);
+$("gvModal").addEventListener("click",e=>{ if(e.target===$("gvModal")) closeGv(); });
+addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("gvModal").hidden) closeGv(); });
+$("gvLoad").addEventListener("click",()=>{
+ const x=saveById(gvId); if(!x) return;
+ if(!gvArm){ gvArm=1; $("gvLoad").textContent="Click again to load"; $("gvNote").textContent="This replaces your gear in step 2."; return; }
+ S.gear=JSON.parse(JSON.stringify(x.gear)); if(+S.gear.ring4[0]>0) S.r4=true; for(const s of SLOTS) fillSlot(s); paintR4(); changed(); paintSaves(); closeGv(); say(`Loaded "${saveName(x)}" as your gear.`);
+});
 $("baSave").addEventListener("click",()=>{
  if(S.saves.length>=MAXSAVES){ say(`You have ${MAXSAVES} saves. Delete one first.`); return; }
  const x={id:uid(),n:"",at:new Date().toISOString(),cp:"",gear:JSON.parse(JSON.stringify(S.gear))};
@@ -1133,10 +1175,13 @@ $("baSave").addEventListener("click",()=>{
  say("Gear saved. You can give it a name.");
 });
 $("baList").addEventListener("toggle",()=>{ if($("baList").open&&$("baRows").children.length!==S.saves.length) paintSaves(); });
+const cpFmt=v=>{ const n=parseCP(v); return n>0?fmt(n):String(v||"").trim(); };
+$("baRows").addEventListener("change",e=>{ const t=e.target; if(!t.dataset.svcp) return; const x=saveById(t.dataset.svcp); if(!x) return; t.value=x.cp=cpFmt(t.value).slice(0,24); save(); });
 $("baRows").addEventListener("input",e=>{ const t=e.target, x=saveById(t.dataset.svn||t.dataset.svcp); if(!x) return;
  if(t.dataset.svn) x.n=t.value.slice(0,40); else x.cp=t.value.slice(0,24); save(); baStatus(); });
 let svArm=null;
 $("baRows").addEventListener("click",e=>{
+ const v=e.target.closest("[data-svview]"); if(v){ gearView(v.dataset.svview); return; }
  const b=e.target.closest("[data-svload],[data-svdel]"); if(!b) return; const id=b.dataset.svload||b.dataset.svdel, x=saveById(id); if(!x) return;
  const key=(b.dataset.svload?"L":"D")+id;
  if(svArm!==key){ for(const o of $("baRows").querySelectorAll("[data-svload],[data-svdel]")) o.textContent=o.dataset.svload?"Load":"Delete";
@@ -1278,12 +1323,13 @@ baM.addEventListener("click",e=>{ if(e.target===baM) closeBa(); });
 addEventListener("keydown",e=>{ if(e.key==="Escape"&&!baM.hidden) closeBa(); });
 for(const [id,k] of [["baT","t"],["baM","m"]]) $(id).addEventListener("input",e=>{ S.share[k]=e.target.value.slice(0,k==="t"?40:24); save(); baRefresh(); });
 // Combat Power is kept with each save (and for the current gear)
+for(const id of ["baCB","baCA"]) $(id).addEventListener("change",e=>{ e.target.value=cpFmt(e.target.value); e.target.dispatchEvent(new Event("input")); });
 $("baCB").addEventListener("input",e=>{ const pb=baPair(); if(pb){ pb.b.cp=e.target.value.slice(0,24); save(); baRefresh(); } });
 $("baCA").addEventListener("input",e=>{ const pb=baPair(); if(!pb) return; if(pb.a) pb.a.cp=e.target.value.slice(0,24); else S.share.ca=e.target.value.slice(0,24); save(); baRefresh(); });
 function baPickers(){
  const pb=baPair(); if(!pb) return; const opt=x=>`<option value="${esc(x.id)}">${esc(x.n?`${x.n} (${baDate(x.at)})`:baWhen(x.at))}</option>`, list=[...S.saves].reverse();
  $("baB").innerHTML=list.map(opt).join(""); $("baA").innerHTML=`<option value="now">Current gear (now)</option>`+list.map(opt).join("");
- $("baB").value=pb.b.id; $("baA").value=pb.a?pb.a.id:"now"; $("baCB").value=pb.b.cp; $("baCA").value=pb.a?pb.a.cp:S.share.ca;
+ $("baB").value=pb.b.id; $("baA").value=pb.a?pb.a.id:"now"; $("baCB").value=cpFmt(pb.b.cp); $("baCA").value=cpFmt(pb.a?pb.a.cp:S.share.ca);
 }
 $("baB").addEventListener("change",e=>{ S.share.bi=e.target.value; save(); baPickers(); baRefresh(); });
 $("baA").addEventListener("change",e=>{ S.share.ai=e.target.value; save(); baPickers(); baRefresh(); });
