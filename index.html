@@ -207,21 +207,27 @@ select:disabled{opacity:.55;cursor:not-allowed}
 .gl .t,.gvh .t{flex:none;width:16px;height:16px;border-radius:4px;display:grid;place-items:center;font:800 10.5px/1 var(--body);font-style:normal}
 .gl .t.L{background:#6fd36f;color:#0c1a0c}.gl .t.U{background:#f1c33c;color:#1f1700}.gl .t.x{background:var(--line)}
 .balist{flex-basis:100%}.balist[hidden]{display:none}.balist summary{cursor:pointer;color:var(--link);font-size:13.5px;width:max-content}
-.svrow{display:grid;grid-template-columns:minmax(0,340px) 160px auto auto auto auto;justify-content:start;gap:6px 12px;align-items:center;margin-top:8px}
+.svrow{display:grid;grid-template-columns:18px 20px minmax(0,340px) 160px auto auto;justify-content:start;gap:6px 12px;align-items:center;margin-top:8px;position:relative;border-radius:10px}
+.svrow.lift{z-index:5;background:var(--surface);box-shadow:0 0 0 1px color-mix(in oklab,var(--link) 60%,transparent),0 10px 28px rgba(0,0,0,.45);transition:none!important}
+.svrow.shift{transition:transform .15s ease}
+.svgrip{display:grid;place-items:center;width:18px;height:30px;padding:0;border:0;border-radius:6px;background:none;color:var(--muted);cursor:grab;touch-action:none}
+.svgrip:hover{color:var(--fg);background:var(--raise)}.svrow.lift .svgrip{cursor:grabbing;color:var(--link)}
+.svno{font:700 17px var(--display);color:var(--muted);text-align:center}
+.svact{display:flex;gap:12px}
 .svrow input{min-height:34px;padding:5px 9px;font-size:14px}.svd{font-size:12.5px;color:var(--muted);white-space:nowrap}.svrow .linkbtn{font-size:13px;white-space:nowrap}
-@media(max-width:600px){.svrow{grid-template-columns:auto auto auto 1fr;padding-top:8px;border-top:1px solid var(--line)}.svrow .svn,.svrow .svcp{grid-column:1/-1}.svd{grid-column:1/-1}}.babar .batxt span{font-size:13px;color:var(--muted)}
+@media(max-width:600px){.svrow{grid-template-columns:18px 20px minmax(0,1fr);padding-top:8px;border-top:1px solid var(--line)}.svrow .svn,.svrow .svcp,.svd,.svact{grid-column:3}}.babar .batxt span{font-size:13px;color:var(--muted)}
 .bambox{width:min(1100px,100%)}
 .bahead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.bahead h2{font-size:18px}
-.baform{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) minmax(0,1.3fr) minmax(0,1fr);grid-template-areas:"t b a c" "m cb ca k";gap:10px 14px;align-items:end;margin-bottom:12px}
-.f-t{grid-area:t}.f-b{grid-area:b}.f-a{grid-area:a}.f-c{grid-area:c}.f-m{grid-area:m}.f-cb{grid-area:cb}.f-ca{grid-area:ca}
-.f-k{grid-area:k;display:flex;flex-direction:column;justify-content:flex-end;gap:2px}
+.baform{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) minmax(0,1.3fr) minmax(0,1fr);grid-template-areas:"t b a c" "m cb ca l" "k k k k";gap:10px 14px;align-items:end;margin-bottom:12px}
+.f-l{grid-area:l}.f-t{grid-area:t}.f-b{grid-area:b}.f-a{grid-area:a}.f-c{grid-area:c}.f-m{grid-area:m}.f-cb{grid-area:cb}.f-ca{grid-area:ca}
+.f-k{grid-area:k;display:flex;flex-wrap:wrap;gap:4px 22px}
 .baform label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted)}
 .baform input,.baform select{width:100%}
 .baform label.salechk{flex-direction:row;align-items:center;gap:7px;font-size:13.5px;min-height:24px;width:max-content}.baform .salechk input{width:16px;min-height:0}
 .baprev{flex:1;min-height:120px;overflow:auto;border:1px solid var(--line);border-radius:10px;background:#0d121b;padding:10px}
 .baprev canvas{display:block;width:100%;height:auto;border-radius:8px}
 .bafoot{margin-top:12px;justify-content:flex-end;align-items:center}.bafoot .muted{margin-right:auto;font-size:13px}
-@media (max-width:700px){.baform{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"t t" "b a" "cb ca" "m c" "k k"}}
+@media (max-width:700px){.baform{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"t t" "b a" "cb ca" "m c" "l l" "k k"}}
 .bud{margin:0 0 12px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--sunk)}
 .budtop{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;font-size:14px;color:var(--muted)}
 .budtop>b{color:var(--fg);font:600 15px var(--display)}.budhide{margin-left:auto;font-size:13px}.budtop label{display:flex;align-items:center;gap:6px}.budtop input{width:96px}
@@ -398,7 +404,7 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
    <div class="row"><button class="btn" id="bReset" type="button">Reset (clear gear)</button><button class="btn ghost" id="bTemplate" type="button">Load example</button><button class="btn accent" type="button" data-go="3">See results →</button></div></div>
   <div class="babar"><div class="batxt"><b>Before &amp; After image</b><span id="baStat"></span> <button type="button" class="linkbtn" id="baViewNow">View current gear</button></div>
    <div class="row"><button class="btn" id="baSave" type="button">Save current gear</button><button class="btn accent" id="baMake" type="button">Make image</button></div>
-   <details class="balist" id="baList" hidden><summary id="baListSum">Your saves</summary><p class="note" style="margin-top:6px">Name a save and add its Combat Power if you like. <b>View</b> shows all its gear. <b>Load</b> puts that gear back in step 2.</p><div id="baRows"></div></details></div>
+   <details class="balist" id="baList" hidden><summary id="baListSum">Your saves</summary><p class="note" style="margin-top:6px">Name a save and add its Combat Power if you like. Oldest is on top. Drag the dots to change the order. <b>View</b> shows all its gear. <b>Load</b> puts that gear back in step 2.</p><div id="baRows"></div></details></div>
   <div class="callout" id="exNote"><b>This is an example (Moeko's gear).</b> Click <b>Reset</b> to clear it, then fill in your own.</div>
   <div class="callout warn"><ul>
    <li><b>Hat:</b> Cooldown lines only count if you turn on <b>Add Cooldown Hat values</b> in step 1.</li>
@@ -477,9 +483,10 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
    <label class="f-m">Mesos spent<input id="baM" inputmode="decimal" placeholder="700B" autocomplete="off"></label>
    <label class="f-cb">Combat Power (Before)<input id="baCB" inputmode="decimal" placeholder="120,000,000" autocomplete="off"></label>
    <label class="f-ca">Combat Power (After)<input id="baCA" inputmode="decimal" placeholder="125,000,000" autocomplete="off"></label>
+   <label class="f-l">Luck based on<select id="baL"><option value="main">Main stat total</option><option value="exact">Exact lines</option></select></label>
    <div class="f-k"><label class="salechk"><input type="checkbox" id="baSale"> Bought on sale</label><label class="salechk"><input type="checkbox" id="baAll"> Show items that didn't change</label></div>
   </div>
-  <p class="note" id="baNote" style="margin:-4px 0 10px">Type your mesos spent to see your luck. Luck compares it to the average cost of rolling these results (or better). It only counts items that changed, so mesos spent on a pot you kept make you look unluckier.</p>
+  <p class="note" id="baNote" style="margin:-4px 0 10px">Type your mesos spent to see your luck. It compares your mesos to what a typical player spends to reach these results (half spend less, half spend more). <b>Main stat total</b> counts your ATT % (Weapon, Secondary, Emblem), crit lines (gloves) or stat % (All Stats counts as stat), so bonus lines like an extra Boss line aren't counted as extra luck. <b>Exact lines</b> counts the exact lines you got, so it's stricter and makes jackpots look luckier. Only items that changed count, so mesos spent on a pot you kept make you look unluckier.</p>
   <div class="baprev"><canvas id="baCv" aria-label="Before and after image preview"></canvas></div>
   <div class="row bafoot"><span class="muted" id="baMsg" role="status"></span><button class="btn" id="baDl" type="button">Download</button><button class="btn accent" id="baCopy" type="button">Copy image</button></div>
  </div>
@@ -489,6 +496,13 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
   <div class="bahead"><div><h2 id="gvTitle"></h2><p class="muted" id="gvSub" style="font-size:13px;margin-top:2px"></p></div><button class="btn ghost" id="gvClose" type="button">Close</button></div>
   <div class="gvbody" id="gvBody"></div>
   <div class="row bafoot"><span class="muted" id="gvNote"></span><button class="btn" id="gvLoad" type="button">Load this gear</button></div>
+ </div>
+</div>
+<div class="modal" id="ldModal" role="alertdialog" aria-modal="true" aria-labelledby="ldTitle" aria-describedby="ldText" hidden>
+ <div class="mbox" style="width:min(580px,100%)">
+  <h2 id="ldTitle" style="font-size:18px">Load without saving?</h2>
+  <p id="ldText" style="margin:8px 0 0;font-size:15px"></p>
+  <div class="row" style="margin-top:16px;justify-content:flex-end;flex-wrap:wrap"><button class="btn" id="ldNo" type="button">Cancel</button><button class="btn" id="ldGo" type="button">Load without saving</button><button class="btn accent" id="ldSave" type="button">Save current, then load</button></div>
  </div>
 </div>
 <div class="modal" id="cfModal" role="dialog" aria-modal="true" aria-labelledby="cfTitle" hidden>
@@ -832,8 +846,8 @@ function tParts(t){
  return parts;
 }
 const tHtml=t=>tParts(t).map(x=>`<span class="tl">${esc(x)}</span>`).join("");
-function analyze(slot,P,cube){
- P=slotP(slot,P); const g=S.gear[slot.id], lvl=+g[0]||0;
+function analyze(slot,P,cube,g0){
+ P=slotP(slot,P); const g=g0||S.gear[slot.id], lvl=+g[0]||0;
  const cur=stats(g.slice(1,4).map(parse),P);
  const outs=outcomes(slot.kind,cube,lvl,P);
  let pb=0;
@@ -1110,10 +1124,12 @@ const MAXSAVES=30;
 const baWhen=d=>{ const x=new Date(d); return isNaN(x)?"":x.toLocaleString("en-US",{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}); };
 const saveById=id=>S.saves.find(x=>x.id===id);
 const saveName=x=>x.n||baWhen(x.at);
+const newestSave=()=>S.saves.reduce((a,x)=>!a||String(x.at)>String(a.at)?x:a,null);
+const saveNo=x=>S.saves.indexOf(x)+1;
 // the image compares two gear sets: Before = a save, After = a save or the current gear
 function baPair(){
  const sv=S.saves; if(!sv.length) return null;
- const b=saveById(S.share.bi)||sv[sv.length-1], a=S.share.ai&&S.share.ai!=="now"?saveById(S.share.ai)||null:null;
+ const b=saveById(S.share.bi)||newestSave(), a=S.share.ai&&S.share.ai!=="now"?saveById(S.share.ai)||null:null;
  return {b,a,A:a?a.gear:S.gear};
 }
 function baRows(all,B,A){
@@ -1128,21 +1144,23 @@ function baRows(all,B,A){
 }
 function baStatus(){
  const el=$("baStat"); if(!el) return; const n=S.saves.length;
- if(n){ const last=S.saves[n-1], ch=baRows(false,last.gear,S.gear).changed;
+ if(n){ const last=newestSave(), ch=baRows(false,last.gear,S.gear).changed;
   el.textContent=`${n} save${n===1?"":"s"}. Since "${saveName(last)}": ${ch} item${ch===1?"":"s"} changed.`; }
  else el.textContent="Save your gear before you cube. Later, compare any save with another save or your current gear.";
  $("baMake").disabled=!n; $("baList").hidden=!n; $("baListSum").textContent=`Your saves (${n})`;
 }
 function paintSaves(){
  const box=$("baRows"); if(!box) return;
- box.innerHTML=[...S.saves].reverse().map(x=>`<div class="svrow">
+ box.innerHTML=S.saves.map((x,i)=>`<div class="svrow" data-svrow="${esc(x.id)}">
+  <button type="button" class="svgrip" data-svgrip="${esc(x.id)}" aria-label="Move save ${i+1}. Drag, or use the up and down arrow keys."><svg viewBox="0 0 10 16" width="10" height="16" aria-hidden="true"><g fill="currentColor"><circle cx="2.5" cy="3" r="1.5"/><circle cx="7.5" cy="3" r="1.5"/><circle cx="2.5" cy="8" r="1.5"/><circle cx="7.5" cy="8" r="1.5"/><circle cx="2.5" cy="13" r="1.5"/><circle cx="7.5" cy="13" r="1.5"/></g></svg></button>
+  <span class="svno">${i+1}</span>
   <input class="svn" data-svn="${esc(x.id)}" value="${esc(x.n)}" placeholder="${esc(baWhen(x.at))}" maxlength="40" aria-label="Save name">
-  <input class="svcp" data-svcp="${esc(x.id)}" value="${esc(cpFmt(x.cp))}" placeholder="Combat Power (optional)" inputmode="decimal" aria-label="Combat Power for this save">
+  <input class="svcp" data-svcp="${esc(x.id)}" value="${esc(cpFmt(x.cp))}" placeholder="Combat Power" inputmode="decimal" aria-label="Combat Power for this save (optional)">
   <span class="svd">Saved ${esc(baWhen(x.at))}</span>
-  <button type="button" class="linkbtn" data-svview="${esc(x.id)}">View</button><button type="button" class="linkbtn" data-svload="${esc(x.id)}">Load</button><button type="button" class="linkbtn" data-svdel="${esc(x.id)}">Delete</button></div>`).join("");
+  <span class="svact"><button type="button" class="linkbtn" data-svview="${esc(x.id)}">View</button><button type="button" class="linkbtn" data-svload="${esc(x.id)}">Load</button><button type="button" class="linkbtn" data-svdel="${esc(x.id)}">Delete</button></span></div>`).join("");
 }
 // read-only overview of one save
-let gvId=null, gvArm=null;
+let gvId=null;
 function gearView(id){
  const now=id==="now", x=now?{n:"Current gear",at:"",cp:S.share.ca,gear:S.gear}:saveById(id); if(!x) return; gvId=id; const G=x.gear;
  const groups=BA_GROUPS.map(([title,ids])=>[title,ids.filter(i=>+G[i][0]>0&&!(i==="secondary"&&zeroMirror()))]).filter(([,ids])=>ids.length);
@@ -1154,7 +1172,7 @@ function gearView(id){
      const [c,v]=parse(code), t=c==="Q"?(v>=2?"L":"U"):pr.has(code)?"L":"U"; return `<div class="gl"><i class="t ${t}">${t}</i>${esc(lineLabel(code))}</div>`; }).join("");
    return `<div class="gvc"><div class="gvh">${iconHtml(g[4],0,1)}<div><b>${esc(name)}</b><small>Lv. ${lvl}  ·  ${esc(s0.name)}</small></div></div>${lines}</div>`; }).join("")}</div></section>`).join("")
   :'<p class="muted">This save has no items.</p>';
- $("gvLoad").textContent="Load this gear"; $("gvLoad").style.display=now?"none":""; gvArm=null; $("gvNote").textContent="";
+ $("gvLoad").style.display=now?"none":""; $("gvNote").textContent="";
  $("gvModal").hidden=false; document.body.style.overflow="hidden"; $("gvClose").focus();
 }
 const closeGv=()=>{ $("gvModal").hidden=true; document.body.style.overflow=""; const b=gvId==="now"?$("baViewNow"):document.querySelector(`[data-svview="${gvId}"]`); if(b) b.focus(); };
@@ -1162,17 +1180,47 @@ $("baViewNow").addEventListener("click",()=>gearView("now"));
 $("gvClose").addEventListener("click",closeGv);
 $("gvModal").addEventListener("click",e=>{ if(e.target===$("gvModal")) closeGv(); });
 addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("gvModal").hidden) closeGv(); });
-$("gvLoad").addEventListener("click",()=>{
- const x=saveById(gvId); if(!x) return;
- if(!gvArm){ gvArm=1; $("gvLoad").textContent="Click again to load"; $("gvNote").textContent="This replaces your gear in step 2."; return; }
- S.gear=JSON.parse(JSON.stringify(x.gear)); if(+S.gear.ring4[0]>0) S.r4=true; for(const s of SLOTS) fillSlot(s); paintR4(); changed(); paintSaves(); closeGv(); say(`Loaded "${saveName(x)}" as your gear.`);
-});
+$("gvLoad").addEventListener("click",()=>{ const id=gvId; closeGv(); askLoad(id); });
+const gearSaved=()=>{ const k=JSON.stringify(S.gear); return S.saves.some(x=>JSON.stringify(x.gear)===k); };
+function doLoad(x){ S.gear=JSON.parse(JSON.stringify(x.gear)); if(+S.gear.ring4[0]>0) S.r4=true; for(const s of SLOTS) fillSlot(s); paintR4(); changed(); paintSaves(); say(`Loaded ${saveNo(x)}. "${saveName(x)}" as your gear.`); }
+function newSave(name){ const x={id:uid(),n:name||"",at:new Date().toISOString(),cp:"",gear:JSON.parse(JSON.stringify(S.gear))}; S.saves.push(x); save(); return x; }
+let ldId=null, ldBack=null;
+function askLoad(id){ const x=saveById(id); if(!x) return;
+ if(gearSaved()){ doLoad(x); return; }
+ ldId=id; ldBack=document.activeElement; $("ldText").textContent=`Your current gear isn't saved. Are you sure you want to load ${saveNo(x)}. "${saveName(x)}" without saving it first?`;
+ $("ldSave").disabled=S.saves.length>=MAXSAVES; $("ldModal").hidden=false; document.body.style.overflow="hidden"; $("ldSave").focus(); }
+const closeLd=()=>{ $("ldModal").hidden=true; document.body.style.overflow=""; if(ldBack&&ldBack.isConnected) ldBack.focus(); };
+$("ldNo").addEventListener("click",closeLd);
+$("ldModal").addEventListener("click",e=>{ if(e.target===$("ldModal")) closeLd(); });
+addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("ldModal").hidden) closeLd(); });
+$("ldGo").addEventListener("click",()=>{ const x=saveById(ldId); closeLd(); if(x) doLoad(x); });
+$("ldSave").addEventListener("click",()=>{ const x=saveById(ldId); closeLd(); if(!x) return; const n=newSave(); baStatus(); doLoad(x); say(`Saved your gear as ${saveNo(n)}, then loaded ${saveNo(x)}. "${saveName(x)}".`); });
 $("baSave").addEventListener("click",()=>{
  if(S.saves.length>=MAXSAVES){ say(`You have ${MAXSAVES} saves. Delete one first.`); return; }
  const x={id:uid(),n:"",at:new Date().toISOString(),cp:"",gear:JSON.parse(JSON.stringify(S.gear))};
  S.saves.push(x); save(); baStatus(); $("baList").open=true; paintSaves();
- const inp=document.querySelector(`[data-svn="${x.id}"]`); if(inp) inp.focus({preventScroll:true});
+ const inp=document.querySelector(`[data-svn="${x.id}"]`); if(inp){ inp.focus({preventScroll:true}); inp.scrollIntoView({block:"nearest"}); }
  say("Gear saved. You can give it a name.");
+});
+function moveSave(id,to){ const i=S.saves.findIndex(x=>x.id===id); if(i<0) return; to=Math.max(0,Math.min(S.saves.length-1,to)); if(to===i) return;
+ const [x]=S.saves.splice(i,1); S.saves.splice(to,0,x); save(); paintSaves(); const g=document.querySelector(`[data-svgrip="${id}"]`); if(g) g.focus({preventScroll:true}); }
+$("baRows").addEventListener("keydown",e=>{ const g=e.target.closest("[data-svgrip]"); if(!g) return; const i=S.saves.findIndex(x=>x.id===g.dataset.svgrip);
+ if(e.key==="ArrowUp"){ e.preventDefault(); moveSave(g.dataset.svgrip,i-1); } else if(e.key==="ArrowDown"){ e.preventDefault(); moveSave(g.dataset.svgrip,i+1); } });
+$("baRows").addEventListener("pointerdown",e=>{
+ const g=e.target.closest("[data-svgrip]"); if(!g||e.button>0) return; e.preventDefault();
+ const rows=[...$("baRows").querySelectorAll(".svrow")], row=g.closest(".svrow"), from=rows.indexOf(row);
+ const tops=rows.map(r=>r.getBoundingClientRect().top), step=rows.length>1?tops[1]-tops[0]:row.offsetHeight, y0=e.clientY; let to=from;
+ row.classList.add("lift"); rows.forEach(r=>{ if(r!==row) r.classList.add("shift"); }); g.setPointerCapture(e.pointerId);
+ const move=ev=>{ const dy=ev.clientY-y0; row.style.transform=`translateY(${dy}px)`;
+  to=Math.max(0,Math.min(rows.length-1,Math.round(from+dy/step)));
+  rows.forEach((r,i)=>{ if(r===row) return; let sh=0; if(from<to&&i>from&&i<=to) sh=-step; if(from>to&&i<from&&i>=to) sh=step; r.style.transform=sh?`translateY(${sh}px)`:""; }); };
+ const end=()=>{ g.removeEventListener("pointermove",move); g.removeEventListener("pointerup",end); g.removeEventListener("pointercancel",end);
+  rows.forEach(r=>{ r.style.transform=""; r.classList.remove("lift","shift"); }); if(to!==from) moveSave(g.dataset.svgrip,to); };
+ g.addEventListener("pointermove",move); g.addEventListener("pointerup",end); g.addEventListener("pointercancel",end);
+});
+for(const b of document.querySelectorAll('#step2 [data-go="3"]')) b.addEventListener("click",()=>{
+ if(S.autoSaved||S.saves.length||isTemplateGear()||!SLOTS.some(s=>+S.gear[s.id][0]>0)) return;
+ S.autoSaved=true; newSave("First save"); baStatus(); say('Saved your gear as 1. "First save". You can find it under Before & After image in step 2.');
 });
 $("baList").addEventListener("toggle",()=>{ if($("baList").open&&$("baRows").children.length!==S.saves.length) paintSaves(); });
 const cpFmt=v=>{ const n=parseCP(v); return n>0?fmt(n):String(v||"").trim(); };
@@ -1182,13 +1230,12 @@ $("baRows").addEventListener("input",e=>{ const t=e.target, x=saveById(t.dataset
 let svArm=null;
 $("baRows").addEventListener("click",e=>{
  const v=e.target.closest("[data-svview]"); if(v){ gearView(v.dataset.svview); return; }
- const b=e.target.closest("[data-svload],[data-svdel]"); if(!b) return; const id=b.dataset.svload||b.dataset.svdel, x=saveById(id); if(!x) return;
- const key=(b.dataset.svload?"L":"D")+id;
- if(svArm!==key){ for(const o of $("baRows").querySelectorAll("[data-svload],[data-svdel]")) o.textContent=o.dataset.svload?"Load":"Delete";
-  svArm=key; b.textContent=b.dataset.svload?"Click again to load":"Click again to delete"; clearTimeout(b._t); b._t=setTimeout(()=>{ if(svArm===key){ svArm=null; b.textContent=b.dataset.svload?"Load":"Delete"; } },3500); return; }
- svArm=null;
- if(b.dataset.svdel){ S.saves=S.saves.filter(s=>s.id!==id); save(); baStatus(); paintSaves(); say(`Deleted "${saveName(x)}".`); }
- else { S.gear=JSON.parse(JSON.stringify(x.gear)); if(+S.gear.ring4[0]>0) S.r4=true; for(const s of SLOTS) fillSlot(s); paintR4(); changed(); paintSaves(); say(`Loaded "${saveName(x)}" as your gear.`); }
+ const ld=e.target.closest("[data-svload]"); if(ld){ askLoad(ld.dataset.svload); return; }
+ const b=e.target.closest("[data-svdel]"); if(!b) return; const id=b.dataset.svdel, x=saveById(id); if(!x) return;
+ const key="D"+id;
+ if(svArm!==key){ for(const o of $("baRows").querySelectorAll("[data-svdel]")) o.textContent="Delete";
+  svArm=key; b.textContent="Click again to delete"; clearTimeout(b._t); b._t=setTimeout(()=>{ if(svArm===key){ svArm=null; b.textContent="Delete"; } },3500); return; }
+ svArm=null; S.saves=S.saves.filter(s=>s.id!==id); save(); baStatus(); paintSaves(); say(`Deleted "${saveName(x)}".`);
 });
 // icons for the picture (same files as the page; a picture can only use icons from this site)
 const baImg={};
@@ -1199,18 +1246,23 @@ function baIcon(name){
   im.onload=()=>res(im); im.onerror=()=>{ if(++i<srcs.length) im.src=srcs[i]; else res(null); }; im.src=srcs[0]; });
 }
 let baNoIcons=false;
-// Luck: average cost to roll each new result (or better, by FD) with this cube, vs the mesos spent
-function baLuck(groups,cube,sale,spent){
+// Luck: average cost to reach each new result with this cube, vs the mesos spent.
+// "main": the item's main total or better (ATT % on Weapon/Secondary/Emblem, crit lines on gloves, stat % elsewhere with All Stats counting as stat).
+//   Bonus lines on top (an extra Boss line, All Stats instead of stat) don't count as extra luck.
+// "exact": these exact lines, or anything worth more FD.
+const mainDim=(kind,st)=>XEN()?null:["weapon","secondary","emblem"].includes(kind)?(st.A>0?"A":null):kind==="gloves"&&st.K>0?"K":st.S>0?"S":kind==="hat"&&st.Q>0?"Q":null;
+function baLuck(groups,cube,sale,spent,mode){
  const P=perValues(), items=[];
  for(const [,rows] of groups) for(const r of rows){ if(!r.b||r.same) continue;
-  const sp=slotP(r.s,P), lvl=+r.a[0]||0, fa=stats(r.a.slice(1,4).map(parse),sp).fd; let p=0;
-  for(const o of outcomes(r.s.kind,cube,lvl,sp)) if(o.fd>=fa-1e-6) p+=o.p;
+  const sp=slotP(r.s,P), lvl=+r.a[0]||0, st=stats(r.a.slice(1,4).map(parse),sp), fa=st.fd, dim=mode==="exact"?null:mainDim(r.s.kind,st); let p=0;
+  for(const o of outcomes(r.s.kind,cube,lvl,sp)) if(o.fd>=fa-1e-6||(dim&&o[dim]>=st[dim])) p+=o.p;   // never stricter than "exact"
   if(p>0) items.push({p:Math.min(p,1),cost:PRICE[cube]*(sale?.75:1)+revealFee(lvl)}); }
  if(!items.length||!(spent>0)) return null;
- const avg=items.reduce((a,x)=>a+x.cost/x.p,0); let seed=777, more=0, N=4000;
+ const avg=items.reduce((a,x)=>a+x.cost/x.p,0); let seed=777, more=0, N=4000; const tots=new Float64Array(N);
  const rnd=()=>{ seed=seed+0x6D2B79F5|0; let t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; };
- for(let k=0;k<N;k++){ let tot=0; for(const x of items) tot+=(x.p>=1?1:Math.max(1,Math.ceil(Math.log(1-rnd())/Math.log(1-x.p))))*x.cost; if(tot>spent) more++; }
- return {avg,diff:(avg-spent)/avg,beat:more/N};
+ for(let k=0;k<N;k++){ let tot=0; for(const x of items) tot+=(x.p>=1?1:Math.max(1,Math.ceil(Math.log(1-rnd())/Math.log(1-x.p))))*x.cost; tots[k]=tot; if(tot>spent) more++; }
+ tots.sort(); const med=tots[N>>1];   // the typical player's cost (half spend less, half spend more)
+ return {avg,med,diff:(med-spent)/med,beat:more/N};
 }
 function rr(c,x,y,w,h,r){ c.beginPath(); c.moveTo(x+r,y); c.arcTo(x+w,y,x+w,y+h,r); c.arcTo(x+w,y+h,x,y+h,r); c.arcTo(x,y+h,x,y,r); c.arcTo(x,y,x+w,y,r); c.closePath(); }
 function wrapText(c,t,maxW,maxL){
@@ -1233,8 +1285,8 @@ async function baDraw(){
  else if(ca>0||cb>0) chips.push(["Combat Power",fmt(ca||cb)]);
  if(fdOk&&changed) chips.push(["Estimated FD gain",`${fd>=0?"+":"-"}${Math.abs(fd).toFixed(3)}%`,"from your scouter values",fd>=0]);
  const cube=sh.c||(S.cube==="glowing"?"glowing":"bright"), sale=sh.sale==null?saleOn:sh.sale;
- const lk=fdOk&&mz>0?baLuck(groups,cube,sale,mz):null;
- if(lk){ const d=Math.round(lk.diff*100); chips.push(["Luck",Math.abs(lk.diff)<0.005?"About average":`${Math.abs(d)}% ${d>=0?"luckier":"unluckier"}`,`Avg ${mesoFmt(lk.avg)} · luckier than ${lk.beat>=.995?">99":lk.beat<.005?"<1":Math.round(lk.beat*100)}% of players`,lk.diff>=0]); }
+ const lkMode=sh.lk==="exact"?"exact":"main", lk=fdOk&&mz>0?baLuck(groups,cube,sale,mz,lkMode):null;
+ if(lk){ const d=Math.round(lk.diff*100); chips.push(["Luck",Math.abs(lk.diff)<0.02?"About average":`${Math.abs(d)}% ${d>=0?"luckier":"unluckier"}`,`Typical cost ${mesoFmt(lk.med)}${lkMode==="exact"?" (exact lines)":""} · luckier than ${lk.beat>=.995?">99":lk.beat<.005?"<1":Math.round(lk.beat*100)}% of players`,lk.diff>=0]); }
  chips.push(["Items changed",String(changed)]);
  // layout (CSS px, drawn at 2x)
  const ROW=78, GAP=7, GH=28, SG=14, rowsN=groups.reduce((n,[,r])=>n+r.length,0), two=rowsN>5;
@@ -1315,7 +1367,7 @@ function baRefresh(){ clearTimeout(baT2); baT2=setTimeout(async()=>{ const ok=aw
 function baBlob(){ return new Promise((res,rej)=>{ try{ $("baCv").toBlob(b=>b?res(b):rej(new Error("no image")),"image/png"); }catch(e){ rej(e); } }); }
 async function baGetBlob(){ try{ return await baBlob(); }catch(e){ if(e&&e.name==="SecurityError"&&!baNoIcons){ baNoIcons=true; await baDraw(); return await baBlob(); } throw e; } }
 const baM=$("baModal"); const baMsg=t=>{ $("baMsg").textContent=t; };
-function openBa(){ const sh=S.share; baPickers(); $("baT").value=sh.t; $("baT").placeholder=S.name?`${S.name}'s Cubing Progress`:"Cubing Progress"; $("baM").value=sh.m; $("baAll").checked=sh.all; $("baC").value=sh.c||(S.cube==="glowing"?"glowing":"bright"); $("baSale").checked=sh.sale==null?saleOn:sh.sale; baMsg("");
+function openBa(){ const sh=S.share; baPickers(); $("baT").value=sh.t; $("baT").placeholder=S.name?`${S.name}'s Cubing Progress`:"Cubing Progress"; $("baM").value=sh.m; $("baAll").checked=sh.all; $("baC").value=sh.c||(S.cube==="glowing"?"glowing":"bright"); $("baL").value=sh.lk==="exact"?"exact":"main"; $("baSale").checked=sh.sale==null?saleOn:sh.sale; baMsg("");
  baM.hidden=false; document.body.style.overflow="hidden"; baRefresh(); $("baM").focus(); }
 const closeBa=()=>{ baM.hidden=true; document.body.style.overflow=""; $("baMake").focus(); };
 $("baMake").addEventListener("click",openBa); $("baClose").addEventListener("click",closeBa);
@@ -1327,7 +1379,7 @@ for(const id of ["baCB","baCA"]) $(id).addEventListener("change",e=>{ e.target.v
 $("baCB").addEventListener("input",e=>{ const pb=baPair(); if(pb){ pb.b.cp=e.target.value.slice(0,24); save(); baRefresh(); } });
 $("baCA").addEventListener("input",e=>{ const pb=baPair(); if(!pb) return; if(pb.a) pb.a.cp=e.target.value.slice(0,24); else S.share.ca=e.target.value.slice(0,24); save(); baRefresh(); });
 function baPickers(){
- const pb=baPair(); if(!pb) return; const opt=x=>`<option value="${esc(x.id)}">${esc(x.n?`${x.n} (${baDate(x.at)})`:baWhen(x.at))}</option>`, list=[...S.saves].reverse();
+ const pb=baPair(); if(!pb) return; const opt=x=>`<option value="${esc(x.id)}">${saveNo(x)}. ${esc(x.n?`${x.n} (${baDate(x.at)})`:baWhen(x.at))}</option>`, list=S.saves;
  $("baB").innerHTML=list.map(opt).join(""); $("baA").innerHTML=`<option value="now">Current gear (now)</option>`+list.map(opt).join("");
  $("baB").value=pb.b.id; $("baA").value=pb.a?pb.a.id:"now"; $("baCB").value=cpFmt(pb.b.cp); $("baCA").value=cpFmt(pb.a?pb.a.cp:S.share.ca);
 }
@@ -1335,6 +1387,7 @@ $("baB").addEventListener("change",e=>{ S.share.bi=e.target.value; save(); baPic
 $("baA").addEventListener("change",e=>{ S.share.ai=e.target.value; save(); baPickers(); baRefresh(); });
 $("baAll").addEventListener("change",e=>{ S.share.all=e.target.checked; save(); baRefresh(); });
 $("baC").addEventListener("change",e=>{ S.share.c=e.target.value; save(); baRefresh(); });
+$("baL").addEventListener("change",e=>{ S.share.lk=e.target.value; save(); baRefresh(); });
 $("baSale").addEventListener("change",e=>{ S.share.sale=e.target.checked; save(); baRefresh(); });
 $("baCopy").addEventListener("click",async()=>{
  try{ if(!navigator.clipboard||!window.ClipboardItem) throw new Error("no clipboard");
@@ -1499,9 +1552,11 @@ function valid(st){
    const sh=st.share&&typeof st.share==="object"?st.share:{};
    let sv=Array.isArray(st.saves)?st.saves:[];
    if(!sv.length&&st.before&&typeof st.before==="object"&&st.before.gear) sv=[{id:"b1",n:"Before",at:st.before.at,cp:sh.cb||"",gear:st.before.gear}];
-   st.saves=sv.filter(x=>x&&typeof x==="object"&&x.gear&&typeof x.gear==="object").slice(-MAXSAVES).map((x,i)=>({id:String(x.id||"s"+i).slice(0,24),n:String(x.n||"").slice(0,40),at:String(x.at||"").slice(0,40),cp:String(x.cp||"").slice(0,24),gear:clean(x.gear)}));
+   sv=sv.filter(x=>x&&typeof x==="object"&&x.gear&&typeof x.gear==="object");
+   st.saves=sv.slice(0,MAXSAVES).map((x,i)=>({id:String(x.id||"s"+i).slice(0,24),n:String(x.n||"").slice(0,40),at:String(x.at||"").slice(0,40),cp:String(x.cp||"").slice(0,24),gear:clean(x.gear)}));
    delete st.before;
-   st.share={t:String(sh.t||"").slice(0,40),m:String(sh.m||"").slice(0,20),ca:String(sh.ca||"").slice(0,24),all:!!sh.all,c:sh.c==="glowing"?"glowing":sh.c==="bright"?"bright":"",sale:typeof sh.sale==="boolean"?sh.sale:null,bi:String(sh.bi||"").slice(0,24),ai:String(sh.ai||"now").slice(0,24)}; } st.budC=st.budC==null?"10000":String(st.budC).slice(0,20);
+   st.autoSaved=!!st.autoSaved;
+   st.share={t:String(sh.t||"").slice(0,40),m:String(sh.m||"").slice(0,20),ca:String(sh.ca||"").slice(0,24),all:!!sh.all,c:sh.c==="glowing"?"glowing":sh.c==="bright"?"bright":"",sale:typeof sh.sale==="boolean"?sh.sale:null,bi:String(sh.bi||"").slice(0,24),ai:String(sh.ai||"now").slice(0,24),lk:sh.lk==="exact"?"exact":"main"}; } st.budC=st.budC==null?"10000":String(st.budC).slice(0,20);
  st.per=Math.min(Math.max(parseInt(st.per)||1000,1),1e9);
  st.r4=!!st.r4||+st.gear.ring4[0]>0;
  st.name=String(st.name||"").slice(0,30); if(!CLS[st.cls]) st.cls="";
