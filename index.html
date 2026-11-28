@@ -206,7 +206,7 @@ select:disabled{opacity:.55;cursor:not-allowed}
 .gvtop b{display:block;font:600 15px var(--display)}.gvsum small{display:block;color:var(--muted);font-size:12px}
 .gvava{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}.gvava img{image-rendering:pixelated;max-width:100%}
 .gvbot strong{display:block;font:700 22px var(--display);font-variant-numeric:tabular-nums;line-height:1.2}
-@media(max-width:900px){.gvgrid2{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}.gvgrid2 .gvc,.gvsum{grid-column:auto;grid-row:auto}.gvc.empty{display:none}}.gvbody{flex:1;min-height:0;overflow:auto;padding:8px;margin:-8px}
+@media(max-width:900px){.gvgrid2{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}.gvgrid2 .gvc,.gvsum{grid-column:auto;grid-row:auto}.gvc.empty{display:none}}.gvbody{flex:1;min-height:0;overflow:hidden auto;padding:12px;margin:-12px}   /* room for the triple prime stars, so they never make a scrollbar */
 .gvbody section+section{margin-top:14px}.gvbody h3{font:600 12px var(--body);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:0 0 8px 2px}
 .gvgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px}
 .gvc{background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:9px 11px}
@@ -215,7 +215,7 @@ select:disabled{opacity:.55;cursor:not-allowed}
 .gvc.tp{position:relative;border:1.5px solid transparent;background:linear-gradient(var(--sunk),var(--sunk)) padding-box,conic-gradient(from var(--tpa),var(--tp1,#ffd76a),var(--tp2,#ff9ad5),var(--tp3,#9ad8ff),var(--tp4,#b6ffb0),var(--tp1,#ffd76a)) border-box;box-shadow:0 0 18px -4px rgba(255,205,90,.65);animation:tpSpin 5s linear infinite}
 .gvgrid2 .gvc.tp{padding:7.5px 9.5px}
 .gvc.tp::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(115deg,transparent 42%,rgba(255,255,255,.09) 50%,transparent 58%) no-repeat;background-size:260% 100%;background-position:130% 0;animation:tpShine 4.2s ease-in-out infinite}
-.gvc.tp .tps{position:absolute;pointer-events:none;fill:#fff3c4;filter:drop-shadow(0 0 3px #ffcf4d) drop-shadow(0 0 6px rgba(255,207,77,.6));transform:scale(0);animation:tpTw 2.6s ease-in-out infinite}
+.gvc.tp .tps{position:absolute;z-index:3;pointer-events:none;fill:#fff3c4;filter:drop-shadow(0 0 3px #ffcf4d) drop-shadow(0 0 6px rgba(255,207,77,.6));transform:scale(0);animation:tpTw 2.6s ease-in-out infinite}
 :root[data-theme="light"] .gvc.tp{--tp1:#f0b000;--tp2:#ee5fae;--tp3:#3b9df2;--tp4:#34b56f;box-shadow:0 0 16px -4px rgba(240,176,0,.55)}
 :root[data-theme="light"] .gvc.tp .tps{fill:#ffd23f;stroke:#c98a00;stroke-width:.8;filter:drop-shadow(0 0 3px rgba(240,170,0,.8))}
 .gvc.tp .tps.s1{width:16px;height:16px;top:-8px;right:-8px}
@@ -1254,9 +1254,7 @@ async function gvDraw(x,now,noPics){
   const ix=x0+10, iy=y0+10, tp=has&&tripleP(s0,g);
   if(tp){ c.save(); const gr=c.createLinearGradient(x0,y0,x0+w,y0+h); [["0","#ffd76a"],[".35","#ff9ad5"],[".7","#9ad8ff"],["1","#b6ffb0"]].forEach(([o,col])=>gr.addColorStop(+o,col));
    c.shadowColor="rgba(255,205,90,.55)"; c.shadowBlur=12; c.strokeStyle=gr; c.lineWidth=1.6; rr(c,x0+.8,y0+.8,w-1.6,h-1.6,10); c.stroke(); c.restore();
-   const glint=(cx,cy,r)=>{ c.save(); c.shadowColor="#ffcf4d"; c.shadowBlur=7; c.fillStyle="#fff3c4"; c.beginPath();
-    for(let k=0;k<8;k++){ const a=k*Math.PI/4-Math.PI/2, rad=k%2?r*.26:r; c.lineTo(cx+Math.cos(a)*rad,cy+Math.sin(a)*rad); } c.closePath(); c.fill(); c.restore(); };
-   glint(x0+w-1,y0+1,8); glint(ix+37,iy+2,5); glint(x0+1,y0+h-1,6); glint(x0+w-16,y0+h-13,4); } c.fillStyle="#141a26"; rr(c,ix,iy,40,40,9); c.fill(); c.strokeStyle="#2a3345"; rr(c,ix+.5,iy+.5,39,39,9); c.stroke();
+   } c.fillStyle="#141a26"; rr(c,ix,iy,40,40,9); c.fill(); c.strokeStyle="#2a3345"; rr(c,ix+.5,iy+.5,39,39,9); c.stroke();
   if(!has){ c.globalAlpha=.6; c.fillStyle="#e8ecf4"; c.font="600 13.5px "+BF; c.fillText(s0.name,ix+50,iy+12); c.fillStyle="#98a3b6"; c.font="400 12px "+BF; c.fillText("Empty",ix+50,iy+30); c.globalAlpha=1; continue; }
   const im=icons[i]; if(im){ const sc=Math.min(1,36/Math.max(im.naturalWidth,im.naturalHeight)), iw=im.naturalWidth*sc, ih=im.naturalHeight*sc; c.imageSmoothingEnabled=sc<1; c.drawImage(im,ix+20-iw/2,iy+20-ih/2,iw,ih); c.imageSmoothingEnabled=true; }
   c.font="600 13.5px "+BF; const nl=wrapText(c,g[4]||s0.name,w-70,2), ny=iy+20-(nl.length*16+15)/2;
@@ -1266,6 +1264,10 @@ async function gvDraw(x,now,noPics){
   if(NOPOT.has(g[4])){ c.fillStyle="#98a3b6"; c.font="italic 400 13px "+BF; c.fillText("No potentials",x0+12,ly+8); continue; }
   showOrder(g.slice(1,4),pr).forEach((code,k)=>{ const yy=ly+k*19; if(code==="J0"){ tag(x0+12,yy,"x"); c.fillStyle="#98a3b6"; c.font="italic 400 13px "+BF; c.fillText("Other potential",x0+34,yy+8); return; }
    const [cc,v]=parse(code), t=cc==="Q"?(v>=2?"L":"U"):pr.has(code)?"L":"U"; tag(x0+12,yy,t); c.fillStyle="#d7dde8"; c.font="400 13px "+BF; c.fillText(lineLabel(code),x0+34,yy+8); });
+  if(tp){ // star glints last, so they sit on top of the icon box and text
+   const glint=(cx,cy,r)=>{ c.save(); c.shadowColor="#ffcf4d"; c.shadowBlur=7; c.fillStyle="#fff3c4"; c.beginPath();
+    for(let k=0;k<8;k++){ const a=k*Math.PI/4-Math.PI/2, rad=k%2?r*.26:r; c.lineTo(cx+Math.cos(a)*rad,cy+Math.sin(a)*rad); } c.closePath(); c.fill(); c.restore(); };
+   glint(x0+w-1,y0+1,8); glint(ix+39,iy+1,5); glint(x0+1,y0+h-1,6); glint(x0+w-16,y0+h-13,4); }
  }
  // middle: name and class on top, character, Combat Power at the bottom
  { const [x0,y0,w,h]=cell(3,1,2), job=S.cls||LK.job||"", cp=parseCP(x.cp), n=ids.filter(i=>+G[i][0]>0).length; box(x0,y0,w,h);
