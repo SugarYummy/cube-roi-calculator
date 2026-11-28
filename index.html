@@ -1250,8 +1250,10 @@ function tpBorder(c,k,t){ const {x0,y0,w,h,sc}=k; let gr;
  if(t!=null&&c.createConicGradient){ gr=c.createConicGradient(t*Math.PI*2-Math.PI/2,x0+w/2,y0+h/2); [0,.25,.5,.75,1].forEach((o,i)=>gr.addColorStop(o,TPC[i%4])); }
  else { gr=c.createLinearGradient(x0,y0,x0+w,y0+h); [0,.35,.7,1].forEach((o,i)=>gr.addColorStop(o,TPC[i])); }
  c.save(); c.shadowColor="rgba(255,205,90,.55)"; c.shadowBlur=6*sc; c.strokeStyle=gr; c.lineWidth=1.6; rr(c,x0+.8,y0+.8,w-1.6,h-1.6,10); c.stroke(); c.restore(); }
-function tpShine(c,k,t){ if(t==null||t<.3||t>.7) return; const {x0,y0,w,h}=k, dx=.9063, dy=.4226, L=w*dx+h*dy, pos=(1.3-1.6*ease((t-.3)/.4))*L, hw=.18*L;
- const gr=c.createLinearGradient(x0+dx*(pos-hw),y0+dy*(pos-hw),x0+dx*(pos+hw),y0+dy*(pos+hw)); gr.addColorStop(0,"rgba(255,255,255,0)"); gr.addColorStop(.5,"rgba(255,255,255,.09)"); gr.addColorStop(1,"rgba(255,255,255,0)");
+function tpShine(c,k,t){ if(t==null||t<.3||t>.7) return; const {x0,y0,w,h}=k, dx=.9063, dy=.4226, hw=.21*w;
+ // the band's middle moves from left of the card to past its right edge (like the popup's 130% to -30% sweep)
+ const cx=x0+(-.78+2.56*ease((t-.3)/.4))*w, cy=y0+h/2;
+ const gr=c.createLinearGradient(cx-dx*hw,cy-dy*hw,cx+dx*hw,cy+dy*hw); gr.addColorStop(0,"rgba(255,255,255,0)"); gr.addColorStop(.5,"rgba(255,255,255,.09)"); gr.addColorStop(1,"rgba(255,255,255,0)");
  c.save(); rr(c,x0,y0,w,h,10); c.clip(); c.fillStyle=gr; c.fillRect(x0,y0,w,h); c.restore(); }
 function tpStars(c,k,t){ const {x0,y0,w,h,ix,iy,sc}=k;
  // same 4 stars as the popup: card corner, icon box corner, bottom left corner, small one bottom right. Each twinkles in turn.
@@ -1312,7 +1314,7 @@ async function gvDraw(x,now,noPics,o={}){
 async function gvGif(noPics){ const {x,now}=gvX, GSC=GIF_SC, N=50, DELAY=80, E=GIFENC;
  const base=await gvDraw(x,now,noPics,{scale:GSC,fx:false}), cards=base.tp; if(!cards.length) return null;
  const W=base.width, H=base.height, fc=document.createElement("canvas"); fc.width=W; fc.height=H; const c=fc.getContext("2d",{willReadFrequently:true});
- const draw=t=>{ c.setTransform(1,0,0,1,0,0); c.drawImage(base,0,0); c.setTransform(GSC,0,0,GSC,0,0); for(const k of cards){ tpBorder(c,k,t); tpStars(c,k,t); } };   // no light sweep here: GIF colours turn it into stripes
+ const draw=t=>{ c.setTransform(1,0,0,1,0,0); c.drawImage(base,0,0); c.setTransform(GSC,0,0,GSC,0,0); for(const k of cards){ tpShine(c,k,t); tpBorder(c,k,t); tpStars(c,k,t); } };
  // the part that moves: all sparkling cards plus room for the glow and corner stars
  const P=14; let rx=Infinity, ry=Infinity, rx2=0, ry2=0;
  for(const k of cards){ rx=Math.min(rx,k.x0-P); ry=Math.min(ry,k.y0-P); rx2=Math.max(rx2,k.x0+k.w+P); ry2=Math.max(ry2,k.y0+k.h+P); }
@@ -1321,14 +1323,17 @@ async function gvGif(noPics){ const {x,now}=gvX, GSC=GIF_SC, N=50, DELAY=80, E=G
  const boxes=cards.map(k=>{ const bx=Math.max(0,Math.floor((k.x0-P)*GSC)), by=Math.max(0,Math.floor((k.y0-P)*GSC)); return [bx,by,Math.min(W,Math.ceil((k.x0+k.w+P)*GSC))-bx,Math.min(H,Math.ceil((k.y0+k.h+P)*GSC))-by]; });
  draw(0); const full=c.getImageData(0,0,W,H).data;   // throws SecurityError if a picture blocks reading
  // one palette for every frame: the whole first frame plus the moving part at a few moments (for the border colours and stars)
- const smp=[full]; for(const t of [.12,.37,.5,.62,.87]){ draw(t); for(const [bx,by,bw,bh] of boxes) smp.push(c.getImageData(bx,by,bw,bh).data); }
+ const smp=[full]; for(const t of [.12,.37,.45,.5,.55,.62,.87]){ draw(t); for(const [bx,by,bw,bh] of boxes) smp.push(c.getImageData(bx,by,bw,bh).data); }
  const all=new Uint8Array(smp.reduce((a,d)=>a+d.length,0)); { let off=0; for(const d of smp){ all.set(d,off); off+=d.length; } }
- const pal=E.quantize(all,255), TI=pal.length, palette=[...pal,[255,0,255]];
- const enc=E.GIFEncoder(), prev=E.applyPalette(full,pal);
+ // plus fixed shades for the gloss over the card and icon box backgrounds, so the soft band doesn't turn into stripes
+ const SH=[]; for(const b0 of [[27,34,48],[20,26,38]]) for(let k=1;k<=12;k++){ const a=.09*k/12; SH.push(b0.map(v=>Math.round(v+(255-v)*a))); }
+ const pal=[...E.quantize(all,255-SH.length),...SH], TI=pal.length, palette=[...pal,[255,0,255]], near=nearest(pal);
+ const toIdx=(d,out)=>{ for(let i=0,j=0;i<out.length;i++,j+=4) out[i]=near(d[j]<<16|d[j+1]<<8|d[j+2]); return out; };
+ const enc=E.GIFEncoder(), prev=toIdx(full,new Uint8Array(W*H));
  enc.writeFrame(prev,W,H,{palette,delay:DELAY,repeat:0,dispose:1});
  for(let f=1;f<N;f++){
   draw(f/N); const out=new Uint8Array(rw*rh).fill(TI);   // TI = "same as before"
-  for(const [bx,by,bw,bh] of boxes){ const ri=E.applyPalette(c.getImageData(bx,by,bw,bh).data,pal);
+  for(const [bx,by,bw,bh] of boxes){ const ri=toIdx(c.getImageData(bx,by,bw,bh).data,new Uint8Array(bw*bh));
    for(let yy=0,j=0;yy<bh;yy++){ let gi=(by+yy)*W+bx, oj=(by-ry+yy)*rw+(bx-rx); for(let xx=0;xx<bw;xx++,j++,gi++,oj++){ const v=ri[j]; if(v!==prev[gi]){ out[oj]=v; prev[gi]=v; } } } }
   enc.writeFrame(out,rw,rh,{x:rx,y:ry,delay:DELAY,transparent:true,transparentIndex:TI,dispose:1});
   if(f%6===0) await new Promise(r=>setTimeout(r));   // let the page breathe
@@ -1336,6 +1341,9 @@ async function gvGif(noPics){ const {x,now}=gvX, GSC=GIF_SC, N=50, DELAY=80, E=G
  enc.finish(); return new Blob([enc.bytes()],{type:"image/gif"});
 }
 const GIF_SC=2;
+// nearest palette colour for an exact 0xRRGGBB colour (remembered), so close shades stay apart
+function nearest(P){ const m=new Map(); return v=>{ let i=m.get(v); if(i!==undefined) return i; const r=v>>16&255, g=v>>8&255, b=v&255; let bd=Infinity; i=0;
+ for(let k=0;k<P.length;k++){ const p=P[k], dr=r-p[0], dg=g-p[1], db=b-p[2], d=3*dr*dr+4*dg*dg+2*db*db; if(d<bd){ bd=d; i=k; } } m.set(v,i); return i; }; }
 async function gvBlob(){ const {x,now}=gvX, mk=async np=>{ const cv=await gvDraw(x,now,np); return await new Promise((res,rej)=>{ try{ cv.toBlob(b=>b?res(b):rej(new Error("no image")),"image/png"); }catch(e){ rej(e); } }); };
  try{ return await mk(false); }catch(e){ if(e&&e.name==="SecurityError") return await mk(true); throw e; } }
 // level and outfit to show: the save's own (from when it was made), else the current rankings picture
