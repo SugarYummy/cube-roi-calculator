@@ -196,6 +196,18 @@ select:disabled{opacity:.55;cursor:not-allowed}
 .why{background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:14px;color:var(--muted)}
 .why ul{margin:6px 0 0;padding-left:18px}.why li{margin:3px 0}
 .list{display:grid;gap:6px}
+.babar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;margin:0 0 14px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--sunk)}
+.babar b{display:block;font:600 15px var(--display)}.babar .batxt span{font-size:13px;color:var(--muted)}
+.bambox{width:min(1100px,100%)}
+.bahead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.bahead h2{font-size:18px}
+.baform{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:flex-end;margin-bottom:12px}
+.baform label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted)}
+.baform input,.baform select{width:170px}.baform #baT{width:250px}
+.baform label.salechk{flex-direction:row;align-items:center;font-size:13.5px;min-height:38px}.baform .salechk input{width:16px;min-height:0}
+.baprev{flex:1;min-height:120px;overflow:auto;border:1px solid var(--line);border-radius:10px;background:#0d121b;padding:10px}
+.baprev canvas{display:block;width:100%;height:auto;border-radius:8px}
+.bafoot{margin-top:12px;justify-content:flex-end;align-items:center}.bafoot .muted{margin-right:auto;font-size:13px}
+@media (max-width:600px){.baform label{flex:1 1 140px}.baform input,.baform #baT{width:100%}}
 .bud{margin:0 0 12px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--sunk)}
 .budtop{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;font-size:14px;color:var(--muted)}
 .budtop>b{color:var(--fg);font:600 15px var(--display)}.budhide{margin-left:auto;font-size:13px}.budtop label{display:flex;align-items:center;gap:6px}.budtop input{width:96px}
@@ -367,9 +379,11 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
  <section class="panel step" id="step2">
   <div class="stephead"><div><h2>Step 2: Input your gear</h2><p>Pick each item and its 3 potential lines.</p></div>
    <div class="row"><button class="btn" id="bReset" type="button">Reset (clear gear)</button><button class="btn ghost" id="bTemplate" type="button">Load example</button><button class="btn accent" type="button" data-go="3">See results →</button></div></div>
+  <div class="babar"><div class="batxt"><b>Before &amp; After image</b><span id="baStat"></span></div>
+   <div class="row"><button class="btn" id="baSave" type="button">Save as Before</button><button class="btn accent" id="baMake" type="button">Make image</button></div></div>
   <div class="callout" id="exNote"><b>This is an example (Moeko's gear).</b> Click <b>Reset</b> to clear it, then fill in your own.</div>
   <div class="callout warn"><ul>
-   <li><b>Hat:</b> only Stat hats are calculated. Cooldown (CD) hat potentials aren't counted.</li>
+   <li><b>Hat:</b> Cooldown lines only count if you turn on <b>Add Cooldown Hat values</b> in step 1.</li>
    <li>All items count as Legendary.</li>
    <li>This tool might have mistakes. Use it at your own risk.</li>
   </ul></div>
@@ -394,6 +408,7 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
    <li><b>Ranking:</b> for each item it checks targets like "33%+ Magic ATT" and picks the one with the most FD per cube (or the fewest cubes).</li>
    <li><b>Auto-reroll targets:</b> settings for the in-game Target presets. One is only suggested if everything it stops on is an upgrade for you. The game adds up totals, and All Stats counts toward your main stat.</li>
    <li><b>Mesos:</b> Heroic world prices. Bright 22M and Glowing 12M each, plus the meso fee each cube use charges (20 × item level²). The 25% off Cash Shop cube sale turns on by itself on sale days.</li>
+   <li><b>Before &amp; After image:</b> in step 2, click <b>Save as Before</b> before you cube. After you update your gear, <b>Make image</b> draws what changed, ready to copy into Discord.</li>
    <li><b>Budget plan:</b> type your mesos (Mesos mode) or your cubes (Cubes mode). It cubes each item in list order until it hits the target, 4,000 times, and shows how far you get most of the time. Turn it off with the Budget plan box above the list.</li>
    <li><b>Your data:</b> saved in your browser only. Copy link puts your gear in the link.</li>
    <li><b>Not exact for:</b> Demon Avenger, Xenon, and Cooldown Hat values from Maple Scouter.</li>
@@ -431,6 +446,23 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
   <h2 id="noTitle" style="font-size:18px">Not allowed</h2>
   <p id="noText" style="margin:8px 0 0;font-size:15px"></p>
   <div class="row" style="margin-top:16px;justify-content:flex-end"><button class="btn accent" id="noOk" type="button">OK</button></div>
+ </div>
+</div>
+<div class="modal" id="baModal" role="dialog" aria-modal="true" aria-labelledby="baTitle" hidden>
+ <div class="mbox bambox">
+  <div class="bahead"><h2 id="baTitle">Before &amp; After image</h2><button class="btn ghost" id="baClose" type="button">Close</button></div>
+  <div class="baform">
+   <label>Title<input id="baT" maxlength="40" autocomplete="off"></label>
+   <label>Mesos spent<input id="baM" inputmode="decimal" placeholder="700B" autocomplete="off"></label>
+   <label>Combat Power before<input id="baCB" inputmode="decimal" placeholder="120,000,000" autocomplete="off"></label>
+   <label>Combat Power after<input id="baCA" inputmode="decimal" placeholder="125,000,000" autocomplete="off"></label>
+   <label>Cube used<select id="baC"><option value="bright">Bright Cube</option><option value="glowing">Glowing Cube</option></select></label>
+   <label class="salechk"><input type="checkbox" id="baSale"> Bought on sale</label>
+   <label class="salechk"><input type="checkbox" id="baAll"> Show items that didn't change</label>
+  </div>
+  <p class="note" id="baNote" style="margin:-4px 0 10px">Type your mesos spent to see your luck. Luck compares it to the average cost of rolling these results (or better). It only counts items that changed, so mesos spent on a pot you kept make you look unluckier.</p>
+  <div class="baprev"><canvas id="baCv" aria-label="Before and after image preview"></canvas></div>
+  <div class="row bafoot"><span class="muted" id="baMsg" role="status"></span><button class="btn" id="baDl" type="button">Download</button><button class="btn accent" id="baCopy" type="button">Copy image</button></div>
  </div>
 </div>
 <div class="modal" id="cfModal" role="dialog" aria-modal="true" aria-labelledby="cfTitle" hidden>
@@ -1041,6 +1073,179 @@ function fillSlot(s){
 }
 const isTemplateGear=()=>SLOTS.every(s=>JSON.stringify(S.gear[s.id])===JSON.stringify(TEMPLATE.gear[s.id]));
 
+/* ---------- before & after image ---------- */
+const BA_GROUPS=[["Weapon, Secondary, Emblem",["weapon","secondary","emblem"]],["Armor",["hat","top","bottom","shoulder","cape","gloves","shoes"]],
+ ["Accessories",["ring1","ring2","ring3","ring4","belt","pend1","pend2","earring","eye","face"]],["Heart, Badge",["heart","badge"]]];
+const parseCP=t=>{ const m=String(t).normalize("NFKC").replace(/[,\s]/g,"").match(/^(\d*\.?\d+)([kmb]?)/i); return m?Math.round(+m[1]*({k:1e3,m:1e6,b:1e9}[m[2].toLowerCase()]||1)):0; };
+const baDate=(d,y)=>{ const x=new Date(d); return isNaN(x)?"":x.toLocaleDateString("en-US",y?{month:"short",day:"numeric",year:"numeric"}:{month:"short",day:"numeric"}); };
+const baKey=g=>[...g.slice(1,4)].sort().join(",")+"|"+(g[4]||"");
+const baUse=id=>!(id==="secondary"&&zeroMirror())&&!noPot(id)&&(id!=="ring4"||S.r4);
+function baRows(all){
+ const B=S.before&&S.before.gear; if(!B) return {groups:[],changed:0};
+ let changed=0; const groups=[];
+ for(const [title,ids] of BA_GROUPS){ const rows=[];
+  for(const id of ids){ const a=S.gear[id], b=B[id]; if(!(+a[0]>0)||!baUse(id)) continue;
+   const had=+b[0]>0, same=had&&baKey(a)===baKey(b); if(!same) changed++;
+   if(same&&!all) continue; rows.push({s:SID[id],a,b:had?b:null,same}); }
+  if(rows.length) groups.push([title,rows]); }
+ return {groups,changed};
+}
+function baStatus(){
+ const el=$("baStat"); if(!el) return; const has=!!(S.before&&S.before.gear);
+ if(has){ const n=baRows(false).changed; el.textContent=`Before saved ${baDate(S.before.at,1)}. ${n} item${n===1?"":"s"} changed since then.`; }
+ else el.textContent="Save your gear before you cube. After you update it, make an image to share.";
+ $("baMake").disabled=!has; if(!baArm) $("baSave").textContent=has?"Save new Before":"Save as Before";
+}
+let baArm=null;
+$("baSave").addEventListener("click",()=>{
+ const b=$("baSave");
+ if(S.before&&!baArm){ b.textContent="Click again to replace"; baArm=setTimeout(()=>{ baArm=null; baStatus(); },3500); return; }
+ clearTimeout(baArm); baArm=null; S.before={at:new Date().toISOString(),gear:JSON.parse(JSON.stringify(S.gear))}; save(); baStatus(); say("Saved your gear as Before. Now go cube!");
+});
+// icons for the picture (same files as the page; a picture can only use icons from this site)
+const baImg={};
+function baIcon(name){
+ if(name in baImg) return baImg[name]; const f=iconFiles(name); if(!f) return baImg[name]=Promise.resolve(null);
+ const srcs=[...f.map(x=>ICON_LOCAL+x+".png"),...f.map(x=>ICON_BASE+x+".png")];
+ return baImg[name]=new Promise(res=>{ let i=0; const im=new Image(); im.crossOrigin="anonymous"; im.referrerPolicy="no-referrer";
+  im.onload=()=>res(im); im.onerror=()=>{ if(++i<srcs.length) im.src=srcs[i]; else res(null); }; im.src=srcs[0]; });
+}
+let baNoIcons=false;
+// Luck: average cost to roll each new result (or better, by FD) with this cube, vs the mesos spent
+function baLuck(groups,cube,sale,spent){
+ const P=perValues(), items=[];
+ for(const [,rows] of groups) for(const r of rows){ if(!r.b||r.same) continue;
+  const sp=slotP(r.s,P), lvl=+r.a[0]||0, fa=stats(r.a.slice(1,4).map(parse),sp).fd; let p=0;
+  for(const o of outcomes(r.s.kind,cube,lvl,sp)) if(o.fd>=fa-1e-6) p+=o.p;
+  if(p>0) items.push({p:Math.min(p,1),cost:PRICE[cube]*(sale?.75:1)+revealFee(lvl)}); }
+ if(!items.length||!(spent>0)) return null;
+ const avg=items.reduce((a,x)=>a+x.cost/x.p,0); let seed=777, more=0, N=4000;
+ const rnd=()=>{ seed=seed+0x6D2B79F5|0; let t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; };
+ for(let k=0;k<N;k++){ let tot=0; for(const x of items) tot+=(x.p>=1?1:Math.max(1,Math.ceil(Math.log(1-rnd())/Math.log(1-x.p))))*x.cost; if(tot>spent) more++; }
+ return {avg,diff:(avg-spent)/avg,beat:more/N};
+}
+function rr(c,x,y,w,h,r){ c.beginPath(); c.moveTo(x+r,y); c.arcTo(x+w,y,x+w,y+h,r); c.arcTo(x+w,y+h,x,y+h,r); c.arcTo(x,y+h,x,y,r); c.arcTo(x,y,x+w,y,r); c.closePath(); }
+function wrapText(c,t,maxW,maxL){
+ const words=t.split(" "), out=[]; let cur="";
+ for(const w of words){ const tr=cur?cur+" "+w:w; if(c.measureText(tr).width<=maxW||!cur) cur=tr; else { out.push(cur); cur=w; } }
+ if(cur) out.push(cur);
+ if(out.length>maxL){ const keep=out.slice(0,maxL); let last=keep[maxL-1]+" "+out.slice(maxL).join(" "); while(c.measureText(last+"…").width>maxW&&last.length) last=last.slice(0,-1); keep[maxL-1]=last.trim()+"…"; return keep; }
+ return out.map(l=>{ if(c.measureText(l).width<=maxW) return l; while(c.measureText(l+"…").width>maxW&&l.length) l=l.slice(0,-1); return l+"…"; });
+}
+async function baDraw(){
+ const cv=$("baCv"), sh=S.share, all=$("baAll").checked, {groups,changed}=baRows(all);
+ const DF='"Space Grotesk","Segoe UI",system-ui,sans-serif', BF='Inter,"Segoe UI",system-ui,sans-serif';
+ try{ await Promise.all(["700 27px "+DF,"600 14px "+BF,"400 13px "+BF,"800 11px "+BF].map(f=>document.fonts.load(f))); }catch(e){}
+ const P=perValues(), fdOk=!missing().length, c0=document.createElement("canvas").getContext("2d");
+ let fd=0; if(fdOk) for(const [,rows] of groups) for(const r of rows) if(r.b&&!r.same){ const sp=slotP(r.s,P); fd+=stats(r.a.slice(1,4).map(parse),sp).fd-stats(r.b.slice(1,4).map(parse),sp).fd; }
+ const chips=[], mz=parseMeso(sh.m), cb=parseCP(sh.cb), ca=parseCP(sh.ca);
+ if(mz>0) chips.push(["Mesos spent",mesoFmt(mz)]);
+ if(cb>0&&ca>0){ const d=ca-cb; chips.push(["Combat Power",`${fmt(cb)}  ▸  ${fmt(ca)}`,`${d>=0?"+":"-"}${fmt(Math.abs(d))} (${d>=0?"+":"-"}${(Math.abs(d)/cb*100).toFixed(1)}%)`,d>=0]); }
+ else if(ca>0||cb>0) chips.push(["Combat Power",fmt(ca||cb)]);
+ if(fdOk&&changed) chips.push(["Estimated FD gain",`${fd>=0?"+":"-"}${Math.abs(fd).toFixed(3)}%`,"from your scouter values",fd>=0]);
+ const cube=sh.c||(S.cube==="glowing"?"glowing":"bright"), sale=sh.sale==null?saleOn:sh.sale;
+ const lk=fdOk&&mz>0?baLuck(groups,cube,sale,mz):null;
+ if(lk){ const d=Math.round(lk.diff*100); chips.push(["Luck",Math.abs(lk.diff)<0.005?"About average":`${Math.abs(d)}% ${d>=0?"luckier":"unluckier"}`,`Avg ${mesoFmt(lk.avg)} · luckier than ${lk.beat>=.995?">99":lk.beat<.005?"<1":Math.round(lk.beat*100)}% of players`,lk.diff>=0]); }
+ chips.push(["Items changed",String(changed)]);
+ // layout (CSS px, drawn at 2x)
+ const ROW=78, GAP=7, GH=28, SG=14, rowsN=groups.reduce((n,[,r])=>n+r.length,0), two=rowsN>5;
+ const W=two?1280:660, PAD=28, colW=two?(W-PAD*2-20)/2:W-PAD*2;
+ const gH=g=>GH+g[1].length*(ROW+GAP);
+ let cols=[groups,[]];
+ if(two){ let best=null; for(let m=0;m<(1<<groups.length);m++){ const L=[],R=[]; groups.forEach((g,i)=>((m>>i)&1?R:L).push(g));
+   const h=x=>x.reduce((a,g,i)=>a+gH(g)+(i?SG:0),0), sc=Math.max(h(L),h(R))+(R.includes(groups[0])?0.25:0); if(!best||sc<best.sc-1e-9) best={sc,L,R}; } cols=[best.L,best.R]; }
+ const colH=c=>c.reduce((a,g,i)=>a+gH(g)+(i?SG:0),0);
+ c0.font="700 18px "+DF;
+ const chipW=chips.map(([lab,val,sub2])=>{ c0.font="700 18px "+DF; const a=c0.measureText(val).width; c0.font="400 12px "+BF; const l=c0.measureText(lab).width; c0.font="600 12px "+BF; const b=sub2?c0.measureText(sub2).width:0; return Math.max(a,b,l)+28; });
+ const chipPos=[]; { let x=PAD, row=0; chipW.forEach((w,i)=>{ if(x+w>W-PAD&&x>PAD){ row++; x=PAD; } chipPos.push([x,row]); x+=w+10; }); }
+ const chipRows=chips.length?chipPos[chipPos.length-1][1]+1:0;
+ const headH=two?74:94, chipH=chipRows*70+(chipRows?6:0), bodyH=groups.length?Math.max(colH(cols[0]),colH(cols[1])):60;
+ const H=PAD+headH+chipH+bodyH+PAD-GAP;
+ cv.width=W*2; cv.height=H*2; const c=cv.getContext("2d"); c.setTransform(2,0,0,2,0,0); c.textBaseline="middle";
+ c.fillStyle="#121722"; c.fillRect(0,0,W,H);
+ // header
+ c.fillStyle="#e8ecf4"; c.font="700 27px "+DF; c.textAlign="left";
+ const title=(sh.t||"").trim()||(S.name?`${S.name}'s Cubing Progress`:"Cubing Progress");
+ c.fillText(wrapText(c,title,W-PAD*2-(two?420:0),1)[0],PAD,PAD+16);
+ const d1=baDate(S.before.at), d2=baDate(new Date());
+ c.font="400 14px "+BF; c.fillStyle="#98a3b6";
+ const sub=`${S.cls?S.cls+"  ·  ":""}Before ${d1}  ▸  After ${d2}`; c.fillText(sub,PAD,PAD+46);
+ // legend
+ const tag=(x,y,t)=>{ c.fillStyle=t==="L"?"#6fd36f":t==="U"?"#f1c33c":"#3a4458"; rr(c,x,y,16,16,4); c.fill(); if(t==="L"||t==="U"){ c.fillStyle=t==="L"?"#0c1a0c":"#1f1700"; c.font="800 10.5px "+BF; c.textAlign="center"; c.fillText(t,x+8,y+8.5); c.textAlign="left"; } };
+ { const items=[["L","Legendary line"],["U","Unique line"],["N","New line"]]; c.font="400 13px "+BF;
+   let x=W-PAD; const y=two?PAD+40:PAD+64, ws=items.map(([,t])=>c.measureText(t).width);
+   if(!two){ x=PAD+(items.reduce((a,_,i)=>a+ (i?16:0)+(items[i][0]==="N"?34:16)+6+ws[i],0)); }
+   for(let i=items.length-1;i>=0;i--){ const [k,t]=items[i]; x-=ws[i]; c.fillStyle="#98a3b6"; c.font="400 13px "+BF; c.fillText(t,x,y+8); x-=6;
+    if(k==="N"){ x-=34; c.fillStyle="rgba(76,195,138,.18)"; rr(c,x,y,34,16,5); c.fill(); c.strokeStyle="rgba(76,195,138,.45)"; c.lineWidth=1; rr(c,x+.5,y+.5,33,15,5); c.stroke(); } else { x-=16; tag(x,y,k); } x-=16; } }
+ let y0=PAD+headH;
+ // summary chips
+ if(chips.length){ c.textAlign="left";
+  chips.forEach(([lab,val,sub2,good],i)=>{ const w=chipW[i], x=chipPos[i][0], yy=y0+chipPos[i][1]*70;
+   c.save(); c.translate(0,yy-y0);
+   c.fillStyle="#1b2230"; rr(c,x,y0,w,60,11); c.fill(); c.strokeStyle="#2e384b"; c.lineWidth=1; rr(c,x+.5,y0+.5,w-1,59,11); c.stroke();
+   c.fillStyle="#98a3b6"; c.font="400 12px "+BF; c.fillText(lab,x+14,y0+14);
+   c.fillStyle="#e8ecf4"; c.font="700 18px "+DF; c.fillText(val,x+14,sub2?y0+33:y0+37);
+   if(sub2){ c.fillStyle=good===undefined?"#98a3b6":good?"#4cc38a":"#ff7a7a"; c.font="600 12px "+BF; c.fillText(sub2,x+14,y0+50); }
+   c.restore(); });
+  y0+=chipH; }
+ if(!groups.length){ c.fillStyle="#98a3b6"; c.font="400 15px "+BF; c.fillText("No potential changes since your Before. Update your gear after cubing.",PAD,y0+24); return false; }
+ // rows
+ const icons={}; if(!baNoIcons) await Promise.all(groups.flatMap(([,rows])=>rows.map(r=>baIcon(r.a[4]).then(im=>{ icons[r.s.id]=im; }))));
+ const LW=168;
+ const drawLines=(r,g,x,y,isAfter,base)=>{
+  const lvl=+g[0]||0, pr=primeSet(r.s.kind,optLvl(lvl)), codes=showOrder(g.slice(1,4),pr), kept={};
+  if(isAfter&&base) for(const k of base.slice(1,4)) kept[k]=(kept[k]||0)+1;
+  codes.forEach((code,i)=>{ const ly=y+i*21, junk=code==="J0", [cc,v]=parse(code), t=junk?"":cc==="Q"?(v>=2?"L":"U"):pr.has(code)?"L":"U";
+   let isNew=false; if(isAfter&&base&&!junk){ if(kept[code]>0) kept[code]--; else isNew=true; }
+   if(isNew){ c.fillStyle="rgba(76,195,138,.16)"; rr(c,x-6,ly-1,LW,20,6); c.fill(); c.strokeStyle="rgba(76,195,138,.42)"; c.lineWidth=1; rr(c,x-5.5,ly-.5,LW-1,19,6); c.stroke(); }
+   tag(x,ly+1,t||"x");
+   c.font=(junk?"italic 400 13px ":"400 13px ")+BF; c.fillStyle=!isAfter?"#98a3b6":isNew?"#ffffff":junk?"#98a3b6":"#c4ccd9";
+   c.fillText(junk?"Other line":lineLabel(code),x+23,ly+9.5); });
+ };
+ cols.forEach((col,ci)=>{ let y=y0; const x0=PAD+ci*(colW+20);
+  col.forEach(([title,rows],gi)=>{ if(gi) y+=SG;
+   c.fillStyle="#98a3b6"; c.font="600 12px "+BF; c.textAlign="left"; c.fillText(title.toUpperCase().split("").join(String.fromCharCode(8202)),x0+2,y+9); y+=GH;
+   for(const r of rows){
+    c.fillStyle="#1b2230"; rr(c,x0,y,colW,ROW,12); c.fill(); c.strokeStyle="#2e384b"; c.lineWidth=1; rr(c,x0+.5,y+.5,colW-1,ROW-1,12); c.stroke();
+    const ix=x0+12, iy=y+(ROW-44)/2; c.fillStyle="#141a26"; rr(c,ix,iy,44,44,9); c.fill(); c.strokeStyle="#2a3345"; rr(c,ix+.5,iy+.5,43,43,9); c.stroke();
+    const im=icons[r.s.id]; if(im){ const sc=Math.min(1,42/Math.max(im.naturalWidth,im.naturalHeight)), w=im.naturalWidth*sc, h=im.naturalHeight*sc; c.imageSmoothingEnabled=sc<1; c.drawImage(im,ix+22-w/2,iy+22-h/2,w,h); c.imageSmoothingEnabled=true; }
+    const afterBox=x0+colW-12-LW, arrowL=afterBox-10-18, beforeBox=arrowL-10-LW, afterX=afterBox+6, beforeX=beforeBox+6, nameX=ix+54, nameW=beforeBox-10-nameX;
+    c.font="600 14px "+BF; const nl=wrapText(c,itemName(r.s),nameW,2), ny=y+ROW/2-(nl.length*17+16)/2;
+    c.fillStyle="#e8ecf4"; nl.forEach((l,i)=>c.fillText(l,nameX,ny+8+i*17));
+    c.fillStyle="#98a3b6"; c.font="400 12px "+BF; c.fillText(`Lv. ${r.a[0]}`,nameX,ny+nl.length*17+9);
+    const ly=y+(ROW-62)/2;
+    if(r.b) drawLines(r,r.b,beforeX,ly,false); else { c.fillStyle="#98a3b6"; c.font="italic 400 13px "+BF; c.fillText("New item",beforeX,y+ROW/2); }
+    c.strokeStyle="#ff8a4c"; c.lineWidth=2.2; c.lineCap="round"; c.lineJoin="round"; const ax=arrowL+9, ay=y+ROW/2;
+    c.beginPath(); c.moveTo(ax-3,ay-5.5); c.lineTo(ax+2.5,ay); c.lineTo(ax-3,ay+5.5); c.stroke();
+    if(r.same){ c.fillStyle="#98a3b6"; c.font="italic 400 13px "+BF; c.fillText("Same pot",afterX,y+ROW/2); } else drawLines(r,r.a,afterX,ly,true,r.b);
+    y+=ROW+GAP; } }); });
+ return true;
+}
+let baT2=null;
+function baRefresh(){ clearTimeout(baT2); baT2=setTimeout(async()=>{ const ok=await baDraw(); $("baCopy").disabled=$("baDl").disabled=!ok; },120); }
+function baBlob(){ return new Promise((res,rej)=>{ try{ $("baCv").toBlob(b=>b?res(b):rej(new Error("no image")),"image/png"); }catch(e){ rej(e); } }); }
+async function baGetBlob(){ try{ return await baBlob(); }catch(e){ if(e&&e.name==="SecurityError"&&!baNoIcons){ baNoIcons=true; await baDraw(); return await baBlob(); } throw e; } }
+const baM=$("baModal"); const baMsg=t=>{ $("baMsg").textContent=t; };
+function openBa(){ const sh=S.share; $("baT").value=sh.t; $("baT").placeholder=S.name?`${S.name}'s Cubing Progress`:"Cubing Progress"; $("baM").value=sh.m; $("baCB").value=sh.cb; $("baCA").value=sh.ca; $("baAll").checked=sh.all; $("baC").value=sh.c||(S.cube==="glowing"?"glowing":"bright"); $("baSale").checked=sh.sale==null?saleOn:sh.sale; baMsg("");
+ baM.hidden=false; document.body.style.overflow="hidden"; baRefresh(); $("baM").focus(); }
+const closeBa=()=>{ baM.hidden=true; document.body.style.overflow=""; $("baMake").focus(); };
+$("baMake").addEventListener("click",openBa); $("baClose").addEventListener("click",closeBa);
+baM.addEventListener("click",e=>{ if(e.target===baM) closeBa(); });
+addEventListener("keydown",e=>{ if(e.key==="Escape"&&!baM.hidden) closeBa(); });
+for(const [id,k] of [["baT","t"],["baM","m"],["baCB","cb"],["baCA","ca"]]) $(id).addEventListener("input",e=>{ S.share[k]=e.target.value.slice(0,k==="t"?40:24); save(); baRefresh(); });
+$("baAll").addEventListener("change",e=>{ S.share.all=e.target.checked; save(); baRefresh(); });
+$("baC").addEventListener("change",e=>{ S.share.c=e.target.value; save(); baRefresh(); });
+$("baSale").addEventListener("change",e=>{ S.share.sale=e.target.checked; save(); baRefresh(); });
+$("baCopy").addEventListener("click",async()=>{
+ try{ if(!navigator.clipboard||!window.ClipboardItem) throw new Error("no clipboard");
+  await navigator.clipboard.write([new ClipboardItem({"image/png":baGetBlob()})]); baMsg("Copied! Paste it in Discord or anywhere."); }
+ catch(e){ baMsg("Your browser can't copy images here. Use Download instead."); }
+});
+$("baDl").addEventListener("click",async()=>{
+ try{ const b=await baGetBlob(), u=URL.createObjectURL(b), a=document.createElement("a"); a.href=u; a.download="cubing-progress.png"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),4000); baMsg("Saved as cubing-progress.png."); }
+ catch(e){ baMsg("Couldn't make the image file in this browser."); }
+});
+
 /* ---------- step 3 ---------- */
 // Budget plan (Mesos): go down the list in order and cube each item until it hits its target. Tried 4,000 times.
 const parseMeso=t=>{ const m=String(t).normalize("NFKC").replace(/[,\s]/g,"").match(/^(\d*\.?\d+)([kmbt]?)/i); if(!m) return 0; const n=+m[1], u=m[2].toLowerCase(); return n*(u?{k:1e3,m:1e6,b:1e9,t:1e12}[u]:(n>=1e6?1:1e9)); };
@@ -1189,7 +1394,12 @@ function valid(st){
  if(st.metric!=="cost") st.metric="fd";
  if(st.unit!=="mesos") st.unit="cubes";
  st.perB=Math.min(Math.max(+parseFloat(st.perB)||100,0.001),1e6);
- st.bud=st.bud==null?"100B":String(st.bud).slice(0,20); st.budC=st.budC==null?"10000":String(st.budC).slice(0,20);
+ st.bud=st.bud==null?"100B":String(st.bud).slice(0,20);
+ { const b=st.before; if(b&&typeof b==="object"&&b.gear&&typeof b.gear==="object"){ const g2={};
+    for(const s of SLOTS){ const g=b.gear[s.id]; g2[s.id]=Array.isArray(g)&&g.length>=4?[parseInt(g[0])||0,...[1,2,3].map(i=>String(g[i]).replace(/[^A-Za-z0-9.]/g,"")||"J0"),String(g[4]||"").slice(0,60)]:[0,"J0","J0","J0",""]; }
+    st.before={at:String(b.at||"").slice(0,40),gear:g2}; } else st.before=null;
+   const sh=st.share&&typeof st.share==="object"?st.share:{};
+   st.share={t:String(sh.t||"").slice(0,40),m:String(sh.m||"").slice(0,20),cb:String(sh.cb||"").slice(0,24),ca:String(sh.ca||"").slice(0,24),all:!!sh.all,c:sh.c==="glowing"?"glowing":sh.c==="bright"?"bright":"",sale:typeof sh.sale==="boolean"?sh.sale:null}; } st.budC=st.budC==null?"10000":String(st.budC).slice(0,20);
  st.per=Math.min(Math.max(parseInt(st.per)||1000,1),1e9);
  st.r4=!!st.r4||+st.gear.ring4[0]>0;
  st.name=String(st.name||"").slice(0,30); if(!CLS[st.cls]) st.cls="";
@@ -1269,10 +1479,10 @@ function addShared(st,msg){
  const fresh=DB.list.length===1&&!S.name&&missing().length===SCOUT.filter(scoutOn).length&&isTemplateGear();
  if(fresh){ DB.list=[]; DB.cur=null; } addProfile(st,msg);
 }
-let tm; function changed(){ if(syncZero()) fillSlot(SID.secondary); save(); updateStep1(); $("exNote").style.display=isTemplateGear()?"":"none"; clearTimeout(tm); tm=setTimeout(renderResults,150); }
+let tm; function changed(){ if(syncZero()) fillSlot(SID.secondary); save(); updateStep1(); baStatus(); $("exNote").style.display=isTemplateGear()?"":"none"; clearTimeout(tm); tm=setTimeout(renderResults,150); }
 function fillCd(){ $("cdOn").checked=S.cd.on; $("cdBody").hidden=!S.cd.on;
  for(let k=1;k<=6;k++){ const x=S.cd.s[k-1], cb=$("cdk"+k), iv=$("cdv"+k); cb.checked=x[0]; iv.value=x[1]?`${(+x[1]).toFixed(3)}%`:""; iv.classList.toggle("off",!x[0]); } }
-function applyAll(){ fillChar(); paintRank(); refreshRank(); fillScout(); fillCd(); for(const s of SLOTS) fillSlot(s); paintR4(); save(); updateStep1(); }
+function applyAll(){ fillChar(); paintRank(); refreshRank(); fillScout(); fillCd(); for(const s of SLOTS) fillSlot(s); paintR4(); save(); updateStep1(); baStatus(); }
 function say(t){ $("msg").textContent=t; setTimeout(()=>{if($("msg").textContent===t)$("msg").textContent="";},4500); }
 
 $("cdGrid").innerHTML=[1,2,3,4,5,6].map(k=>`<div class="cdi"><label><input type="checkbox" id="cdk${k}" data-k="${k}">-${k}s</label><input class="cdv" id="cdv${k}" data-k="${k}" placeholder="FD %" inputmode="decimal" autocomplete="off" aria-label="Final Damage for -${k} seconds"></div>`).join("");
@@ -1332,7 +1542,7 @@ $("bReset").addEventListener("click",()=>{S.gear=blankGear();S.r4=false;applyAll
 const enc=st=>btoa(unescape(encodeURIComponent(JSON.stringify(st)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
 const dec=t=>{t=t.trim();const m=t.match(/#g=([A-Za-z0-9_\-+\/=]+)/);if(m)t=m[1];t=t.replace(/-/g,"+").replace(/_/g,"/");while(t.length%4)t+="=";return JSON.parse(decodeURIComponent(escape(atob(t))));};
 $("bCopy").addEventListener("click",async()=>{
- const link=location.href.split("#")[0]+"#g="+enc(S);
+ const link=location.href.split("#")[0]+"#g="+enc({...S,before:null,share:null});
  try{await navigator.clipboard.writeText(link);say("Link copied. Anyone who opens it sees your gear and values.");}
  catch(e){$("codebox").classList.add("on");$("codeIn").value=link;$("codeIn").select();say("Copy the link in the box.");}
 });
