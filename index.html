@@ -23,7 +23,7 @@
 button{touch-action:manipulation;cursor:pointer}
 html,body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 var(--body);overflow-x:clip}
 button,input,select,textarea{font:inherit;color:inherit}
-.wrap{max-width:1280px;margin:0 auto;padding:20px 18px 60px}
+.wrap{max-width:1360px;margin:0 auto;padding:20px 18px 60px}
 header{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
 h1{font-family:var(--display);font-size:24px;font-weight:700;margin:0;letter-spacing:-.01em;display:flex;align-items:center;gap:10px}
 h1 svg{width:26px;height:26px;flex:none}
@@ -166,7 +166,7 @@ table.sc{width:100%;border-collapse:collapse}
 /* step 2 gear rows */
 .grp{margin-top:14px}
 .grp h3{margin-bottom:6px}
-.ghd,.gr{display:grid;grid-template-columns:76px minmax(0,1fr) 112px repeat(3,minmax(0,194px));gap:8px;align-items:center}
+.ghd,.gr{display:grid;grid-template-columns:76px minmax(0,1fr) 112px repeat(3,minmax(0,214px));gap:8px;align-items:center}
 .ghd{font-size:12px;color:var(--muted);padding:0 11px 4px}.ghd span:nth-child(n+2){padding-left:9px}
 .gr{background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-bottom:6px}
 .gr .sn{font-weight:600}.gr .sn small{display:block;font-weight:400;font-size:12px;color:var(--muted);line-height:1.3}
@@ -174,7 +174,7 @@ table.sc{width:100%;border-collapse:collapse}
 .gic{display:flex;flex:none}.ic.sm{width:40px;height:40px;border-radius:9px}.ic.sm img{max-width:32px;max-height:32px;transform:none}
 .ghd span:nth-child(2){padding-left:57px}
 .gr select{font-size:15px;padding:7px 26px 7px 8px;background-position:right 8px center;text-overflow:ellipsis}
-select.tL,select.tU{background-repeat:no-repeat;background-position:left 8px center,right 8px center;background-size:16px 16px,11px 8px;padding-left:31px!important}select.tL{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%238bd448'/%3E%3Ctext x='8' y='12' text-anchor='middle' font-family='Arial,sans-serif' font-weight='700' font-size='10' fill='%2310200b'%3EL%3C/text%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%2398a3b6' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}select.tU{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%23f2b632'/%3E%3Ctext x='8' y='12' text-anchor='middle' font-family='Arial,sans-serif' font-weight='700' font-size='10' fill='%2310200b'%3EU%3C/text%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%2398a3b6' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}select optgroup{font-style:normal;font-weight:700;color:var(--muted)}
+select.tL,select.tU{background-repeat:no-repeat;background-position:left 8px center,right 8px center;background-size:16px 16px,11px 8px;padding-left:29px!important;padding-right:22px}select.tL{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%238bd448'/%3E%3Ctext x='8' y='12' text-anchor='middle' font-family='Arial,sans-serif' font-weight='700' font-size='10' fill='%2310200b'%3EL%3C/text%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%2398a3b6' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}select.tU{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%23f2b632'/%3E%3Ctext x='8' y='12' text-anchor='middle' font-family='Arial,sans-serif' font-weight='700' font-size='10' fill='%2310200b'%3EU%3C/text%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%2398a3b6' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}select optgroup{font-style:normal;font-weight:700;color:var(--muted)}
 select.J{color:var(--muted)}
 select:disabled{opacity:.55;cursor:not-allowed}
 .gr.empty{border-style:dashed}
@@ -197,12 +197,16 @@ select:disabled{opacity:.55;cursor:not-allowed}
 .why ul{margin:6px 0 0;padding-left:18px}.why li{margin:3px 0}
 .list{display:grid;gap:6px}
 .babar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;margin:0 0 14px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--sunk)}
-.babar b{display:block;font:600 15px var(--display)}.babar .batxt span{font-size:13px;color:var(--muted)}
+.babar .batxt>b{display:block;font:600 15px var(--display)}
+.balist{flex-basis:100%}.balist[hidden]{display:none}.balist summary{cursor:pointer;color:var(--link);font-size:13.5px;width:max-content}
+.svrow{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) auto auto auto;gap:6px 12px;align-items:center;margin-top:8px}
+.svrow input{min-height:34px;padding:5px 9px;font-size:14px}.svd{font-size:12.5px;color:var(--muted);white-space:nowrap}.svrow .linkbtn{font-size:13px;white-space:nowrap}
+@media(max-width:600px){.svrow{grid-template-columns:auto auto 1fr;padding-top:8px;border-top:1px solid var(--line)}.svrow .svn,.svrow .svcp{grid-column:1/-1}.svd{grid-column:1/-1}}.babar .batxt span{font-size:13px;color:var(--muted)}
 .bambox{width:min(1100px,100%)}
 .bahead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.bahead h2{font-size:18px}
 .baform{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:flex-end;margin-bottom:12px}
 .baform label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted)}
-.baform input,.baform select{width:170px}.baform #baT{width:250px}
+.baform input,.baform select{width:170px}.baform #baB,.baform #baA{width:210px}.baform #baT{width:250px}
 .baform label.salechk{flex-direction:row;align-items:center;font-size:13.5px;min-height:38px}.baform .salechk input{width:16px;min-height:0}
 .baprev{flex:1;min-height:120px;overflow:auto;border:1px solid var(--line);border-radius:10px;background:#0d121b;padding:10px}
 .baprev canvas{display:block;width:100%;height:auto;border-radius:8px}
@@ -282,7 +286,7 @@ i.O{background:var(--line);color:var(--muted)!important}
 .seg button:not(.on):hover{color:var(--fg)}
 footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}footer b{color:var(--fg)}
 @media(max-width:900px){.top,.s1{grid-template-columns:minmax(0,1fr)}.shot{order:-1}}
-@media(max-width:1240px){
+@media(max-width:1340px){
  .ghd{display:none}
  .gr{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);grid-template-areas:"sn sn lv" "nm nm nm" "l1 l2 l3"}
  .gr .sn{grid-area:sn;align-self:center}.gr .nm{grid-area:nm}.gr .lv{grid-area:lv}
@@ -300,6 +304,9 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
  .tt td[data-l]::before{content:attr(data-l);display:block;font-size:11px;color:var(--muted);font-weight:400}
  .tt td[data-l="Chance"]{grid-column:span 2;order:1}.tt td[data-l="FD gain"]{order:2}.tt td[data-l="FD per cubes"]{order:3}.tt td.q{order:4}
  .list summary .ch{grid-area:c;text-align:left}.list summary .gn{grid-area:g}.list summary .c50{display:none}.list summary .bar{grid-area:b}
+}
+@media(max-width:820px){
+ .gr{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 124px;grid-template-areas:"sn sn lv" "nm nm nm" "l1 l1 l1" "l2 l2 l2" "l3 l3 l3"}
 }
 @media(max-width:600px){
  .tab small{display:none}.tab{padding:8px;gap:6px;font-size:14px}
@@ -380,7 +387,8 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
   <div class="stephead"><div><h2>Step 2: Input your gear</h2><p>Pick each item and its 3 potential lines.</p></div>
    <div class="row"><button class="btn" id="bReset" type="button">Reset (clear gear)</button><button class="btn ghost" id="bTemplate" type="button">Load example</button><button class="btn accent" type="button" data-go="3">See results →</button></div></div>
   <div class="babar"><div class="batxt"><b>Before &amp; After image</b><span id="baStat"></span></div>
-   <div class="row"><button class="btn" id="baSave" type="button">Save as Before</button><button class="btn accent" id="baMake" type="button">Make image</button></div></div>
+   <div class="row"><button class="btn" id="baSave" type="button">Save current gear</button><button class="btn accent" id="baMake" type="button">Make image</button></div>
+   <details class="balist" id="baList" hidden><summary id="baListSum">Your saves</summary><p class="note" style="margin-top:6px">Name a save and add its Combat Power if you like. <b>Load</b> puts that gear back in step 2.</p><div id="baRows"></div></details></div>
   <div class="callout" id="exNote"><b>This is an example (Moeko's gear).</b> Click <b>Reset</b> to clear it, then fill in your own.</div>
   <div class="callout warn"><ul>
    <li><b>Hat:</b> Cooldown lines only count if you turn on <b>Add Cooldown Hat values</b> in step 1.</li>
@@ -408,7 +416,7 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
    <li><b>Ranking:</b> for each item it checks targets like "33%+ Magic ATT" and picks the one with the most FD per cube (or the fewest cubes).</li>
    <li><b>Auto-reroll targets:</b> settings for the in-game Target presets. One is only suggested if everything it stops on is an upgrade for you. The game adds up totals, and All Stats counts toward your main stat.</li>
    <li><b>Mesos:</b> Heroic world prices. Bright 22M and Glowing 12M each, plus the meso fee each cube use charges (20 × item level²). The 25% off Cash Shop cube sale turns on by itself on sale days.</li>
-   <li><b>Before &amp; After image:</b> in step 2, click <b>Save as Before</b> before you cube. After you update your gear, <b>Make image</b> draws what changed, ready to copy into Discord.</li>
+   <li><b>Before &amp; After image:</b> in step 2, click <b>Save current gear</b> before you cube (keep as many saves as you like). <b>Make image</b> compares any save with another save or your current gear, ready to copy into Discord.</li>
    <li><b>Budget plan:</b> type your mesos (Mesos mode) or your cubes (Cubes mode). It cubes each item in list order until it hits the target, 4,000 times, and shows how far you get most of the time. Turn it off with the Budget plan box above the list.</li>
    <li><b>Your data:</b> saved in your browser only. Copy link puts your gear in the link.</li>
    <li><b>Not exact for:</b> Demon Avenger, Xenon, and Cooldown Hat values from Maple Scouter.</li>
@@ -453,9 +461,11 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
   <div class="bahead"><h2 id="baTitle">Before &amp; After image</h2><button class="btn ghost" id="baClose" type="button">Close</button></div>
   <div class="baform">
    <label>Title<input id="baT" maxlength="40" autocomplete="off"></label>
+   <label>Before<select id="baB"></select></label>
+   <label>After<select id="baA"></select></label>
    <label>Mesos spent<input id="baM" inputmode="decimal" placeholder="700B" autocomplete="off"></label>
-   <label>Combat Power before<input id="baCB" inputmode="decimal" placeholder="120,000,000" autocomplete="off"></label>
-   <label>Combat Power after<input id="baCA" inputmode="decimal" placeholder="125,000,000" autocomplete="off"></label>
+   <label>Combat Power (Before)<input id="baCB" inputmode="decimal" placeholder="120,000,000" autocomplete="off"></label>
+   <label>Combat Power (After)<input id="baCA" inputmode="decimal" placeholder="125,000,000" autocomplete="off"></label>
    <label>Cube used<select id="baC"><option value="bright">Bright Cube</option><option value="glowing">Glowing Cube</option></select></label>
    <label class="salechk"><input type="checkbox" id="baSale"> Bought on sale</label>
    <label class="salechk"><input type="checkbox" id="baAll"> Show items that didn't change</label>
@@ -1079,28 +1089,61 @@ const BA_GROUPS=[["Weapon, Secondary, Emblem",["weapon","secondary","emblem"]],[
 const parseCP=t=>{ const m=String(t).normalize("NFKC").replace(/[,\s]/g,"").match(/^(\d*\.?\d+)([kmb]?)/i); return m?Math.round(+m[1]*({k:1e3,m:1e6,b:1e9}[m[2].toLowerCase()]||1)):0; };
 const baDate=(d,y)=>{ const x=new Date(d); return isNaN(x)?"":x.toLocaleDateString("en-US",y?{month:"short",day:"numeric",year:"numeric"}:{month:"short",day:"numeric"}); };
 const baKey=g=>[...g.slice(1,4)].sort().join(",")+"|"+(g[4]||"");
-const baUse=id=>!(id==="secondary"&&zeroMirror())&&!noPot(id)&&(id!=="ring4"||S.r4);
-function baRows(all){
- const B=S.before&&S.before.gear; if(!B) return {groups:[],changed:0};
+const baUse=(id,A)=>!(id==="secondary"&&zeroMirror())&&!NOPOT.has(A[id][4])&&(id!=="ring4"||+A[id][0]>0);
+const MAXSAVES=30;
+const baWhen=d=>{ const x=new Date(d); return isNaN(x)?"":x.toLocaleString("en-US",{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}); };
+const saveById=id=>S.saves.find(x=>x.id===id);
+const saveName=x=>x.n||baWhen(x.at);
+// the image compares two gear sets: Before = a save, After = a save or the current gear
+function baPair(){
+ const sv=S.saves; if(!sv.length) return null;
+ const b=saveById(S.share.bi)||sv[sv.length-1], a=S.share.ai&&S.share.ai!=="now"?saveById(S.share.ai)||null:null;
+ return {b,a,A:a?a.gear:S.gear};
+}
+function baRows(all,B,A){
+ if(!B) return {groups:[],changed:0};
  let changed=0; const groups=[];
  for(const [title,ids] of BA_GROUPS){ const rows=[];
-  for(const id of ids){ const a=S.gear[id], b=B[id]; if(!(+a[0]>0)||!baUse(id)) continue;
+  for(const id of ids){ const a=A[id], b=B[id]; if(!(+a[0]>0)||!baUse(id,A)) continue;
    const had=+b[0]>0, same=had&&baKey(a)===baKey(b); if(!same) changed++;
    if(same&&!all) continue; rows.push({s:SID[id],a,b:had?b:null,same}); }
   if(rows.length) groups.push([title,rows]); }
  return {groups,changed};
 }
 function baStatus(){
- const el=$("baStat"); if(!el) return; const has=!!(S.before&&S.before.gear);
- if(has){ const n=baRows(false).changed; el.textContent=`Before saved ${baDate(S.before.at,1)}. ${n} item${n===1?"":"s"} changed since then.`; }
- else el.textContent="Save your gear before you cube. After you update it, make an image to share.";
- $("baMake").disabled=!has; if(!baArm) $("baSave").textContent=has?"Save new Before":"Save as Before";
+ const el=$("baStat"); if(!el) return; const n=S.saves.length;
+ if(n){ const last=S.saves[n-1], ch=baRows(false,last.gear,S.gear).changed;
+  el.textContent=`${n} save${n===1?"":"s"}. Since "${saveName(last)}": ${ch} item${ch===1?"":"s"} changed.`; }
+ else el.textContent="Save your gear before you cube. Later, compare any save with another save or your current gear.";
+ $("baMake").disabled=!n; $("baList").hidden=!n; $("baListSum").textContent=`Your saves (${n})`;
 }
-let baArm=null;
+function paintSaves(){
+ const box=$("baRows"); if(!box) return;
+ box.innerHTML=[...S.saves].reverse().map(x=>`<div class="svrow">
+  <input class="svn" data-svn="${esc(x.id)}" value="${esc(x.n)}" placeholder="${esc(baWhen(x.at))}" maxlength="40" aria-label="Save name">
+  <input class="svcp" data-svcp="${esc(x.id)}" value="${esc(x.cp)}" placeholder="Combat Power (optional)" inputmode="decimal" aria-label="Combat Power for this save">
+  <span class="svd">Saved ${esc(baWhen(x.at))}</span>
+  <button type="button" class="linkbtn" data-svload="${esc(x.id)}">Load</button><button type="button" class="linkbtn" data-svdel="${esc(x.id)}">Delete</button></div>`).join("");
+}
 $("baSave").addEventListener("click",()=>{
- const b=$("baSave");
- if(S.before&&!baArm){ b.textContent="Click again to replace"; baArm=setTimeout(()=>{ baArm=null; baStatus(); },3500); return; }
- clearTimeout(baArm); baArm=null; S.before={at:new Date().toISOString(),gear:JSON.parse(JSON.stringify(S.gear))}; save(); baStatus(); say("Saved your gear as Before. Now go cube!");
+ if(S.saves.length>=MAXSAVES){ say(`You have ${MAXSAVES} saves. Delete one first.`); return; }
+ const x={id:uid(),n:"",at:new Date().toISOString(),cp:"",gear:JSON.parse(JSON.stringify(S.gear))};
+ S.saves.push(x); save(); baStatus(); $("baList").open=true; paintSaves();
+ const inp=document.querySelector(`[data-svn="${x.id}"]`); if(inp) inp.focus({preventScroll:true});
+ say("Gear saved. You can give it a name.");
+});
+$("baList").addEventListener("toggle",()=>{ if($("baList").open&&$("baRows").children.length!==S.saves.length) paintSaves(); });
+$("baRows").addEventListener("input",e=>{ const t=e.target, x=saveById(t.dataset.svn||t.dataset.svcp); if(!x) return;
+ if(t.dataset.svn) x.n=t.value.slice(0,40); else x.cp=t.value.slice(0,24); save(); baStatus(); });
+let svArm=null;
+$("baRows").addEventListener("click",e=>{
+ const b=e.target.closest("[data-svload],[data-svdel]"); if(!b) return; const id=b.dataset.svload||b.dataset.svdel, x=saveById(id); if(!x) return;
+ const key=(b.dataset.svload?"L":"D")+id;
+ if(svArm!==key){ for(const o of $("baRows").querySelectorAll("[data-svload],[data-svdel]")) o.textContent=o.dataset.svload?"Load":"Delete";
+  svArm=key; b.textContent=b.dataset.svload?"Click again to load":"Click again to delete"; clearTimeout(b._t); b._t=setTimeout(()=>{ if(svArm===key){ svArm=null; b.textContent=b.dataset.svload?"Load":"Delete"; } },3500); return; }
+ svArm=null;
+ if(b.dataset.svdel){ S.saves=S.saves.filter(s=>s.id!==id); save(); baStatus(); paintSaves(); say(`Deleted "${saveName(x)}".`); }
+ else { S.gear=JSON.parse(JSON.stringify(x.gear)); if(+S.gear.ring4[0]>0) S.r4=true; for(const s of SLOTS) fillSlot(s); paintR4(); changed(); paintSaves(); say(`Loaded "${saveName(x)}" as your gear.`); }
 });
 // icons for the picture (same files as the page; a picture can only use icons from this site)
 const baImg={};
@@ -1133,12 +1176,13 @@ function wrapText(c,t,maxW,maxL){
  return out.map(l=>{ if(c.measureText(l).width<=maxW) return l; while(c.measureText(l+"…").width>maxW&&l.length) l=l.slice(0,-1); return l+"…"; });
 }
 async function baDraw(){
- const cv=$("baCv"), sh=S.share, all=$("baAll").checked, {groups,changed}=baRows(all);
+ const cv=$("baCv"), sh=S.share, all=$("baAll").checked, pb=baPair(); if(!pb) return false;
+ const {groups,changed}=baRows(all,pb.b.gear,pb.A);
  const DF='"Space Grotesk","Segoe UI",system-ui,sans-serif', BF='Inter,"Segoe UI",system-ui,sans-serif';
  try{ await Promise.all(["700 27px "+DF,"600 14px "+BF,"400 13px "+BF,"800 11px "+BF].map(f=>document.fonts.load(f))); }catch(e){}
  const P=perValues(), fdOk=!missing().length, c0=document.createElement("canvas").getContext("2d");
  let fd=0; if(fdOk) for(const [,rows] of groups) for(const r of rows) if(r.b&&!r.same){ const sp=slotP(r.s,P); fd+=stats(r.a.slice(1,4).map(parse),sp).fd-stats(r.b.slice(1,4).map(parse),sp).fd; }
- const chips=[], mz=parseMeso(sh.m), cb=parseCP(sh.cb), ca=parseCP(sh.ca);
+ const chips=[], mz=parseMeso(sh.m), cb=parseCP(pb.b.cp), ca=parseCP(pb.a?pb.a.cp:sh.ca);
  if(mz>0) chips.push(["Mesos spent",mesoFmt(mz)]);
  if(cb>0&&ca>0){ const d=ca-cb; chips.push(["Combat Power",`${fmt(cb)}  ▸  ${fmt(ca)}`,`${d>=0?"+":"-"}${fmt(Math.abs(d))} (${d>=0?"+":"-"}${(Math.abs(d)/cb*100).toFixed(1)}%)`,d>=0]); }
  else if(ca>0||cb>0) chips.push(["Combat Power",fmt(ca||cb)]);
@@ -1167,9 +1211,9 @@ async function baDraw(){
  c.fillStyle="#e8ecf4"; c.font="700 27px "+DF; c.textAlign="left";
  const title=(sh.t||"").trim()||(S.name?`${S.name}'s Cubing Progress`:"Cubing Progress");
  c.fillText(wrapText(c,title,W-PAD*2-(two?420:0),1)[0],PAD,PAD+16);
- const d1=baDate(S.before.at), d2=baDate(new Date());
+ const lab=x=>x?(x.n?`${x.n} (${baDate(x.at)})`:baWhen(x.at)):`Now (${baDate(new Date())})`;
  c.font="400 14px "+BF; c.fillStyle="#98a3b6";
- const sub=`${S.cls?S.cls+"  ·  ":""}Before ${d1}  ▸  After ${d2}`; c.fillText(sub,PAD,PAD+46);
+ const sub=`${S.cls?S.cls+"  ·  ":""}${lab(pb.b)}  ▸  ${lab(pb.a)}`; c.fillText(sub,PAD,PAD+46);
  // legend
  const tag=(x,y,t)=>{ c.fillStyle=t==="L"?"#6fd36f":t==="U"?"#f1c33c":"#3a4458"; rr(c,x,y,16,16,4); c.fill(); if(t==="L"||t==="U"){ c.fillStyle=t==="L"?"#0c1a0c":"#1f1700"; c.font="800 10.5px "+BF; c.textAlign="center"; c.fillText(t,x+8,y+8.5); c.textAlign="left"; } };
  { const items=[["L","Legendary line"],["U","Unique line"],["N","New line"]]; c.font="400 13px "+BF;
@@ -1188,7 +1232,7 @@ async function baDraw(){
    if(sub2){ c.fillStyle=good===undefined?"#98a3b6":good?"#4cc38a":"#ff7a7a"; c.font="600 12px "+BF; c.fillText(sub2,x+14,y0+50); }
    c.restore(); });
   y0+=chipH; }
- if(!groups.length){ c.fillStyle="#98a3b6"; c.font="400 15px "+BF; c.fillText("No potential changes since your Before. Update your gear after cubing.",PAD,y0+24); return false; }
+ if(!groups.length){ c.fillStyle="#98a3b6"; c.font="400 15px "+BF; c.fillText(pb.a===pb.b?"Before and After are the same save. Pick a different one.":"No potential changes between these two. Update your gear after cubing.",PAD,y0+24); return false; }
  // rows
  const icons={}; if(!baNoIcons) await Promise.all(groups.flatMap(([,rows])=>rows.map(r=>baIcon(r.a[4]).then(im=>{ icons[r.s.id]=im; }))));
  const LW=168;
@@ -1210,7 +1254,7 @@ async function baDraw(){
     const ix=x0+12, iy=y+(ROW-44)/2; c.fillStyle="#141a26"; rr(c,ix,iy,44,44,9); c.fill(); c.strokeStyle="#2a3345"; rr(c,ix+.5,iy+.5,43,43,9); c.stroke();
     const im=icons[r.s.id]; if(im){ const sc=Math.min(1,42/Math.max(im.naturalWidth,im.naturalHeight)), w=im.naturalWidth*sc, h=im.naturalHeight*sc; c.imageSmoothingEnabled=sc<1; c.drawImage(im,ix+22-w/2,iy+22-h/2,w,h); c.imageSmoothingEnabled=true; }
     const afterBox=x0+colW-12-LW, arrowL=afterBox-10-18, beforeBox=arrowL-10-LW, afterX=afterBox+6, beforeX=beforeBox+6, nameX=ix+54, nameW=beforeBox-10-nameX;
-    c.font="600 14px "+BF; const nl=wrapText(c,itemName(r.s),nameW,2), ny=y+ROW/2-(nl.length*17+16)/2;
+    c.font="600 14px "+BF; const nl=wrapText(c,r.a[4]||r.s.name,nameW,2), ny=y+ROW/2-(nl.length*17+16)/2;
     c.fillStyle="#e8ecf4"; nl.forEach((l,i)=>c.fillText(l,nameX,ny+8+i*17));
     c.fillStyle="#98a3b6"; c.font="400 12px "+BF; c.fillText(`Lv. ${r.a[0]}`,nameX,ny+nl.length*17+9);
     const ly=y+(ROW-62)/2;
@@ -1226,13 +1270,23 @@ function baRefresh(){ clearTimeout(baT2); baT2=setTimeout(async()=>{ const ok=aw
 function baBlob(){ return new Promise((res,rej)=>{ try{ $("baCv").toBlob(b=>b?res(b):rej(new Error("no image")),"image/png"); }catch(e){ rej(e); } }); }
 async function baGetBlob(){ try{ return await baBlob(); }catch(e){ if(e&&e.name==="SecurityError"&&!baNoIcons){ baNoIcons=true; await baDraw(); return await baBlob(); } throw e; } }
 const baM=$("baModal"); const baMsg=t=>{ $("baMsg").textContent=t; };
-function openBa(){ const sh=S.share; $("baT").value=sh.t; $("baT").placeholder=S.name?`${S.name}'s Cubing Progress`:"Cubing Progress"; $("baM").value=sh.m; $("baCB").value=sh.cb; $("baCA").value=sh.ca; $("baAll").checked=sh.all; $("baC").value=sh.c||(S.cube==="glowing"?"glowing":"bright"); $("baSale").checked=sh.sale==null?saleOn:sh.sale; baMsg("");
+function openBa(){ const sh=S.share; baPickers(); $("baT").value=sh.t; $("baT").placeholder=S.name?`${S.name}'s Cubing Progress`:"Cubing Progress"; $("baM").value=sh.m; $("baAll").checked=sh.all; $("baC").value=sh.c||(S.cube==="glowing"?"glowing":"bright"); $("baSale").checked=sh.sale==null?saleOn:sh.sale; baMsg("");
  baM.hidden=false; document.body.style.overflow="hidden"; baRefresh(); $("baM").focus(); }
 const closeBa=()=>{ baM.hidden=true; document.body.style.overflow=""; $("baMake").focus(); };
 $("baMake").addEventListener("click",openBa); $("baClose").addEventListener("click",closeBa);
 baM.addEventListener("click",e=>{ if(e.target===baM) closeBa(); });
 addEventListener("keydown",e=>{ if(e.key==="Escape"&&!baM.hidden) closeBa(); });
-for(const [id,k] of [["baT","t"],["baM","m"],["baCB","cb"],["baCA","ca"]]) $(id).addEventListener("input",e=>{ S.share[k]=e.target.value.slice(0,k==="t"?40:24); save(); baRefresh(); });
+for(const [id,k] of [["baT","t"],["baM","m"]]) $(id).addEventListener("input",e=>{ S.share[k]=e.target.value.slice(0,k==="t"?40:24); save(); baRefresh(); });
+// Combat Power is kept with each save (and for the current gear)
+$("baCB").addEventListener("input",e=>{ const pb=baPair(); if(pb){ pb.b.cp=e.target.value.slice(0,24); save(); baRefresh(); } });
+$("baCA").addEventListener("input",e=>{ const pb=baPair(); if(!pb) return; if(pb.a) pb.a.cp=e.target.value.slice(0,24); else S.share.ca=e.target.value.slice(0,24); save(); baRefresh(); });
+function baPickers(){
+ const pb=baPair(); if(!pb) return; const opt=x=>`<option value="${esc(x.id)}">${esc(x.n?`${x.n} (${baDate(x.at)})`:baWhen(x.at))}</option>`, list=[...S.saves].reverse();
+ $("baB").innerHTML=list.map(opt).join(""); $("baA").innerHTML=`<option value="now">Current gear (now)</option>`+list.map(opt).join("");
+ $("baB").value=pb.b.id; $("baA").value=pb.a?pb.a.id:"now"; $("baCB").value=pb.b.cp; $("baCA").value=pb.a?pb.a.cp:S.share.ca;
+}
+$("baB").addEventListener("change",e=>{ S.share.bi=e.target.value; save(); baPickers(); baRefresh(); });
+$("baA").addEventListener("change",e=>{ S.share.ai=e.target.value; save(); baPickers(); baRefresh(); });
 $("baAll").addEventListener("change",e=>{ S.share.all=e.target.checked; save(); baRefresh(); });
 $("baC").addEventListener("change",e=>{ S.share.c=e.target.value; save(); baRefresh(); });
 $("baSale").addEventListener("change",e=>{ S.share.sale=e.target.checked; save(); baRefresh(); });
@@ -1395,11 +1449,13 @@ function valid(st){
  if(st.unit!=="mesos") st.unit="cubes";
  st.perB=Math.min(Math.max(+parseFloat(st.perB)||100,0.001),1e6);
  st.bud=st.bud==null?"100B":String(st.bud).slice(0,20);
- { const b=st.before; if(b&&typeof b==="object"&&b.gear&&typeof b.gear==="object"){ const g2={};
-    for(const s of SLOTS){ const g=b.gear[s.id]; g2[s.id]=Array.isArray(g)&&g.length>=4?[parseInt(g[0])||0,...[1,2,3].map(i=>String(g[i]).replace(/[^A-Za-z0-9.]/g,"")||"J0"),String(g[4]||"").slice(0,60)]:[0,"J0","J0","J0",""]; }
-    st.before={at:String(b.at||"").slice(0,40),gear:g2}; } else st.before=null;
+ { const clean=g0=>{ const g2={}; for(const s of SLOTS){ const g=g0&&g0[s.id]; g2[s.id]=Array.isArray(g)&&g.length>=4?[parseInt(g[0])||0,...[1,2,3].map(i=>String(g[i]).replace(/[^A-Za-z0-9.]/g,"")||"J0"),String(g[4]||"").slice(0,60)]:[0,"J0","J0","J0",""]; } return g2; };
    const sh=st.share&&typeof st.share==="object"?st.share:{};
-   st.share={t:String(sh.t||"").slice(0,40),m:String(sh.m||"").slice(0,20),cb:String(sh.cb||"").slice(0,24),ca:String(sh.ca||"").slice(0,24),all:!!sh.all,c:sh.c==="glowing"?"glowing":sh.c==="bright"?"bright":"",sale:typeof sh.sale==="boolean"?sh.sale:null}; } st.budC=st.budC==null?"10000":String(st.budC).slice(0,20);
+   let sv=Array.isArray(st.saves)?st.saves:[];
+   if(!sv.length&&st.before&&typeof st.before==="object"&&st.before.gear) sv=[{id:"b1",n:"Before",at:st.before.at,cp:sh.cb||"",gear:st.before.gear}];
+   st.saves=sv.filter(x=>x&&typeof x==="object"&&x.gear&&typeof x.gear==="object").slice(-MAXSAVES).map((x,i)=>({id:String(x.id||"s"+i).slice(0,24),n:String(x.n||"").slice(0,40),at:String(x.at||"").slice(0,40),cp:String(x.cp||"").slice(0,24),gear:clean(x.gear)}));
+   delete st.before;
+   st.share={t:String(sh.t||"").slice(0,40),m:String(sh.m||"").slice(0,20),ca:String(sh.ca||"").slice(0,24),all:!!sh.all,c:sh.c==="glowing"?"glowing":sh.c==="bright"?"bright":"",sale:typeof sh.sale==="boolean"?sh.sale:null,bi:String(sh.bi||"").slice(0,24),ai:String(sh.ai||"now").slice(0,24)}; } st.budC=st.budC==null?"10000":String(st.budC).slice(0,20);
  st.per=Math.min(Math.max(parseInt(st.per)||1000,1),1e9);
  st.r4=!!st.r4||+st.gear.ring4[0]>0;
  st.name=String(st.name||"").slice(0,30); if(!CLS[st.cls]) st.cls="";
@@ -1542,7 +1598,7 @@ $("bReset").addEventListener("click",()=>{S.gear=blankGear();S.r4=false;applyAll
 const enc=st=>btoa(unescape(encodeURIComponent(JSON.stringify(st)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
 const dec=t=>{t=t.trim();const m=t.match(/#g=([A-Za-z0-9_\-+\/=]+)/);if(m)t=m[1];t=t.replace(/-/g,"+").replace(/_/g,"/");while(t.length%4)t+="=";return JSON.parse(decodeURIComponent(escape(atob(t))));};
 $("bCopy").addEventListener("click",async()=>{
- const link=location.href.split("#")[0]+"#g="+enc({...S,before:null,share:null});
+ const link=location.href.split("#")[0]+"#g="+enc({...S,saves:[],share:null});
  try{await navigator.clipboard.writeText(link);say("Link copied. Anyone who opens it sees your gear and values.");}
  catch(e){$("codebox").classList.add("on");$("codeIn").value=link;$("codeIn").select();say("Copy the link in the box.");}
 });
