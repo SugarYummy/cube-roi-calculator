@@ -412,7 +412,7 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
    <div class="row"><button class="btn" id="bReset" type="button">Reset (clear gear)</button><button class="btn ghost" id="bTemplate" type="button">Load example</button><button class="btn accent" type="button" data-go="3">See results →</button></div></div>
   <div class="babar"><div class="batxt"><b>Before &amp; After image</b><span id="baStat"></span> <button type="button" class="linkbtn" id="baViewNow">View current gear</button></div>
    <div class="row"><button class="btn" id="baSave" type="button">Save current gear</button><button class="btn accent" id="baMake" type="button">Make image</button></div>
-   <details class="balist" id="baList" hidden><summary id="baListSum">Your saves</summary><p class="note" style="margin-top:6px">Name a save and add its Combat Power if you like. Oldest is on top. Drag the dots to change the order. <b>View</b> shows all its gear. <b>Load</b> puts that gear back in step 2.</p><div id="baRows"></div></details></div>
+   <details class="balist" id="baList" hidden><summary id="baListSum">Your saves</summary><p class="note" style="margin-top:6px">Name a save and add its Combat Power if you like. Each save also keeps your character's level and outfit from the rankings. Oldest is on top. Drag the dots to change the order. <b>View</b> shows all its gear. <b>Load</b> puts that gear back in step 2.</p><div id="baRows"></div></details></div>
   <div class="callout" id="exNote"><b>This is an example (Moeko's gear).</b> Click <b>Reset</b> to clear it, then fill in your own.</div>
   <div class="callout warn"><ul>
    <li><b>Hat:</b> Cooldown lines only count if you turn on <b>Add Cooldown Hat values</b> in step 1.</li>
@@ -503,7 +503,7 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
  <div class="mbox gvbox">
   <div class="bahead"><div><h2 id="gvTitle"></h2><p class="muted" id="gvSub" style="font-size:13px;margin-top:2px"></p></div><button class="btn ghost" id="gvClose" type="button">Close</button></div>
   <div class="gvbody" id="gvBody"></div>
-  <div class="row bafoot"><span class="muted" id="gvNote"></span><button class="btn" id="gvLoad" type="button">Load this gear</button></div>
+  <div class="row bafoot"><span class="muted" id="gvNote" role="status"></span><button class="btn" id="gvDl" type="button">Download</button><button class="btn" id="gvCopy" type="button">Copy image</button><button class="btn accent" id="gvLoad" type="button">Load this gear</button></div>
  </div>
 </div>
 <div class="modal" id="ldModal" role="alertdialog" aria-modal="true" aria-labelledby="ldTitle" aria-describedby="ldText" hidden>
@@ -1168,11 +1168,72 @@ function paintSaves(){
   <span class="svact"><button type="button" class="linkbtn" data-svview="${esc(x.id)}">View</button><button type="button" class="linkbtn" data-svload="${esc(x.id)}">Load</button><button type="button" class="linkbtn" data-svdel="${esc(x.id)}">Delete</button></span></div>`).join("");
 }
 // read-only overview of one save
-let gvId=null;
+let gvId=null, gvX=null;
+// the View as an image to share (same layout as the popup)
+const avaCache={};
+function gvAva(url){
+ if(avaCache[url]) return avaCache[url];
+ const load=src=>new Promise(res=>{ const im=new Image(); im.crossOrigin="anonymous"; im.referrerPolicy="no-referrer"; im.onload=()=>res(im); im.onerror=()=>res(null); im.src=src; });
+ return avaCache[url]=(async()=>{
+  for(const src of [url,`${RANK_API}/avatar?u=${encodeURIComponent(url)}`]){ const im=await load(src); if(!im) continue;
+   try{ const t=document.createElement("canvas"); t.width=im.naturalWidth; t.height=im.naturalHeight; const g=t.getContext("2d"); g.drawImage(im,0,0);
+    const d=g.getImageData(0,0,t.width,t.height).data; let x0=t.width,y0=t.height,x1=-1,y1=-1;          // trim the empty space around the character
+    for(let y=0;y<t.height;y++) for(let x=0;x<t.width;x++) if(d[(y*t.width+x)*4+3]>8){ if(x<x0)x0=x; if(x>x1)x1=x; if(y<y0)y0=y; if(y>y1)y1=y; }
+    if(x1<0) return null; return {im,sx:x0,sy:y0,sw:x1-x0+1,sh:y1-y0+1};
+   }catch(e){ /* the picture can't be used in an image from this address; try the next one */ } }
+  return null; })();
+}
+async function gvDraw(x,now,noPics){
+ const G=x.gear, DF='"Space Grotesk","Segoe UI",system-ui,sans-serif', BF='Inter,"Segoe UI",system-ui,sans-serif';
+ try{ await Promise.all(["700 24px "+DF,"600 14px "+BF,"400 13px "+BF,"800 11px "+BF].map(f=>document.fonts.load(f))); }catch(e){}
+ const ids=BA_GROUPS.flatMap(([,a])=>a).filter(i=>i!=="ring4"||+G.ring4[0]>0||S.r4);
+ const W=1240, PAD=26, GAP=8, colW=(W-PAD*2-GAP*4)/5, ROW=126, headH=66, H=PAD+headH+5*ROW+4*GAP+PAD;
+ const cv=document.createElement("canvas"); cv.width=W*2; cv.height=H*2; const c=cv.getContext("2d"); c.setTransform(2,0,0,2,0,0); c.textBaseline="middle"; c.textAlign="left";
+ c.fillStyle="#121722"; c.fillRect(0,0,W,H);
+ const tag=(x0,y0,t)=>{ c.fillStyle=t==="L"?"#6fd36f":t==="U"?"#f1c33c":"#3a4458"; rr(c,x0,y0,15,15,4); c.fill(); if(t==="L"||t==="U"){ c.fillStyle=t==="L"?"#0c1a0c":"#1f1700"; c.font="800 10px "+BF; c.textAlign="center"; c.fillText(t,x0+7.5,y0+8); c.textAlign="left"; } };
+ // header: save name, then which save and when; legend on the right
+ c.fillStyle="#e8ecf4"; c.font="700 24px "+DF; c.fillText(wrapText(c,now?"Current gear":saveName(x),W-PAD*2-380,1)[0],PAD,PAD+14);
+ c.font="400 13.5px "+BF; c.fillStyle="#98a3b6"; c.fillText(now?`Gear in the calculator, ${baDate(new Date(),1)}`:`Save ${saveNo(x)} of ${S.saves.length}  ·  ${baWhen(x.at)}`,PAD,PAD+42);
+ { let lx=W-PAD; c.font="400 13px "+BF; for(const [k,t] of [["U","Unique line"],["L","Legendary line"]]){ c.font="400 13px "+BF; const w=c.measureText(t).width; lx-=w; c.fillStyle="#98a3b6"; c.fillText(t,lx,PAD+20); lx-=22; tag(lx,PAD+12.5,k); lx-=18; } }
+ const LK=lookOf(x,now), icons={}, ava=noPics||!LK.img?null:await gvAva(LK.img);
+ if(!noPics) await Promise.all(ids.filter(i=>+G[i][0]>0).map(i=>baIcon(G[i][4]).then(im=>{ icons[i]=im; })));
+ const cell=(col,row,span=1)=>[PAD+(col-1)*(colW+GAP),PAD+headH+(row-1)*(ROW+GAP),colW,span*ROW+(span-1)*GAP];
+ const box=(x0,y0,w,h,dash)=>{ c.fillStyle=dash?"rgba(0,0,0,0)":"#1b2230"; rr(c,x0,y0,w,h,10); c.fill(); c.strokeStyle="#2e384b"; c.lineWidth=1; if(dash) c.setLineDash([5,4]); rr(c,x0+.5,y0+.5,w-1,h-1,10); c.stroke(); c.setLineDash([]); };
+ for(const i of ids){
+  const s0=SID[i], g=G[i], lvl=+g[0]||0, [x0,y0,w,h]=cell(...GV_POS[i]), has=lvl>0&&!(i==="secondary"&&zeroMirror());
+  box(x0,y0,w,h,!has);
+  const ix=x0+10, iy=y0+10; c.fillStyle="#141a26"; rr(c,ix,iy,40,40,9); c.fill(); c.strokeStyle="#2a3345"; rr(c,ix+.5,iy+.5,39,39,9); c.stroke();
+  if(!has){ c.globalAlpha=.6; c.fillStyle="#e8ecf4"; c.font="600 13.5px "+BF; c.fillText(s0.name,ix+50,iy+12); c.fillStyle="#98a3b6"; c.font="400 12px "+BF; c.fillText("Empty",ix+50,iy+30); c.globalAlpha=1; continue; }
+  const im=icons[i]; if(im){ const sc=Math.min(1,36/Math.max(im.naturalWidth,im.naturalHeight)), iw=im.naturalWidth*sc, ih=im.naturalHeight*sc; c.imageSmoothingEnabled=sc<1; c.drawImage(im,ix+20-iw/2,iy+20-ih/2,iw,ih); c.imageSmoothingEnabled=true; }
+  c.font="600 13.5px "+BF; const nl=wrapText(c,g[4]||s0.name,w-70,2), ny=iy+20-(nl.length*16+15)/2;
+  c.fillStyle="#e8ecf4"; nl.forEach((l,k)=>c.fillText(l,ix+50,ny+8+k*16));
+  c.fillStyle="#98a3b6"; c.font="400 12px "+BF; c.fillText(`Lv. ${lvl}  ·  ${s0.name}`,ix+50,ny+nl.length*16+8);
+  const pr=primeSet(s0.kind,optLvl(lvl)), ly=y0+64;
+  if(NOPOT.has(g[4])){ c.fillStyle="#98a3b6"; c.font="italic 400 13px "+BF; c.fillText("No potentials",x0+12,ly+8); continue; }
+  showOrder(g.slice(1,4),pr).forEach((code,k)=>{ const yy=ly+k*19; if(code==="J0"){ tag(x0+12,yy,"x"); c.fillStyle="#98a3b6"; c.font="italic 400 13px "+BF; c.fillText("Other potential",x0+34,yy+8); return; }
+   const [cc,v]=parse(code), t=cc==="Q"?(v>=2?"L":"U"):pr.has(code)?"L":"U"; tag(x0+12,yy,t); c.fillStyle="#d7dde8"; c.font="400 13px "+BF; c.fillText(lineLabel(code),x0+34,yy+8); });
+ }
+ // middle: name and class on top, character, Combat Power at the bottom
+ { const [x0,y0,w,h]=cell(3,1,2), job=S.cls||LK.job||"", cp=parseCP(x.cp), n=ids.filter(i=>+G[i][0]>0).length; box(x0,y0,w,h);
+  c.textAlign="center"; const mx=x0+w/2;
+  c.fillStyle="#e8ecf4"; c.font="600 15px "+DF; c.fillText(S.name||"Your character",mx,y0+22);
+  if(job||LK.lv){ c.fillStyle="#98a3b6"; c.font="400 12px "+BF; c.fillText(`${LK.lv?`Lv. ${LK.lv} `:""}${job}`,mx,y0+40); }
+  const bot=cp?62:24, top=54, availH=h-top-bot-6, availW=w-20;
+  if(ava){ const k=Math.max(1,Math.min(2,Math.floor(Math.min(availH/ava.sh,availW/ava.sw)))), dw=ava.sw*k, dh=ava.sh*k;
+   c.imageSmoothingEnabled=false; c.drawImage(ava.im,ava.sx,ava.sy,ava.sw,ava.sh,Math.round(mx-dw/2),Math.round(y0+top+(availH-dh)/2),dw,dh); c.imageSmoothingEnabled=true; }
+  if(cp){ c.fillStyle="#98a3b6"; c.font="400 12px "+BF; c.fillText("Combat Power",mx,y0+h-56); c.fillStyle="#e8ecf4"; c.font="700 22px "+DF; c.fillText(fmt(cp),mx,y0+h-36); }
+  c.fillStyle="#98a3b6"; c.font="400 12px "+BF; c.fillText(`${n} item${n===1?"":"s"}${x.n&&!now?`  ·  saved ${baWhen(x.at)}`:""}`,mx,y0+h-14);
+  c.textAlign="left"; }
+ return cv;
+}
+async function gvBlob(){ const {x,now}=gvX, mk=async np=>{ const cv=await gvDraw(x,now,np); return await new Promise((res,rej)=>{ try{ cv.toBlob(b=>b?res(b):rej(new Error("no image")),"image/png"); }catch(e){ rej(e); } }); };
+ try{ return await mk(false); }catch(e){ if(e&&e.name==="SecurityError") return await mk(true); throw e; } }
+// level and outfit to show: the save's own (from when it was made), else the current rankings picture
+const lookOf=(x,now)=>{ const a=!now&&x.av, R=S.rank; return a?{lv:a.lv,job:a.job,img:a.img}:{lv:R&&R.level,job:R&&R.job,img:R&&R.img}; };
 const GV_POS={ring1:[1,1],ring2:[1,2],ring3:[1,3],ring4:[1,4],belt:[1,5],face:[2,1],eye:[2,2],earring:[2,3],pend1:[2,4],pend2:[2,5],
  weapon:[3,3],secondary:[3,4],emblem:[3,5],hat:[4,1],top:[4,2],bottom:[4,3],shoulder:[4,4],cape:[5,1],gloves:[5,2],shoes:[5,3],heart:[5,4],badge:[5,5]};
 function gearView(id){
- const now=id==="now", x=now?{n:"Current gear",at:"",cp:S.share.ca,gear:S.gear}:saveById(id); if(!x) return; gvId=id; const G=x.gear;
+ const now=id==="now", x=now?{n:"Current gear",at:"",cp:S.share.ca,gear:S.gear}:saveById(id); if(!x) return; gvId=id; gvX={x,now}; const G=x.gear;
  const groups=BA_GROUPS.map(([title,ids])=>[title,ids.filter(i=>+G[i][0]>0&&!(i==="secondary"&&zeroMirror()))]).filter(([,ids])=>ids.length);
  $("gvTitle").textContent=saveName(x);
  $("gvSub").textContent=now?"What you have in step 2 right now":`Save ${saveNo(x)} of ${S.saves.length}`;
@@ -1185,9 +1246,9 @@ function gearView(id){
     const [cc,v]=parse(code), t=cc==="Q"?(v>=2?"L":"U"):pr.has(code)?"L":"U"; return `<div class="gl"><i class="t ${t}">${t}</i>${esc(lineLabel(code))}</div>`; }).join("");
   return `<div class="gvc" style="--c:${c};--r:${r}"><div class="gvh">${iconHtml(g[4],0,1)}<div><b>${esc(name)}</b><small>Lv. ${lvl}  ·  ${esc(s0.name)}</small></div></div>${lines}</div>`; };
  const cp=parseCP(x.cp), n=groups.reduce((a,[,ids])=>a+ids.length,0);
- const R=S.rank, job=S.cls||(R&&R.job)||"";
- $("gvBody").innerHTML=`<div class="gvgrid2"><div class="gvsum"><div class="gvtop"><b>${esc(S.name||"Your character")}</b>${job||(R&&R.level)?`<small>${R&&R.level?`Lv. ${R.level} `:""}${esc(job)}</small>`:""}</div>
-  ${R&&R.img?`<div class="gvava"><img src="${esc(R.img)}" alt="${esc(R.name)}" referrerpolicy="no-referrer"></div>`:""}
+ const L=lookOf(x,now), job=S.cls||L.job||"";
+ $("gvBody").innerHTML=`<div class="gvgrid2"><div class="gvsum"><div class="gvtop"><b>${esc(S.name||"Your character")}</b>${job||L.lv?`<small>${L.lv?`Lv. ${L.lv} `:""}${esc(job)}</small>`:""}</div>
+  ${L.img?`<div class="gvava"><img src="${esc(L.img)}" alt="${esc(S.name||"")}" referrerpolicy="no-referrer"></div>`:""}
   <div class="gvbot">${cp?`<small>Combat Power</small><strong>${fmt(cp)}</strong>`:""}<small>${n} item${n===1?"":"s"}${x.n&&!now?`  ·  saved ${esc(baWhen(x.at))}`:""}</small></div></div>${BA_GROUPS.flatMap(([,ids])=>ids).filter(i=>i!=="ring4"||+G.ring4[0]>0||S.r4).map(card).join("")}</div>`;
  { // character picture at Maple's pixel scale (2x for the small rankings picture, never blurred)
    const im=$("gvBody").querySelector(".gvava img");
@@ -1202,9 +1263,23 @@ $("gvClose").addEventListener("click",closeGv);
 $("gvModal").addEventListener("click",e=>{ if(e.target===$("gvModal")) closeGv(); });
 addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("gvModal").hidden) closeGv(); });
 $("gvLoad").addEventListener("click",()=>{ const id=gvId; closeGv(); askLoad(id); });
+$("gvCopy").addEventListener("click",async()=>{
+ try{ if(!navigator.clipboard||!window.ClipboardItem) throw new Error("no clipboard"); await navigator.clipboard.write([new ClipboardItem({"image/png":gvBlob()})]); $("gvNote").textContent="Copied! Paste it in Discord or anywhere."; }
+ catch(e){ $("gvNote").textContent="Your browser can't copy images here. Use Download instead."; }
+});
+$("gvDl").addEventListener("click",async()=>{
+ try{ const b=await gvBlob(), u=URL.createObjectURL(b), a=document.createElement("a"); a.href=u; a.download=`${(gvX.now?"current-gear":saveName(gvX.x)).replace(/[^A-Za-z0-9 ._-]+/g,"-").trim()||"gear"}.png`; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),4000); $("gvNote").textContent="Image saved."; }
+ catch(e){ $("gvNote").textContent="Couldn't make the image file in this browser."; }
+});
 const gearSaved=()=>{ const k=JSON.stringify(S.gear); return S.saves.some(x=>JSON.stringify(x.gear)===k); };
 function doLoad(x){ S.gear=JSON.parse(JSON.stringify(x.gear)); if(+S.gear.ring4[0]>0) S.r4=true; for(const s of SLOTS) fillSlot(s); paintR4(); changed(); paintSaves(); say(`Loaded ${saveNo(x)}. "${saveName(x)}" as your gear.`); }
-function newSave(name){ const x={id:uid(),n:name||"",at:new Date().toISOString(),cp:"",gear:JSON.parse(JSON.stringify(S.gear))}; S.saves.push(x); save(); return x; }
+function newSave(name){ const x={id:uid(),n:name||"",at:new Date().toISOString(),cp:"",gear:JSON.parse(JSON.stringify(S.gear))}; S.saves.push(x); save(); keepLook(x); return x; }
+// a copy of the rankings picture goes in the save (Nexon's links may stop working later); Nexon's link is kept if a copy can't be made
+async function keepLook(x){
+ const R=S.rank; if(!R) return; x.av={lv:R.level||0,job:R.job||"",img:R.img}; save();
+ const a=await gvAva(R.img); if(!a) return;
+ try{ const t=document.createElement("canvas"); t.width=a.im.naturalWidth; t.height=a.im.naturalHeight; t.getContext("2d").drawImage(a.im,0,0); const d=t.toDataURL("image/png"); if(d.length<300000){ x.av.img=d; save(); } }catch(e){}
+}
 let ldId=null, ldBack=null;
 function askLoad(id){ const x=saveById(id); if(!x) return;
  if(gearSaved()){ doLoad(x); return; }
@@ -1218,8 +1293,7 @@ $("ldGo").addEventListener("click",()=>{ const x=saveById(ldId); closeLd(); if(x
 $("ldSave").addEventListener("click",()=>{ const x=saveById(ldId); closeLd(); if(!x) return; const n=newSave(); baStatus(); doLoad(x); say(`Saved your gear as ${saveNo(n)}, then loaded ${saveNo(x)}. "${saveName(x)}".`); });
 $("baSave").addEventListener("click",()=>{
  if(S.saves.length>=MAXSAVES){ say(`You have ${MAXSAVES} saves. Delete one first.`); return; }
- const x={id:uid(),n:"",at:new Date().toISOString(),cp:"",gear:JSON.parse(JSON.stringify(S.gear))};
- S.saves.push(x); save(); baStatus(); $("baList").open=true; paintSaves();
+ const x=newSave(); baStatus(); $("baList").open=true; paintSaves();
  const inp=document.querySelector(`[data-svn="${x.id}"]`); if(inp){ inp.focus({preventScroll:true}); inp.scrollIntoView({block:"nearest"}); }
  say("Gear saved. You can give it a name.");
 });
@@ -1606,7 +1680,8 @@ function valid(st){
    let sv=Array.isArray(st.saves)?st.saves:[];
    if(!sv.length&&st.before&&typeof st.before==="object"&&st.before.gear) sv=[{id:"b1",n:"Before",at:st.before.at,cp:sh.cb||"",gear:st.before.gear}];
    sv=sv.filter(x=>x&&typeof x==="object"&&x.gear&&typeof x.gear==="object");
-   st.saves=sv.slice(0,MAXSAVES).map((x,i)=>({id:String(x.id||"s"+i).slice(0,24),n:String(x.n||"").slice(0,40),at:String(x.at||"").slice(0,40),cp:String(x.cp||"").slice(0,24),gear:clean(x.gear)}));
+   st.saves=sv.slice(0,MAXSAVES).map((x,i)=>({id:String(x.id||"s"+i).slice(0,24),n:String(x.n||"").slice(0,40),at:String(x.at||"").slice(0,40),cp:String(x.cp||"").slice(0,24),gear:clean(x.gear),
+     av:x.av&&typeof x.av==="object"?{lv:parseInt(x.av.lv)||0,job:String(x.av.job||"").slice(0,40),img:(v=>v.length<300000&&/^data:image\/png;base64,[A-Za-z0-9+/=]+$/.test(v)||/^https:\/\/([a-z0-9-]+\.)*nexon\.(net|com)\//i.test(v)?v:"")(String(x.av.img||""))}:null}));
    delete st.before;
    st.autoSaved=!!st.autoSaved;
    st.share={t:String(sh.t||"").slice(0,40),m:String(sh.m||"").slice(0,20),ca:String(sh.ca||"").slice(0,24),all:!!sh.all,c:sh.c==="glowing"?"glowing":sh.c==="bright"?"bright":"",sale:typeof sh.sale==="boolean"?sh.sale:null,bi:String(sh.bi||"").slice(0,24),ai:String(sh.ai||"now").slice(0,24),lk:sh.lkSet&&sh.lk==="main"?"main":"exact",lkSet:!!sh.lkSet}; } st.budC=st.budC==null?"10000":String(st.budC).slice(0,20);
