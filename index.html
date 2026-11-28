@@ -1168,13 +1168,13 @@ function paintSaves(){
   <span class="svact"><button type="button" class="linkbtn" data-svview="${esc(x.id)}">View</button><button type="button" class="linkbtn" data-svload="${esc(x.id)}">Load</button><button type="button" class="linkbtn" data-svdel="${esc(x.id)}">Delete</button></span></div>`).join("");
 }
 // read-only overview of one save
-let gvId=null, gvX=null;
+let gvId=null, gvX=null, gvMiss=false;
 // the View as an image to share (same layout as the popup)
 const avaCache={};
 function gvAva(url){
  if(avaCache[url]) return avaCache[url];
  const load=src=>new Promise(res=>{ const im=new Image(); im.crossOrigin="anonymous"; im.referrerPolicy="no-referrer"; im.onload=()=>res(im); im.onerror=()=>res(null); im.src=src; });
- return avaCache[url]=(async()=>{
+ const job=avaCache[url]=(async()=>{
   for(const src of [url,`${RANK_API}/avatar?u=${encodeURIComponent(url)}`]){ const im=await load(src); if(!im) continue;
    try{ const t=document.createElement("canvas"); t.width=im.naturalWidth; t.height=im.naturalHeight; const g=t.getContext("2d"); g.drawImage(im,0,0);
     const d=g.getImageData(0,0,t.width,t.height).data; let x0=t.width,y0=t.height,x1=-1,y1=-1;          // trim the empty space around the character
@@ -1182,6 +1182,8 @@ function gvAva(url){
     if(x1<0) return null; return {im,sx:x0,sy:y0,sw:x1-x0+1,sh:y1-y0+1};
    }catch(e){ /* the picture can't be used in an image from this address; try the next one */ } }
   return null; })();
+ job.then(r=>{ if(!r) delete avaCache[url]; });   // a failure isn't remembered, so the next try asks again
+ return job;
 }
 async function gvDraw(x,now,noPics){
  const G=x.gear, DF='"Space Grotesk","Segoe UI",system-ui,sans-serif', BF='Inter,"Segoe UI",system-ui,sans-serif';
@@ -1195,7 +1197,7 @@ async function gvDraw(x,now,noPics){
  c.fillStyle="#e8ecf4"; c.font="700 24px "+DF; c.fillText(wrapText(c,now?"Current gear":saveName(x),W-PAD*2-380,1)[0],PAD,PAD+14);
  c.font="400 13.5px "+BF; c.fillStyle="#98a3b6"; c.fillText(now?`Gear in the calculator, ${baDate(new Date(),1)}`:`Save ${saveNo(x)} of ${S.saves.length}  ·  ${baWhen(x.at)}`,PAD,PAD+42);
  { let lx=W-PAD; c.font="400 13px "+BF; for(const [k,t] of [["U","Unique line"],["L","Legendary line"]]){ c.font="400 13px "+BF; const w=c.measureText(t).width; lx-=w; c.fillStyle="#98a3b6"; c.fillText(t,lx,PAD+20); lx-=22; tag(lx,PAD+12.5,k); lx-=18; } }
- const LK=lookOf(x,now), icons={}, ava=noPics||!LK.img?null:await gvAva(LK.img);
+ const LK=lookOf(x,now), icons={}, ava=noPics||!LK.img?null:await gvAva(LK.img); gvMiss=!!LK.img&&!ava;
  if(!noPics) await Promise.all(ids.filter(i=>+G[i][0]>0).map(i=>baIcon(G[i][4]).then(im=>{ icons[i]=im; })));
  const cell=(col,row,span=1)=>[PAD+(col-1)*(colW+GAP),PAD+headH+(row-1)*(ROW+GAP),colW,span*ROW+(span-1)*GAP];
  const box=(x0,y0,w,h,dash)=>{ c.fillStyle=dash?"rgba(0,0,0,0)":"#1b2230"; rr(c,x0,y0,w,h,10); c.fill(); c.strokeStyle="#2e384b"; c.lineWidth=1; if(dash) c.setLineDash([5,4]); rr(c,x0+.5,y0+.5,w-1,h-1,10); c.stroke(); c.setLineDash([]); };
@@ -1264,11 +1266,11 @@ $("gvModal").addEventListener("click",e=>{ if(e.target===$("gvModal")) closeGv()
 addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("gvModal").hidden) closeGv(); });
 $("gvLoad").addEventListener("click",()=>{ const id=gvId; closeGv(); askLoad(id); });
 $("gvCopy").addEventListener("click",async()=>{
- try{ if(!navigator.clipboard||!window.ClipboardItem) throw new Error("no clipboard"); await navigator.clipboard.write([new ClipboardItem({"image/png":gvBlob()})]); $("gvNote").textContent="Copied! Paste it in Discord or anywhere."; }
+ try{ if(!navigator.clipboard||!window.ClipboardItem) throw new Error("no clipboard"); await navigator.clipboard.write([new ClipboardItem({"image/png":gvBlob()})]); $("gvNote").textContent=gvMiss?"Copied, but your character picture couldn't be added this time.":"Copied! Paste it in Discord or anywhere."; }
  catch(e){ $("gvNote").textContent="Your browser can't copy images here. Use Download instead."; }
 });
 $("gvDl").addEventListener("click",async()=>{
- try{ const b=await gvBlob(), u=URL.createObjectURL(b), a=document.createElement("a"); a.href=u; a.download=`${(gvX.now?"current-gear":saveName(gvX.x)).replace(/[^A-Za-z0-9 ._-]+/g,"-").trim()||"gear"}.png`; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),4000); $("gvNote").textContent="Image saved."; }
+ try{ const b=await gvBlob(), u=URL.createObjectURL(b), a=document.createElement("a"); a.href=u; a.download=`${(gvX.now?"current-gear":saveName(gvX.x)).replace(/[^A-Za-z0-9 ._-]+/g,"-").trim()||"gear"}.png`; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),4000); $("gvNote").textContent=gvMiss?"Image saved, but your character picture couldn't be added this time.":"Image saved."; }
  catch(e){ $("gvNote").textContent="Couldn't make the image file in this browser."; }
 });
 const gearSaved=()=>{ const k=JSON.stringify(S.gear); return S.saves.some(x=>JSON.stringify(x.gear)===k); };
