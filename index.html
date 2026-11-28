@@ -457,7 +457,7 @@ const SLOTS = [
  ["hat","Hat","hat","hat"],["top","Top","top","top"],["bottom","Bottom","bottom","bottom"],["shoulder","Shoulder","shoulder","shoulder"],
  ["cape","Cape","cape","cape"],["gloves","Gloves","gloves","gloves"],["shoes","Shoes","shoes","shoes"],["heart","Heart","heart","heart"],["badge","Badge","heart","badge"]
 ].map(([id,name,kind,list])=>({id,name,kind,list}));
-const ICONS={"Endless Terror":["Endless_Terror"],"Dawn Guardian Angel Ring":["Dawn_Guardian_Angel_Ring","Guardian_Angel_Ring"],"Guardian Angel Ring":["Guardian_Angel_Ring"],
+const ICONS={"Endless Terror":["Endless_Terror"],"Dawn Guardian Angel Ring":["Guardian_Angel_Ring"],"Guardian Angel Ring":["Guardian_Angel_Ring"],
  "Superior Gollux Ring":["Superior_Gollux_Ring"],"Meister Ring":["Meister_Ring"],"Reinforced Gollux Ring":["Reinforced_Gollux_Ring"],"Kanna's Treasure":["Kanna%27s_Treasure"],"Solid Gollux Ring":["Solid_Gollux_Ring"],
  "Source of Suffering":["Source_of_Suffering"],"Superior Gollux Pendant":["Superior_Engraved_Gollux_Pendant"],"Daybreak Pendant":["Daybreak_Pendant"],"Dominator Pendant":["Dominator_Pendant"],
  "Reinforced Gollux Pendant":["Reinforced_Engraved_Gollux_Pendant"],"Chaos Horntail Necklace":["Chaos_Horntail_Necklace"],"Mechanator Pendant":["Mechanator_Pendant"],
@@ -494,6 +494,8 @@ function iconFiles(n){
  if((/ Emblem( \(|$)/.test(n)&&n!=="Class Emblem")||n==="Hybrid Heart") return [fileName(n)];
  let m; // shoulder, cape, gloves and shoes share one picture for every job
  if(m=n.match(/^(Eternal|Arcane Umbra|AbsoLab) \w+ (Shoulder|Cape|Gloves|Shoes)$/)) return [fileName(m[1]+" "+m[2])];
+ if(/^Eternal (Hat|Top|Bottom)$/.test(n)){ const a=armorName(n,jobGroup()); return a&&a!==n?iconFiles(a):null; }
+ if(["Destiny Weapon","Genesis Weapon","Astra Secondary"].includes(n)) return null; // no class picked yet, so there is no one picture
  if(/^(Destiny|Genesis|Astra|Eternal|Arcane Umbra|AbsoLab|Royal|Eagle Eye|Trixter) /.test(n)) return [fileName(n)];
  const g=jobGroup(); if(!ARM[g]) return null;
  if(n==="Mitra's Rage") return ["Mitra%27s_Rage_"+g];
