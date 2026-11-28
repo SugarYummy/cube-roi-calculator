@@ -483,10 +483,10 @@ footer{color:var(--muted);font-size:13px;margin-top:14px;display:grid;gap:2px}fo
    <label class="f-m">Mesos spent<input id="baM" inputmode="decimal" placeholder="700B" autocomplete="off"></label>
    <label class="f-cb">Combat Power (Before)<input id="baCB" inputmode="decimal" placeholder="120,000,000" autocomplete="off"></label>
    <label class="f-ca">Combat Power (After)<input id="baCA" inputmode="decimal" placeholder="125,000,000" autocomplete="off"></label>
-   <label class="f-l">Luck based on<select id="baL"><option value="main">Main stat total</option><option value="exact">Exact lines</option></select></label>
+   <label class="f-l">Luck based on<select id="baL"><option value="exact">Exact lines</option><option value="main">Main stat total</option></select></label>
    <div class="f-k"><label class="salechk"><input type="checkbox" id="baSale"> Bought on sale</label><label class="salechk"><input type="checkbox" id="baAll"> Show items that didn't change</label></div>
   </div>
-  <p class="note" id="baNote" style="margin:-4px 0 10px">Type your mesos spent to see your luck. It compares your mesos to what a typical player spends to reach these results (half spend less, half spend more). <b>Main stat total</b> counts your ATT % (Weapon, Secondary, Emblem), crit lines (gloves) or stat % (All Stats counts as stat), so bonus lines like an extra Boss line aren't counted as extra luck. <b>Exact lines</b> counts the exact lines you got, so it's stricter and makes jackpots look luckier. Only items that changed count, so mesos spent on a pot you kept make you look unluckier.</p>
+  <p class="note" id="baNote" style="margin:-4px 0 10px">Type your mesos spent to see your luck. It compares your mesos to what a typical player spends to reach these results (half spend less, half spend more). <b>Exact lines</b> counts the lines you got, or anything worth more FD (an All Stats line counts like the same % of your main stat, so 12 / 12 / 9 All Stats counts as 12 / 12 / 9). <b>Main stat total</b> only counts your ATT % (Weapon, Secondary, Emblem), crit lines (gloves) or stat % (All Stats counts as stat), so bonus lines like an extra Boss line don't count as luck. Rare rolls get an <b>Anomaly</b> note on the image. Only items that changed count, so mesos spent on a pot you kept make you look unluckier.</p>
   <div class="baprev"><canvas id="baCv" aria-label="Before and after image preview"></canvas></div>
   <div class="row bafoot"><span class="muted" id="baMsg" role="status"></span><button class="btn" id="baDl" type="button">Download</button><button class="btn accent" id="baCopy" type="button">Copy image</button></div>
  </div>
@@ -1250,11 +1250,34 @@ let baNoIcons=false;
 // "main": the item's main total or better (ATT % on Weapon/Secondary/Emblem, crit lines on gloves, stat % elsewhere with All Stats counting as stat).
 //   Bonus lines on top (an extra Boss line, All Stats instead of stat) don't count as extra luck.
 // "exact": these exact lines, or anything worth more FD.
+// probability of each exact set of 3 lines (any order)
+const comboCache=new Map();
+function comboTable(kind,cube,lvl,P){
+ const key=[kind,cube,lvl,HPM(),XEN(),cdActive(),JSON.stringify(P)].join("|"); if(comboCache.has(key)) return comboCache.get(key);
+ const [L1,L2,L3]=pools(kind,cube,lvl), m=new Map(), cd=x=>x.c==="J"?"J0":x.c+x.v;
+ for(const a of L1) for(const b of L2){ const pb=adjRate(b,[a],L2); if(!pb) continue;
+  for(const c of L3){ const pc=adjRate(c,[a,b],L3); if(!pc) continue;
+   const k=[cd(a),cd(b),cd(c)].sort().join(","), p=a.r/100*pb/100*pc/100, o=m.get(k);
+   if(o) o.p+=p; else m.set(k,{codes:[cd(a),cd(b),cd(c)],p,fd:stats([[a.c,a.v],[b.c,b.v],[c.c,c.v]],P).fd}); } }
+ if(comboCache.size>60) comboCache.clear(); comboCache.set(key,m); return m;
+}
+function baAnomalies(groups,cube){
+ const P=perValues(), out=[];
+ for(const [,rows] of groups) for(const r of rows){ if(!r.b||r.same) continue;
+  const lvl=+r.a[0]||0, codes=r.a.slice(1,4), pr=primeSet(r.s.kind,optLvl(lvl));
+  if(codes.includes("J0")||!codes.every(c=>pr.has(c))) continue;            // only triple prime rolls
+  const tb=comboTable(r.s.kind,cube,lvl,slotP(r.s,P)), me=tb.get([...codes].sort().join(",")); if(!me) continue;
+  let alt=null; for(const o of tb.values()) if(o.fd>me.fd+1e-6&&o.p>=me.p*1.5&&(!alt||o.p>alt.p)) alt=o;
+  if(alt) out.push({name:r.a[4]||r.s.name,me:showOrder(codes,pr),pme:me.p,alt:showOrder(alt.codes,pr),palt:alt.p});
+ }
+ return out;
+}
 const mainDim=(kind,st)=>XEN()?null:["weapon","secondary","emblem"].includes(kind)?(st.A>0?"A":null):kind==="gloves"&&st.K>0?"K":st.S>0?"S":kind==="hat"&&st.Q>0?"Q":null;
 function baLuck(groups,cube,sale,spent,mode){
  const P=perValues(), items=[];
  for(const [,rows] of groups) for(const r of rows){ if(!r.b||r.same) continue;
-  const sp=slotP(r.s,P), lvl=+r.a[0]||0, st=stats(r.a.slice(1,4).map(parse),sp), fa=st.fd, dim=mode==="exact"?null:mainDim(r.s.kind,st); let p=0;
+  const asStat=!HPM()&&!XEN(), lines=r.a.slice(1,4).map(c=>asStat&&c[0]==="A"?"S"+c.slice(1):c);   // All Stats counts as the same % of stat
+  const sp=slotP(r.s,P), lvl=+r.a[0]||0, st=stats(lines.map(parse),sp), fa=st.fd, dim=mode==="exact"?null:mainDim(r.s.kind,st); let p=0;
   for(const o of outcomes(r.s.kind,cube,lvl,sp)) if(o.fd>=fa-1e-6||(dim&&o[dim]>=st[dim])) p+=o.p;   // never stricter than "exact"
   if(p>0) items.push({p:Math.min(p,1),cost:PRICE[cube]*(sale?.75:1)+revealFee(lvl)}); }
  if(!items.length||!(spent>0)) return null;
@@ -1285,8 +1308,8 @@ async function baDraw(){
  else if(ca>0||cb>0) chips.push(["Combat Power",fmt(ca||cb)]);
  if(fdOk&&changed) chips.push(["Estimated FD gain",`${fd>=0?"+":"-"}${Math.abs(fd).toFixed(3)}%`,"from your scouter values",fd>=0]);
  const cube=sh.c||(S.cube==="glowing"?"glowing":"bright"), sale=sh.sale==null?saleOn:sh.sale;
- const lkMode=sh.lk==="exact"?"exact":"main", lk=fdOk&&mz>0?baLuck(groups,cube,sale,mz,lkMode):null;
- if(lk){ const d=Math.round(lk.diff*100); chips.push(["Luck",Math.abs(lk.diff)<0.02?"About average":`${Math.abs(d)}% ${d>=0?"luckier":"unluckier"}`,`Typical cost ${mesoFmt(lk.med)}${lkMode==="exact"?" (exact lines)":""} · luckier than ${lk.beat>=.995?">99":lk.beat<.005?"<1":Math.round(lk.beat*100)}% of players`,lk.diff>=0]); }
+ const lkMode=sh.lk==="main"?"main":"exact", lk=fdOk&&mz>0?baLuck(groups,cube,sale,mz,lkMode):null;
+ if(lk){ const d=Math.round(lk.diff*100); chips.push(["Luck",Math.abs(lk.diff)<0.02?"About average":`${Math.abs(d)}% ${d>=0?"luckier":"unluckier"}`,`Typical cost ${mesoFmt(lk.med)}${lkMode==="main"?" (main stat total)":""} · luckier than ${lk.beat>=.995?">99":lk.beat<.005?"<1":Math.round(lk.beat*100)}% of players`,lk.diff>=0]); }
  chips.push(["Items changed",String(changed)]);
  // layout (CSS px, drawn at 2x)
  const ROW=78, GAP=7, GH=28, SG=14, rowsN=groups.reduce((n,[,r])=>n+r.length,0), two=rowsN>5;
@@ -1300,8 +1323,11 @@ async function baDraw(){
  const chipW=chips.map(([lab,val,sub2])=>{ c0.font="700 18px "+DF; const a=c0.measureText(val).width; c0.font="400 12px "+BF; const l=c0.measureText(lab).width; c0.font="600 12px "+BF; const b=sub2?c0.measureText(sub2).width:0; return Math.max(a,b,l)+28; });
  const chipPos=[]; { let x=PAD, row=0; chipW.forEach((w,i)=>{ if(x+w>W-PAD&&x>PAD){ row++; x=PAD; } chipPos.push([x,row]); x+=w+10; }); }
  const chipRows=chips.length?chipPos[chipPos.length-1][1]+1:0;
+ const anoms=baAnomalies(groups,cube), noteW=W-PAD*2-32; c0.font="400 13px "+BF;
+ const noteLines=anoms.flatMap(a=>wrapText(c0,`${a.name}: ${a.me.map(lineLabel).join(", ")} is triple prime (1 in ${fmt(Math.round(1/a.pme))}), but ${a.alt.map(lineLabel).join(", ")} gives more FD and is easier to hit (1 in ${fmt(Math.round(1/a.palt))}).`,noteW,4));
+ const noteH=anoms.length?38+noteLines.length*19+16:0;
  const headH=two?74:94, chipH=chipRows*70+(chipRows?6:0), bodyH=groups.length?Math.max(colH(cols[0]),colH(cols[1])):60;
- const H=PAD+headH+chipH+bodyH+PAD-GAP;
+ const H=PAD+headH+chipH+noteH+bodyH+PAD-GAP;
  cv.width=W*2; cv.height=H*2; const c=cv.getContext("2d"); c.setTransform(2,0,0,2,0,0); c.textBaseline="middle";
  c.fillStyle="#121722"; c.fillRect(0,0,W,H);
  // header
@@ -1329,6 +1355,12 @@ async function baDraw(){
    if(sub2){ c.fillStyle=good===undefined?"#98a3b6":good?"#4cc38a":"#ff7a7a"; c.font="600 12px "+BF; c.fillText(sub2,x+14,y0+50); }
    c.restore(); });
   y0+=chipH; }
+ if(anoms.length){ const h=noteH-16;
+  c.fillStyle="#1b2230"; rr(c,PAD,y0,W-PAD*2,h,11); c.fill(); c.strokeStyle="#2e384b"; c.lineWidth=1; rr(c,PAD+.5,y0+.5,W-PAD*2-1,h-1,11); c.stroke();
+  c.fillStyle="#e0b050"; rr(c,PAD,y0,4,h,2); c.fill();
+  c.textAlign="left"; c.font="600 13px "+BF; c.fillStyle="#e0b050"; c.fillText("Anomaly",PAD+18,y0+18);
+  c.font="400 13px "+BF; c.fillStyle="#c4ccd9"; noteLines.forEach((l,i)=>c.fillText(l,PAD+18,y0+40+i*19));
+  y0+=noteH; }
  if(!groups.length){ c.fillStyle="#98a3b6"; c.font="400 15px "+BF; c.fillText(pb.a===pb.b?"Before and After are the same save. Pick a different one.":"No potential changes between these two. Update your gear after cubing.",PAD,y0+24); return false; }
  // rows
  const icons={}; if(!baNoIcons) await Promise.all(groups.flatMap(([,rows])=>rows.map(r=>baIcon(r.a[4]).then(im=>{ icons[r.s.id]=im; }))));
@@ -1367,7 +1399,7 @@ function baRefresh(){ clearTimeout(baT2); baT2=setTimeout(async()=>{ const ok=aw
 function baBlob(){ return new Promise((res,rej)=>{ try{ $("baCv").toBlob(b=>b?res(b):rej(new Error("no image")),"image/png"); }catch(e){ rej(e); } }); }
 async function baGetBlob(){ try{ return await baBlob(); }catch(e){ if(e&&e.name==="SecurityError"&&!baNoIcons){ baNoIcons=true; await baDraw(); return await baBlob(); } throw e; } }
 const baM=$("baModal"); const baMsg=t=>{ $("baMsg").textContent=t; };
-function openBa(){ const sh=S.share; baPickers(); $("baT").value=sh.t; $("baT").placeholder=S.name?`${S.name}'s Cubing Progress`:"Cubing Progress"; $("baM").value=sh.m; $("baAll").checked=sh.all; $("baC").value=sh.c||(S.cube==="glowing"?"glowing":"bright"); $("baL").value=sh.lk==="exact"?"exact":"main"; $("baSale").checked=sh.sale==null?saleOn:sh.sale; baMsg("");
+function openBa(){ const sh=S.share; baPickers(); $("baT").value=sh.t; $("baT").placeholder=S.name?`${S.name}'s Cubing Progress`:"Cubing Progress"; $("baM").value=sh.m; $("baAll").checked=sh.all; $("baC").value=sh.c||(S.cube==="glowing"?"glowing":"bright"); $("baL").value=sh.lk==="main"?"main":"exact"; $("baSale").checked=sh.sale==null?saleOn:sh.sale; baMsg("");
  baM.hidden=false; document.body.style.overflow="hidden"; baRefresh(); $("baM").focus(); }
 const closeBa=()=>{ baM.hidden=true; document.body.style.overflow=""; $("baMake").focus(); };
 $("baMake").addEventListener("click",openBa); $("baClose").addEventListener("click",closeBa);
@@ -1387,7 +1419,7 @@ $("baB").addEventListener("change",e=>{ S.share.bi=e.target.value; save(); baPic
 $("baA").addEventListener("change",e=>{ S.share.ai=e.target.value; save(); baPickers(); baRefresh(); });
 $("baAll").addEventListener("change",e=>{ S.share.all=e.target.checked; save(); baRefresh(); });
 $("baC").addEventListener("change",e=>{ S.share.c=e.target.value; save(); baRefresh(); });
-$("baL").addEventListener("change",e=>{ S.share.lk=e.target.value; save(); baRefresh(); });
+$("baL").addEventListener("change",e=>{ S.share.lk=e.target.value; S.share.lkSet=true; save(); baRefresh(); });
 $("baSale").addEventListener("change",e=>{ S.share.sale=e.target.checked; save(); baRefresh(); });
 $("baCopy").addEventListener("click",async()=>{
  try{ if(!navigator.clipboard||!window.ClipboardItem) throw new Error("no clipboard");
@@ -1556,7 +1588,7 @@ function valid(st){
    st.saves=sv.slice(0,MAXSAVES).map((x,i)=>({id:String(x.id||"s"+i).slice(0,24),n:String(x.n||"").slice(0,40),at:String(x.at||"").slice(0,40),cp:String(x.cp||"").slice(0,24),gear:clean(x.gear)}));
    delete st.before;
    st.autoSaved=!!st.autoSaved;
-   st.share={t:String(sh.t||"").slice(0,40),m:String(sh.m||"").slice(0,20),ca:String(sh.ca||"").slice(0,24),all:!!sh.all,c:sh.c==="glowing"?"glowing":sh.c==="bright"?"bright":"",sale:typeof sh.sale==="boolean"?sh.sale:null,bi:String(sh.bi||"").slice(0,24),ai:String(sh.ai||"now").slice(0,24),lk:sh.lk==="exact"?"exact":"main"}; } st.budC=st.budC==null?"10000":String(st.budC).slice(0,20);
+   st.share={t:String(sh.t||"").slice(0,40),m:String(sh.m||"").slice(0,20),ca:String(sh.ca||"").slice(0,24),all:!!sh.all,c:sh.c==="glowing"?"glowing":sh.c==="bright"?"bright":"",sale:typeof sh.sale==="boolean"?sh.sale:null,bi:String(sh.bi||"").slice(0,24),ai:String(sh.ai||"now").slice(0,24),lk:sh.lkSet&&sh.lk==="main"?"main":"exact",lkSet:!!sh.lkSet}; } st.budC=st.budC==null?"10000":String(st.budC).slice(0,20);
  st.per=Math.min(Math.max(parseInt(st.per)||1000,1),1e9);
  st.r4=!!st.r4||+st.gear.ring4[0]>0;
  st.name=String(st.name||"").slice(0,30); if(!CLS[st.cls]) st.cls="";
